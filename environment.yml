@@ -1,0 +1,12 @@
+name: geo
+channels:
+  - conda-forge
+dependencies:
+  - netcdf4
+  - python=3.11
+  - dask
+  - xarray
+  - rasterio
+  - rioxarray
+  - jupyterlab
+  - matplotlib

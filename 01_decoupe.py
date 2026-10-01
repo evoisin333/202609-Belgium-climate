@@ -6,7 +6,7 @@ E-OBS, Tmax journaliere E-OBS) sur le rectangle de la Belgique
 projet ; les sorties *_BE.nc vont dans 02_working.
 
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/01_decoupe.py
+    python 01_decoupe.py
 """
 import xarray as xr
 import os, glob

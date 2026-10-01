@@ -2,7 +2,7 @@
 """
 16_analyse.py
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/16_analyse.py
+    python 16_analyse.py
 
 Exploite les CSV de statistiques zonales produits sous ArcGIS (14 et 15) pour construire
 les chiffres du rapport. Ne depend plus d'ArcGIS ni de la licence.

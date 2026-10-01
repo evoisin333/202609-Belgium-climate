@@ -6,7 +6,7 @@ plages de valeurs, couverture du NDVI, coherence entre su30 et SU.
 Ne modifie AUCUN fichier.
 
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/04_controles.py
+    python 04_controles.py
 """
 import glob
 import os

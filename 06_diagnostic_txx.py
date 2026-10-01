@@ -7,7 +7,7 @@ Resultat : 2019 et 2022 sont de vraies canicules, spatialement coherentes ;
 2003 et 2004 portent la signature d'une station defectueuse.
 
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/06_diagnostic_txx.py
+    python 06_diagnostic_txx.py
 """
 import xarray as xr
 

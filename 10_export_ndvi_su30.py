@@ -9,7 +9,7 @@ Sortie (03_arcgis) : un NetCDF par saison, avec une vraie dimension 'time'
 pour ArcGIS Pro.
 
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/10_export_ndvi_su30.py
+    python 10_export_ndvi_su30.py
 """
 
 from pathlib import Path

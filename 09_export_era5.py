@@ -6,7 +6,7 @@ Dates au milieu de la saison : DJF -> 15 janvier, MAM -> 15 avril,
 JJA -> 15 juillet, SON -> 15 octobre. Sorties dans 03_arcgis.
 
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/09_export_era5.py
+    python 09_export_era5.py
 """
 
 from pathlib import Path

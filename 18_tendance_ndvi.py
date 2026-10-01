@@ -2,7 +2,7 @@
 """
 18_tendance_ndvi.py
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/18_tendance_ndvi.py
+    python 18_tendance_ndvi.py
 
 Tendance du NDVI estival 2001-2024 : pente de Sen et test de Mann-Kendall,
 calcules pixel par pixel en Python (le calcul equivalent sous ArcGIS

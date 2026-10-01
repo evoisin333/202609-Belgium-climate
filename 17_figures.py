@@ -2,7 +2,7 @@
 """
 17_figures.py
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/17_figures.py
+    python 17_figures.py
 Necessite matplotlib :  conda install -c conda-forge matplotlib
 
 Produit dans 06_figures\\ quatre figures, en PNG 300 dpi (rapport Word,

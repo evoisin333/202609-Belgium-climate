@@ -20,7 +20,7 @@ Methode :
 - Sur ces pixels, les etes suspects sont mis a NaN dans SU, TXx et su30.
 
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/08_masque_artefact_lux.py
+    python 08_masque_artefact_lux.py
 
 Fermer d'abord toute session Python (>>>) et retirer les couches d'ArcGIS Pro,
 sinon les fichiers sont verrouilles en ecriture.

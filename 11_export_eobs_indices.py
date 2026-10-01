@@ -8,7 +8,7 @@ SU et TXx sont lus dans leur version _qc (07_controle_spatial_qc.py puis
 d'origine et _qc. Sorties dans 03_arcgis.
 
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/11_export_eobs_indices.py
+    python 11_export_eobs_indices.py
 """
 
 from pathlib import Path

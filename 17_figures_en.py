@@ -2,7 +2,7 @@
 """
 17_figures_en.py
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/17_figures_en.py
+    python 17_figures_en.py
 Necessite matplotlib :  conda install -c conda-forge matplotlib
 
 Version anglaise de 17_figures.py. Produit dans 06_figures_en\\ quatre

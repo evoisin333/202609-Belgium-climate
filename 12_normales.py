@@ -30,7 +30,7 @@ Le NDVI n'est pas traite ici : sa serie commence en 2001 et releve de
 l'axe impact, avec anomalies et tendances (phase 4).
 
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/12_normales.py
+    python 12_normales.py
 """
 
 from pathlib import Path

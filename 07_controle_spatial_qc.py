@@ -14,7 +14,7 @@ Sorties (02_working), les fichiers d'origine ne sont pas modifies :
   txx_..._BE_qc.nc, su_..._BE_qc.nc, eobs_su30_BE_saisonnier_qc.nc
 
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/07_controle_spatial_qc.py
+    python 07_controle_spatial_qc.py
 """
 import numpy as np
 import xarray as xr

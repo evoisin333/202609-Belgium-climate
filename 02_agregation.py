@@ -10,7 +10,7 @@ Periode conservee : 1961-2024 (hivers 1960 et 2025 incomplets).
 Sorties (02_working) : era5_BE_saisonnier.nc, eobs_su30_BE_saisonnier.nc
 
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/02_agregation.py
+    python 02_agregation.py
 """
 import xarray as xr
 import numpy as np

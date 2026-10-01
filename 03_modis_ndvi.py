@@ -9,7 +9,7 @@ Periode conservee : 2001-2024 (hivers 2000 et 2025 incomplets).
 Sortie : 02_working/modis_ndvi_BE_saisonnier.nc
 
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/03_modis_ndvi.py
+    python 03_modis_ndvi.py
 """
 import rioxarray as rxr
 import xarray as xr

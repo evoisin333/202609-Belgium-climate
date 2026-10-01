@@ -7,7 +7,7 @@ E-OBS du sud du Grand-Duche de Luxembourg (55 jours >= 30 degC en 2003,
 Tmax jusqu'a 47,2 degC).
 
 A lancer depuis la racine du projet, environnement geo :
-    python scripts/05_diagnostic_pixel_max.py
+    python 05_diagnostic_pixel_max.py
 """
 import xarray as xr
 

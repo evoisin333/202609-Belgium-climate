@@ -1,0 +1,27 @@
+# --- Données (trop lourdes pour GitHub, à retélécharger via les scripts) ---
+data/*
+!data/README.md
+*.nc
+*.tif
+*.tiff
+*.hdf
+*.zip
+
+# --- ArcGIS Pro ---
+*.gdb/
+*.aprx
+*.atbx
+*.lock
+.backups/
+ImportLog/
+Index/
+
+# --- Python / Jupyter ---
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# --- Divers ---
+.DS_Store
+Thumbs.db
+desktop.ini

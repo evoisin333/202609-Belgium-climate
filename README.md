@@ -27,9 +27,9 @@ Change between the WMO climate normals **1961–1990 and 1991–2020**, national
 - **Rain is shifting from spring to winter**, while annual totals barely change, and soils are drying in spring and summer.
 - **Summer vegetation is declining on farmland.** Over 2001–2024, the median summer NDVI trend is −0.012 per decade, with 29 % of pixels showing a significant trend (26 % declining, 3 % increasing). The decline concentrates on cropland and grassland (−0.019 and −0.021 per decade), while forests lose about five times less. Grassland and cropland NDVI is strongly linked to summer temperature (r ≈ −0.72 to −0.77) and soil moisture (r ≈ +0.66 to +0.72); forests show no significant link with summer temperature.
 
-![Mean seasonal temperature in Belgium, 1961–2024](06_figures_en/fig1_seasonal_temperature.png)
+![Mean seasonal temperature in Belgium, 1961–2024](fig1_seasonal_temperature.png)
 
-![Change between the two climate normals](06_figures_en/fig2_normals_change.png)
+![Change between the two climate normals](fig2_normals_change.png)
 
 ---
 

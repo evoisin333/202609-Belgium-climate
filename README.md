@@ -64,7 +64,7 @@ NetCDF files go in the project root, rasters and boundaries in `01_raw/`, with t
 
 These v31.0e links were online on 9 October 2026; newer E-OBS versions exist and ECA&D may replace the index files when it updates them.
 
-**MODIS MOD13Q1 v061** — [NASA AppEEARS](https://appeears.earthdatacloud.nasa.gov/) area request (Earthdata account): product `MOD13Q1.061`, layers `_250m_16_days_NDVI` and `_250m_16_days_pixel_reliability`, from the start of the record (February 2000) to the end of 2024, polygon `belgique_contour.geojson` (Belgian outline from the geo.be INSPIRE WFS, dissolved and slightly buffered), GeoTIFF output. Files go in `01_raw/MODIS/NDVI/` and `01_raw/MODIS/pixel_reliability/`. The output projection is not archived; `10_export_ndvi_su30.py` assumes geographic WGS84.
+**MODIS MOD13Q1 v061** — [NASA AppEEARS](https://appeears.earthdatacloud.nasa.gov/) area request (Earthdata account): product `MOD13Q1.061`, layers `_250m_16_days_NDVI` and `_250m_16_days_pixel_reliability`, from the start of the record (February 2000) to the end of 2024, polygon `belgique_contour.geojson` (Belgian outline from the geo.be INSPIRE WFS, dissolved and slightly buffered), GeoTIFF output. Files go in `01_raw/MODIS/NDVI/` and `01_raw/MODIS/pixel_reliability/`. Output projection: Geographic (WGS84, EPSG:4326), as `10_export_ndvi_su30.py` expects; `03_modis_ndvi.py` checks it and stops otherwise.
 
 **CORINE Land Cover 2018** — [Copernicus Land Monitoring Service](https://land.copernicus.eu/en/products/corine-land-cover/clc2018), raster 100 m, version V2020_20u1, file `U2018_CLC2018_V2020_20u1.tif`. Place it in the folder that contains this repository (or a subfolder): `15_ndvi_corine.py` searches there.
 

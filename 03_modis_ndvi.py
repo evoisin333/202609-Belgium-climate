@@ -37,6 +37,20 @@ dates = sorted(set(ndvi_f) & set(rel_f))
 print(f"{len(dates)} composites apparies")
 print(f"de {dates[0].date()} a {dates[-1].date()}\n")
 
+# --- controle du systeme de coordonnees (sortie AppEEARS) ---
+# 10_export_ndvi_su30.py traite x/y comme longitude/latitude : la requete
+# AppEEARS doit donc sortir en Geographic (EPSG:4326), pas en sinusoidal.
+n0 = rxr.open_rasterio(ndvi_f[dates[0]])
+r0 = rxr.open_rasterio(rel_f[dates[0]])
+if n0.rio.crs is None or n0.rio.crs.to_epsg() != 4326:
+    raise SystemExit(f"NDVI MODIS en {n0.rio.crs} : EPSG:4326 attendu "
+                     "(choisir Geographic comme projection dans AppEEARS)")
+if r0.rio.crs != n0.rio.crs or r0.rio.shape != n0.rio.shape \
+        or r0.rio.transform() != n0.rio.transform():
+    raise SystemExit("NDVI et pixel_reliability ne sont pas sur la meme grille")
+print(f"CRS MODIS : EPSG:4326, grilles identiques "
+      f"({n0.rio.shape[0]} x {n0.rio.shape[1]} px)\n")
+
 # --- lecture, masquage, mise a l'echelle ---
 couches = []
 for i, d in enumerate(dates):

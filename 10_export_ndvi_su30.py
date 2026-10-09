@@ -25,6 +25,8 @@ SORTIE.mkdir(exist_ok=True)
 
 MOIS_MILIEU = {"DJF": 1, "MAM": 4, "JJA": 7, "SON": 10}
 
+# Grilles geographiques WGS84 : verifie pour MODIS dans 03_modis_ndvi.py,
+# natif pour E-OBS
 CRS_ATTRS = {
     "grid_mapping_name": "latitude_longitude",
     "longitude_of_prime_meridian": 0.0,

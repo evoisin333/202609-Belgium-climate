@@ -115,7 +115,9 @@ conda activate geo
 python 01_decoupe.py
 ```
 
-The ArcGIS steps (13, 14, 15, 19 and the manual step) require ArcGIS Pro with the Spatial Analyst and Image Analyst extensions. Steps 12 and 16–18 rely only on open-source Python.
+Python scripts (01–12, 16–18) are run from the repository root; their paths are relative to it.
+
+The ArcGIS steps (13, 14, 15, 19 and the manual step) require ArcGIS Pro with the Spatial Analyst and Image Analyst extensions. Run them in the ArcGIS Pro Python window with the `Belgium` project open: they locate the project folder and `Belgium.gdb` from the open project. The only line to edit is `DEPOT` (path to this repository) at the top of `14_stats_zonales.py` and `15_ndvi_corine.py`. Steps 12 and 16–18 rely only on open-source Python.
 
 ---
 

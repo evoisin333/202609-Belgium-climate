@@ -22,12 +22,20 @@ import arcpy.sa
 arcpy.CheckOutExtension("Spatial")
 arcpy.env.overwriteOutput = True
 
-# --- Chemins : a adapter ------------------------------------------------------
-PROJET = r"C:\chemin\vers\Project Belgium"           # donnees et scripts Python
-GDB_DATA = r"C:\chemin\vers\Belgium\Belgium.gdb"     # geodatabase du projet ArcGIS
+# --- Chemins ------------------------------------------------------------------
+# Seule ligne a adapter : dossier du depot (scripts, 03_arcgis, 04_stats)
+DEPOT = r"C:\vers\chemin\Project Belgium"
 
-ARCGIS = os.path.join(PROJET, "03_arcgis")
-STATS = os.path.join(PROJET, "04_stats")
+# Le reste se deduit du projet ArcGIS Pro ouvert
+PROJET_ARCGIS = os.path.dirname(arcpy.mp.ArcGISProject("CURRENT").filePath)
+GDB_DATA = os.path.join(PROJET_ARCGIS, "Belgium.gdb")   # geodatabase du projet
+
+ARCGIS = os.path.join(DEPOT, "03_arcgis")
+STATS = os.path.join(DEPOT, "04_stats")
+if not os.path.isdir(ARCGIS):
+    raise SystemExit("03_arcgis introuvable dans %s : corriger DEPOT" % DEPOT)
+print("depot     : %s" % DEPOT)
+print("projet    : %s" % PROJET_ARCGIS)
 GDB = arcpy.mp.ArcGISProject("CURRENT").defaultGeodatabase   # sorties
 
 # Provinces en WGS84 : meme systeme que les rasters, pas de reprojection inutile.
@@ -38,7 +46,7 @@ PROVINCES = os.path.join(GDB_DATA, "provinces_BE_wgs84")
 if not arcpy.Exists(PROVINCES):
     PROVINCES = os.path.join(GDB, "provinces_BE_wgs84")
 if not arcpy.Exists(PROVINCES):
-    raise SystemExit("provinces_BE_wgs84 introuvable : corriger GDB_DATA")
+    raise SystemExit("provinces_BE_wgs84 introuvable dans %s ni dans %s" % (GDB_DATA, GDB))
 print("provinces : %s" % PROVINCES)
 print("sorties   : %s" % GDB)
 

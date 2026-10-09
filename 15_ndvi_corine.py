@@ -33,22 +33,32 @@ from arcpy.sa import Reclassify, RemapValue, Int
 arcpy.CheckOutExtension("Spatial")
 arcpy.env.overwriteOutput = True
 
-# --- Chemins : a adapter ------------------------------------------------------
-PROJET = r"C:\chemin\vers\Project Belgium"           # donnees et scripts Python
-GDB_DATA = r"C:\chemin\vers\Belgium\Belgium.gdb"     # geodatabase du projet ArcGIS
+# --- Chemins ------------------------------------------------------------------
+# Seule ligne a adapter : dossier du depot (scripts, 01_raw, 03_arcgis, 04_stats)
+DEPOT = r"C:\chemin\vers\Project Belgium"
 # Raster CORINE europeen complet (U2018_CLC2018*.tif). Laisser None pour le
 # chercher dans les cartes du projet ouvert, puis dans les dossiers voisins.
 CLC_FULL = None
 
-ARCGIS = os.path.join(PROJET, "03_arcgis")
-STATS = os.path.join(PROJET, "04_stats")
+# Le reste se deduit du projet ArcGIS Pro ouvert
+PROJET_ARCGIS = os.path.dirname(arcpy.mp.ArcGISProject("CURRENT").filePath)
+GDB_DATA = os.path.join(PROJET_ARCGIS, "Belgium.gdb")   # geodatabase du projet
+
+ARCGIS = os.path.join(DEPOT, "03_arcgis")
+STATS = os.path.join(DEPOT, "04_stats")
 GDB = arcpy.mp.ArcGISProject("CURRENT").defaultGeodatabase
+if not os.path.isdir(ARCGIS):
+    raise SystemExit("03_arcgis introuvable dans %s : corriger DEPOT" % DEPOT)
+print("depot     : %s" % DEPOT)
+print("projet    : %s" % PROJET_ARCGIS)
 
 PROVINCES = os.path.join(GDB_DATA, "provinces_BE_wgs84")
+if not arcpy.Exists(PROVINCES):
+    raise SystemExit("provinces_BE_wgs84 introuvable dans %s" % GDB_DATA)
 CHAMP_ZONE = "NUTS_ID"
 NDVI_REF = os.path.join(ARCGIS, "modis_ndvi_BE_JJA.crf")
 
-CLC_DECOUPE = os.path.join(PROJET, "01_raw", "CLC2018_BE2.tif")
+CLC_DECOUPE = os.path.join(DEPOT, "01_raw", "CLC2018_BE2.tif")
 CORINE_RECLASS = os.path.join(GDB, "corine_8classes")
 CORINE_GRILLE = os.path.join(GDB, "corine_grille_ndvi")
 PROV_GRILLE = os.path.join(GDB, "provinces_grille_ndvi")
@@ -100,7 +110,7 @@ if CLC_FULL is None:
                 CLC_FULL = l.dataSource
                 break
 if CLC_FULL is None:
-    motif = os.path.join(os.path.dirname(PROJET), "**", "U2018_CLC2018*.tif")
+    motif = os.path.join(os.path.dirname(DEPOT), "**", "U2018_CLC2018*.tif")
     trouves = glob.glob(motif, recursive=True)
     CLC_FULL = trouves[0] if trouves else None
 if CLC_FULL is None:

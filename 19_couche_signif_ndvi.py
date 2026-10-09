@@ -25,9 +25,12 @@ from arcpy.sa import Con, Raster
 arcpy.CheckOutExtension("Spatial")
 arcpy.env.overwriteOutput = True
 
-RACINE = r"C:\chemin\vers\Belgium"   # projet ArcGIS Pro, a adapter
+# Chemins deduits du projet ArcGIS Pro ouvert, rien a adapter
+RACINE = os.path.dirname(arcpy.mp.ArcGISProject("CURRENT").filePath)
 TENDANCES = os.path.join(RACINE, "05_tendances")
 GDB = os.path.join(RACINE, "Belgium.gdb")
+if not os.path.isdir(TENDANCES):
+    raise SystemExit("Dossier '05_tendances' introuvable dans %s" % RACINE)
 
 # Adapte ce nom si besoin : le script liste le dossier s'il ne trouve pas.
 PVALUE = os.path.join(TENDANCES, "trend_ndvi_JJA_pvalue.tif")

@@ -28,8 +28,8 @@ Sorties, dans 05_tendances :
   <nom>_pente_dec_signif.tif  idem, pixels non significatifs retires
   <nom>_pvalue.tif            p-value, pour hachurer les zones non significatives
 
-A EXECUTER DANS ARCGIS PRO :
-  ruban Analysis -> Python -> Python Notebook, coller ce code, Ctrl+Entree.
+A LANCER DANS LA FENETRE PYTHON D'ARCGIS PRO (Analysis > Python > Python Window),
+projet Belgium ouvert.
 """
 
 import os
@@ -41,11 +41,13 @@ arcpy.CheckOutExtension("ImageAnalyst")
 arcpy.CheckOutExtension("Spatial")
 
 # --------------------------------------------------------------------------
-# Parametres : chemin du projet ArcGIS Pro, a adapter
+# Chemins : deduits du projet ArcGIS Pro ouvert, rien a adapter
 # --------------------------------------------------------------------------
-RACINE = r"C:\chemin\vers\Belgium"   # projet ArcGIS Pro
+RACINE = os.path.dirname(arcpy.mp.ArcGISProject("CURRENT").filePath)
 TENDANCES = os.path.join(RACINE, "tendances")
 SORTIE = os.path.join(RACINE, "05_tendances")
+if not os.path.isdir(TENDANCES):
+    raise SystemExit("Dossier 'tendances' introuvable dans %s" % RACINE)
 
 SEUIL_P = 0.05
 FACTEUR = 10.0        # par an -> par decennie

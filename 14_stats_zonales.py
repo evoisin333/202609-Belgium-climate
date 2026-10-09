@@ -23,7 +23,7 @@ arcpy.env.overwriteOutput = True
 
 # --- Chemins ------------------------------------------------------------------
 # Seule ligne a adapter : dossier du depot (scripts, 03_arcgis, 04_stats)
-DEPOT = r"C:\chemin\vers\Project Belgium"
+DEPOT = r"C:\vers\chemin\Project Belgium"
 
 # Le reste se deduit du projet ArcGIS Pro ouvert
 PROJET_ARCGIS = os.path.dirname(arcpy.mp.ArcGISProject("CURRENT").filePath)
@@ -38,15 +38,34 @@ print("projet    : %s" % PROJET_ARCGIS)
 GDB = arcpy.mp.ArcGISProject("CURRENT").defaultGeodatabase   # sorties
 
 # Provinces en WGS84 : meme systeme que les rasters, pas de reprojection inutile.
-# Elles ne sont pas dans la geodatabase par defaut : on cherche dans les deux.
+# Source : Eurostat GISCO, NUTS 2024 niveau 2, 1:1 million, EPSG:4326
+#   https://gisco-services.ec.europa.eu/distribution/v2/nuts/geojson/NUTS_RG_01M_2024_4326_LEVL_2.geojson
+#   (c) EuroGeographics pour les limites administratives
+# Fichier a placer dans 01_raw. La couche est creee une seule fois dans
+# Belgium.gdb ; si elle existe deja (ici ou dans la gdb par defaut), on la reutilise.
 CHAMP_ZONE = "NUTS_ID"
+NUTS_GEOJSON = os.path.join(DEPOT, "01_raw", "NUTS_RG_01M_2024_4326_LEVL_2.geojson")
 
 PROVINCES = os.path.join(GDB_DATA, "provinces_BE_wgs84")
-if not arcpy.Exists(PROVINCES):
+if not arcpy.Exists(PROVINCES) and arcpy.Exists(os.path.join(GDB, "provinces_BE_wgs84")):
     PROVINCES = os.path.join(GDB, "provinces_BE_wgs84")
+
 if not arcpy.Exists(PROVINCES):
-    raise SystemExit("provinces_BE_wgs84 introuvable dans %s ni dans %s" % (GDB_DATA, GDB))
-print("provinces : %s" % PROVINCES)
+    if not os.path.exists(NUTS_GEOJSON):
+        raise SystemExit("GeoJSON NUTS introuvable : %s" % NUTS_GEOJSON)
+    print("creation de provinces_BE_wgs84 depuis %s" % os.path.basename(NUTS_GEOJSON))
+    nuts_europe = os.path.join(GDB_DATA, "NUTS2_EUROPE")
+    arcpy.conversion.JSONToFeatures(NUTS_GEOJSON, nuts_europe, "POLYGON")
+    arcpy.analysis.Select(nuts_europe, PROVINCES, "CNTR_CODE = 'BE'")
+    arcpy.management.Delete(nuts_europe)
+
+# Controles : 10 provinces + Bruxelles-Capitale, en WGS84
+n = int(arcpy.management.GetCount(PROVINCES)[0])
+epsg = arcpy.Describe(PROVINCES).spatialReference.factoryCode
+if n != 11 or epsg != 4326:
+    raise SystemExit("provinces_BE_wgs84 : %d entites (11 attendues), EPSG %s (4326 attendu)"
+                     % (n, epsg))
+print("provinces : %s  (11 entites, EPSG:4326)" % PROVINCES)
 print("sorties   : %s" % GDB)
 
 if not os.path.isdir(STATS):

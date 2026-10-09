@@ -41,7 +41,7 @@ Change between the WMO climate normals **1961–1990 and 1991–2020**, national
 | E-OBS v31.0e — seasonal ETCCDI indices (FD, SU, TR, TXx, PRCPTOT) and daily Tmax | Thermal extremes, precipitation, days ≥ 30 °C | 0.1° | 1961–2024 | [ECA&D / Copernicus](https://surfobs.climate.copernicus.eu/) |
 | MODIS MOD13Q1 v061 (NDVI, pixel reliability) | Vegetation response | 250 m nominal (≈ 230 m), 16-day | 2001–2024 | [NASA AppEEARS](https://appeears.earthdatacloud.nasa.gov/) |
 | CORINE Land Cover 2018 | Land-cover classes (44 → 8) | 100 m | 2018 | [Copernicus Land](https://land.copernicus.eu/) |
-| NUTS 2 regions (Brussels-Capital and the 10 provinces) | Zonal statistics | — | — | [Eurostat GISCO](https://ec.europa.eu/eurostat/web/gisco) |
+| NUTS 2 regions (Brussels-Capital and the 10 provinces), file `NUTS_RG_01M_2024_4326_LEVL_2.geojson` in `01_raw/` | Zonal statistics | 1:1 million | NUTS 2024 | [Eurostat GISCO](https://gisco-services.ec.europa.eu/distribution/v2/nuts/geojson/NUTS_RG_01M_2024_4326_LEVL_2.geojson) |
 
 Indicator definitions (ETCCDI): **FD** frost days (Tmin < 0 °C), **SU** summer days (Tmax > 25 °C), **TR** tropical nights (Tmin > 20 °C), **TXx** hottest day of the season, **PRCPTOT** precipitation on wet days (≥ 1 mm). **su30** (days with Tmax ≥ 30 °C) is computed in this project from E-OBS daily Tmax.
 

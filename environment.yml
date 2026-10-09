@@ -2,12 +2,13 @@ name: geo
 channels:
   - conda-forge
 dependencies:
-  - netcdf4
-  - python=3.11
-  - dask
-  - xarray
-  - rasterio
-  - rioxarray
-  - jupyterlab
-  - matplotlib
-  - cdsapi
+  - python=3.11.16
+  - xarray=2026.7.0
+  - numpy=2.4.6
+  - pandas=3.0.5
+  - dask=2026.8.0
+  - netcdf4=1.7.4
+  - rasterio=1.4.4
+  - rioxarray=0.19.0
+  - matplotlib=3.11.2
+  - cdsapi=0.7.7

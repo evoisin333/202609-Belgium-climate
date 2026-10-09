@@ -139,6 +139,8 @@ python 00_telechargement_era5.py
 python 01_decoupe.py
 ```
 
+`environment.yml` pins the exact versions used for the published results (Python 3.11.16, xarray 2026.7.0, numpy 2.4.6, pandas 3.0.5, rioxarray 0.19.0, conda-forge, Windows).
+
 Python scripts (00–12, 16–18) are run from the repository root; their paths are relative to it.
 
 The ArcGIS steps (13, 14, 15, 19) require ArcGIS Pro with the Spatial Analyst and Image Analyst extensions. Run them in the ArcGIS Pro Python window with the `Belgium` project open: they locate the project folder and `Belgium.gdb` from the open project. The only line to edit is `DEPOT` (path to this repository) at the top of `13_tendances_arcgis.py`, `14_stats_zonales.py` and `15_ndvi_corine.py`. Steps 12 and 16–18 rely only on open-source Python.

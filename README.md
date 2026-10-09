@@ -47,6 +47,29 @@ Indicator definitions (ETCCDI): **FD** frost days (Tmin < 0 °C), **SU** summer 
 
 Raw and intermediate data are not stored here (several GB). They can be downloaded from the sources above.
 
+### Data acquisition
+
+NetCDF files go in the project root, rasters and boundaries in `01_raw/`, with the file names below (the scripts look for them by name).
+
+**ERA5-Land** — run `00_telechargement_era5.py` (Copernicus CDS API). Request: dataset `reanalysis-era5-land-monthly-means`, product `monthly_averaged_reanalysis`, variables `2m_temperature`, `total_precipitation`, `volumetric_soil_water_layer_1`, `volumetric_soil_water_layer_2`, years 1960–2024 (December 1960 is needed for winter 1961), all months, time 00:00, area N 52.0 / W 2.0 / S 49.2 / E 6.8, NetCDF. Output: `data_stream-moda.nc`. Requires a CDS account, the dataset licence accepted on its *Download* tab, and an API key in `~/.cdsapirc` ([how-to](https://cds.climate.copernicus.eu/how-to-api)). Dataset DOI: [10.24381/cds.68d2bb30](https://doi.org/10.24381/cds.68d2bb30).
+
+**E-OBS v31.0e** — direct download, no account ([indices page](https://surfobs.climate.copernicus.eu/dataaccess/access_eobs_indices.php), [daily data page](https://surfobs.climate.copernicus.eu/dataaccess/access_eobs.php)):
+
+- [`fd_seas_0.1deg_reg_ens_median_E-OBSv31.0e.nc`](https://surfobs.climate.copernicus.eu/data/indices/eobs/cold/fd_seas_0.1deg_reg_ens_median_E-OBSv31.0e.nc)
+- [`su_seas_0.1deg_reg_ens_median_E-OBSv31.0e.nc`](https://surfobs.climate.copernicus.eu/data/indices/eobs/heat/su_seas_0.1deg_reg_ens_median_E-OBSv31.0e.nc)
+- [`tr_seas_0.1deg_reg_ens_median_E-OBSv31.0e.nc`](https://surfobs.climate.copernicus.eu/data/indices/eobs/heat/tr_seas_0.1deg_reg_ens_median_E-OBSv31.0e.nc)
+- [`txx_seas_0.1deg_reg_ens_median_E-OBSv31.0e.nc`](https://surfobs.climate.copernicus.eu/data/indices/eobs/heat/txx_seas_0.1deg_reg_ens_median_E-OBSv31.0e.nc)
+- [`prcptot_seas_0.1deg_reg_ens_median_E-OBSv31.0e.nc`](https://surfobs.climate.copernicus.eu/data/indices/eobs/rain/prcptot_seas_0.1deg_reg_ens_median_E-OBSv31.0e.nc)
+- [`tx_ens_mean_0.1deg_reg_v31.0e.nc`](https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/Grid_0.1deg_reg_ensemble/tx_ens_mean_0.1deg_reg_v31.0e.nc) (daily Tmax, several GB)
+
+These v31.0e links were online on 9 October 2026; newer E-OBS versions exist and ECA&D may replace the index files when it updates them.
+
+**MODIS MOD13Q1 v061** — [NASA AppEEARS](https://appeears.earthdatacloud.nasa.gov/) area request (Earthdata account): product `MOD13Q1.061`, layers `_250m_16_days_NDVI` and `_250m_16_days_pixel_reliability`, from the start of the record (February 2000) to the end of 2024, polygon `belgique_contour.geojson` (Belgian outline from the geo.be INSPIRE WFS, dissolved and slightly buffered), GeoTIFF output. Files go in `01_raw/MODIS/NDVI/` and `01_raw/MODIS/pixel_reliability/`. The output projection is not archived; `10_export_ndvi_su30.py` assumes geographic WGS84.
+
+**CORINE Land Cover 2018** — [Copernicus Land Monitoring Service](https://land.copernicus.eu/en/products/corine-land-cover/clc2018), raster 100 m, version V2020_20u1, file `U2018_CLC2018_V2020_20u1.tif`. Place it in the folder that contains this repository (or a subfolder): `15_ndvi_corine.py` searches there.
+
+**NUTS 2 regions** — [`NUTS_RG_01M_2024_4326_LEVL_2.geojson`](https://gisco-services.ec.europa.eu/distribution/v2/nuts/geojson/NUTS_RG_01M_2024_4326_LEVL_2.geojson) in `01_raw/`; `14_stats_zonales.py` builds `provinces_BE_wgs84` from it.
+
 ---
 
 ## Method
@@ -65,10 +88,11 @@ Raw and intermediate data are not stored here (several GB). They can be download
 
 ## Processing chain
 
-Scripts are numbered in execution order. Python scripts run in the conda environment from `environment.yml`, from the project root folder. ArcGIS scripts are pasted into the ArcGIS Pro Python window; set the folder paths at the top of each one first.
+Scripts are numbered in execution order. Python scripts run in the conda environment from `environment.yml`, from the project root folder. ArcGIS scripts are run in the ArcGIS Pro Python window; set `DEPOT` at the top of 13, 14 and 15 first.
 
 | # | Script | Environment | What it does |
 |---|---|---|---|
+| 00 | `00_telechargement_era5.py` | Python | Downloads ERA5-Land monthly means from the CDS (other sources: see *Data acquisition*) |
 | 01 | `01_decoupe.py` | Python | Clips all European NetCDF files to the Belgian bounding box |
 | 02 | `02_agregation.py` | Python | ERA5 unit conversions, seasonal aggregation, days ≥ 30 °C from daily Tmax |
 | 03 | `03_modis_ndvi.py` | Python | MODIS quality masking, scaling, seasonal NDVI |
@@ -111,10 +135,11 @@ Belgium/                  ← ArcGIS Pro project, next to the root
 ```bash
 conda env create -f environment.yml
 conda activate geo
+python 00_telechargement_era5.py
 python 01_decoupe.py
 ```
 
-Python scripts (01–12, 16–18) are run from the repository root; their paths are relative to it.
+Python scripts (00–12, 16–18) are run from the repository root; their paths are relative to it.
 
 The ArcGIS steps (13, 14, 15, 19) require ArcGIS Pro with the Spatial Analyst and Image Analyst extensions. Run them in the ArcGIS Pro Python window with the `Belgium` project open: they locate the project folder and `Belgium.gdb` from the open project. The only line to edit is `DEPOT` (path to this repository) at the top of `13_tendances_arcgis.py`, `14_stats_zonales.py` and `15_ndvi_corine.py`. Steps 12 and 16–18 rely only on open-source Python.
 

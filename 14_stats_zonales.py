@@ -11,8 +11,7 @@ provinces), a partir des CRF de 03_arcgis :
 Les tables sont exportees en CSV dans 04_stats.
 Le croisement NDVI x occupation du sol est traite par 15_ndvi_corine.py.
 
-Prealable : CRF crees dans 03_arcgis a partir des NetCDF des scripts 09 a 11
-(Copy Raster, extension .crf, Process as Multidimensional).
+Prealable : CRF de 03_arcgis crees par 13_tendances_arcgis.py (etape A).
 """
 
 import os
@@ -24,7 +23,7 @@ arcpy.env.overwriteOutput = True
 
 # --- Chemins ------------------------------------------------------------------
 # Seule ligne a adapter : dossier du depot (scripts, 03_arcgis, 04_stats)
-DEPOT = r"C:\vers\chemin\Project Belgium"
+DEPOT = r"C:\chemin\vers\Project Belgium"
 
 # Le reste se deduit du projet ArcGIS Pro ouvert
 PROJET_ARCGIS = os.path.dirname(arcpy.mp.ArcGISProject("CURRENT").filePath)

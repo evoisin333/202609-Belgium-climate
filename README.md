@@ -78,8 +78,7 @@ Scripts are numbered in execution order. Python scripts run in the conda environ
 | 08 | `08_masque_artefact_lux.py` | Python | Masks the residual artefact halo (summers 2003, 2004, 2006, 2007) |
 | 09–11 | `09_export_era5.py`, `10_export_ndvi_su30.py`, `11_export_eobs_indices.py` | Python | One CF-compliant NetCDF per season, readable by ArcGIS Pro |
 | 12 | `12_normales.py` | Python | Climate normals and change maps (GeoTIFF) |
-| — | *manual step* | ArcGIS Pro | NetCDF → CRF (*Copy Raster*, multidimensional), then *Generate Trend Raster* (Mann-Kendall) |
-| 13 | `13_tendances_arcgis.py` | ArcGIS Pro | Slope per decade, p-values, significance masking |
+| 13 | `13_tendances_arcgis.py` | ArcGIS Pro | NetCDF → multidimensional CRF (*Copy Raster*), *Generate Trend Raster* (Mann-Kendall, Ignore NoData on) for 11 indicator × season combinations, then slope per decade, p-values, significance masking |
 | 14 | `14_stats_zonales.py` | ArcGIS Pro | Zonal statistics by region, ERA5 and E-OBS |
 | 15 | `15_ndvi_corine.py` | ArcGIS Pro | NDVI by region × land-cover class |
 | 16 | `16_analyse.py` | Python | Normals by region, national series, NDVI–climate correlations |
@@ -117,7 +116,7 @@ python 01_decoupe.py
 
 Python scripts (01–12, 16–18) are run from the repository root; their paths are relative to it.
 
-The ArcGIS steps (13, 14, 15, 19 and the manual step) require ArcGIS Pro with the Spatial Analyst and Image Analyst extensions. Run them in the ArcGIS Pro Python window with the `Belgium` project open: they locate the project folder and `Belgium.gdb` from the open project. The only line to edit is `DEPOT` (path to this repository) at the top of `14_stats_zonales.py` and `15_ndvi_corine.py`. Steps 12 and 16–18 rely only on open-source Python.
+The ArcGIS steps (13, 14, 15, 19) require ArcGIS Pro with the Spatial Analyst and Image Analyst extensions. Run them in the ArcGIS Pro Python window with the `Belgium` project open: they locate the project folder and `Belgium.gdb` from the open project. The only line to edit is `DEPOT` (path to this repository) at the top of `13_tendances_arcgis.py`, `14_stats_zonales.py` and `15_ndvi_corine.py`. Steps 12 and 16–18 rely only on open-source Python.
 
 ---
 

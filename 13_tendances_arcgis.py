@@ -2,13 +2,23 @@
 """
 13_tendances_arcgis.py
 
-Finalisation des tendances Mann-Kendall produites par Generate Trend Raster.
+Tendances Mann-Kendall, de la conversion des NetCDF a la finalisation.
 
-Prealable, a la main dans ArcGIS Pro : Generate Trend Raster (methode
-MANN-KENDALL) sur chaque CRF de 03_arcgis a analyser, sorties nommees
+Etape A : chaque NetCDF de 03_arcgis (scripts 09 a 11) est copie en CRF
+multidimensionnel (Copy Raster, toutes les tranches). Ces CRF servent aussi
+aux scripts 14 et 15.
+
+Etape B : Generate Trend Raster (MANN-KENDALL, dimension StdTime) sur les
+combinaisons indicateur x saison de la liste TENDANCES_A_CALCULER, sorties
 trend_<indicateur>_<saison>.crf dans le dossier "tendances" du projet ArcGIS.
+Ignore NoData = DATA (valeur par defaut d'ArcGIS) : une annee manquante,
+par exemple un ete masque par 08_masque_artefact_lux.py, est simplement
+retiree de la serie du pixel au lieu de rendre le pixel NoData.
 
-Pour chaque trend_*.crf du dossier "tendances" :
+Les CRF et tendances deja presents sont conserves : supprimer un fichier
+pour le recalculer.
+
+Etape C, pour chaque trend_*.crf du dossier "tendances" :
   1. extraction de la bande Sens_Slope et de la bande P_Value ;
   2. conversion de la pente en unite par decennie (x10) ;
   3. version masquee ou les pixels non significatifs (p >= SEUIL_P) passent
@@ -32,23 +42,91 @@ A LANCER DANS LA FENETRE PYTHON D'ARCGIS PRO (Analysis > Python > Python Window)
 projet Belgium ouvert.
 """
 
+import glob
 import os
 
 import arcpy
+from arcpy.ia import GenerateTrendRaster
 from arcpy.sa import Con, ExtractBand, SetNull
 
 arcpy.CheckOutExtension("ImageAnalyst")
 arcpy.CheckOutExtension("Spatial")
 
 # --------------------------------------------------------------------------
-# Chemins : deduits du projet ArcGIS Pro ouvert, rien a adapter
+# Chemins
 # --------------------------------------------------------------------------
+# Seule ligne a adapter : dossier du depot (scripts, 03_arcgis)
+DEPOT = r"C:\vers\chemin\Project Belgium"
+
+# Le reste se deduit du projet ArcGIS Pro ouvert
 RACINE = os.path.dirname(arcpy.mp.ArcGISProject("CURRENT").filePath)
+ARCGIS = os.path.join(DEPOT, "03_arcgis")
 TENDANCES = os.path.join(RACINE, "tendances")
 SORTIE = os.path.join(RACINE, "05_tendances")
-if not os.path.isdir(TENDANCES):
-    raise SystemExit("Dossier 'tendances' introuvable dans %s" % RACINE)
+if not os.path.isdir(ARCGIS):
+    raise SystemExit("03_arcgis introuvable dans %s : corriger DEPOT" % DEPOT)
+os.makedirs(TENDANCES, exist_ok=True)
+print("depot  : %s" % DEPOT)
+print("projet : %s\n" % RACINE)
 
+# Combinaisons analysees : (CRF source dans 03_arcgis, variable, sortie)
+TENDANCES_A_CALCULER = [
+    ("era5_BE_DJF.crf", "t2m", "trend_t2m_DJF"),
+    ("era5_BE_MAM.crf", "t2m", "trend_t2m_MAM"),
+    ("era5_BE_JJA.crf", "t2m", "trend_t2m_JJA"),
+    ("era5_BE_SON.crf", "t2m", "trend_t2m_SON"),
+    ("era5_BE_JJA.crf", "swvl2", "trend_swvl2_JJA"),
+    ("eobs_fd_BE_DJF.crf", "fd", "trend_fd_DJF"),
+    ("eobs_su_BE_JJA.crf", "su", "trend_su_JJA"),
+    ("eobs_su30_BE_JJA.crf", "su30", "trend_su30_JJA"),
+    ("eobs_txx_BE_JJA.crf", "txx", "trend_txx_JJA"),
+    ("eobs_prcptot_BE_DJF.crf", "prcptot", "trend_prcptot_DJF"),
+    ("eobs_prcptot_BE_MAM.crf", "prcptot", "trend_prcptot_MAM"),
+]
+
+# Parametres de Generate Trend Raster, ecrits en clair pour la reproductibilite
+DIMENSION = "StdTime"         # nom ArcGIS de la dimension temps des NetCDF
+METHODE = "MANN-KENDALL"
+IGNORE_NODATA = "DATA"        # defaut ArcGIS : les annees NoData sont ignorees
+
+# --------------------------------------------------------------------------
+# Etape A : NetCDF -> CRF multidimensionnel
+# --------------------------------------------------------------------------
+print("=== A. NetCDF -> CRF ===")
+for nc in sorted(glob.glob(os.path.join(ARCGIS, "*.nc"))):
+    crf = nc[:-3] + ".crf"
+    nom = os.path.basename(crf)
+    if arcpy.Exists(crf):
+        print("  deja present : %s" % nom)
+        continue
+    arcpy.management.CopyRaster(nc, crf, format="CRF",
+                                process_as_multidimensional="ALL_SLICES")
+    # Controle : le CRF doit garder toutes les variables du NetCDF
+    variables = arcpy.Raster(crf, True).variableNames
+    print("  cree : %s  (variables : %s)" % (nom, ", ".join(variables)))
+
+# --------------------------------------------------------------------------
+# Etape B : Generate Trend Raster
+# --------------------------------------------------------------------------
+print("\n=== B. Generate Trend Raster ===")
+for source, variable, nom in TENDANCES_A_CALCULER:
+    sortie_crf = os.path.join(TENDANCES, nom + ".crf")
+    if arcpy.Exists(sortie_crf):
+        print("  deja present : %s" % nom)
+        continue
+    entree = os.path.join(ARCGIS, source)
+    if not arcpy.Exists(entree):
+        print("  !! source introuvable, ignore : %s" % source)
+        continue
+    tendance = GenerateTrendRaster(entree, DIMENSION, variable, METHODE,
+                                   ignore_nodata=IGNORE_NODATA)
+    tendance.save(sortie_crf)
+    print("  cree : %s" % nom)
+
+# --------------------------------------------------------------------------
+# Etape C : finalisation
+# --------------------------------------------------------------------------
+print("\n=== C. Finalisation ===")
 SEUIL_P = 0.05
 FACTEUR = 10.0        # par an -> par decennie
 

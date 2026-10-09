@@ -22,7 +22,8 @@ Deux pieges rencontres :
     partager le meme cadre de reference (snapRaster, taille de cellule,
     emprise), sinon le croisement ne couvre qu'une partie du pays.
 
-Prealable : CRF modis_ndvi_BE_<saison>.crf dans 03_arcgis.
+Prealable : CRF modis_ndvi_BE_<saison>.crf dans 03_arcgis, crees par
+13_tendances_arcgis.py (etape A).
 """
 
 import os

@@ -19,7 +19,8 @@ Ajout : un pixel n'est retenu que s'il compte au moins N_MIN annees valides.
 Sur 2 ou 3 annees, la pente de Sen peut prendre n'importe quelle valeur.
 
 Une validation compare d'abord cette implementation a la tendance ArcGIS de
-la temperature, sur le pixel de Bruxelles.
+la temperature estivale (13_tendances_arcgis.py), sur tous les pixels ERA5 :
+ecarts ecrits dans 05_resultats/validation_tendance_python_arcgis.csv.
 
 Sorties (NetCDF, a convertir en TIF sous ArcGIS, voir fin de script) :
   Belgium\\05_tendances\\trend_ndvi_JJA_pente_dec.nc
@@ -31,6 +32,8 @@ import os
 import warnings
 
 import numpy as np
+import pandas as pd
+import rioxarray  # noqa: F401  (active .rio pour lire les TIF ArcGIS)
 import xarray as xr
 
 RACINE = os.getcwd()   # racine du projet
@@ -38,6 +41,7 @@ PORTFOLIO = os.path.dirname(RACINE)   # le projet ArcGIS "Belgium" est a cote
 ENTREE = os.path.join(RACINE, "03_arcgis", "modis_ndvi_BE_JJA.nc")
 ERA5 = os.path.join(RACINE, "03_arcgis", "era5_BE_JJA.nc")
 SORTIE = os.path.join(PORTFOLIO, "Belgium", "05_tendances")
+RESULTATS = os.path.join(RACINE, "05_resultats")
 
 N_MIN = 18        # annees valides minimum sur 24 (75 %)
 SEUIL = 0.05      # significativite
@@ -111,18 +115,39 @@ def ecrire(tableau, gabarit, nom, attrs):
 
 
 # ===========================================================================
-# 1. Validation sur la temperature (comparaison avec ArcGIS)
+# 1. Validation : meme calcul que ArcGIS sur la temperature estivale
 # ===========================================================================
-print("=== Validation : t2m JJA, pixel de Bruxelles ===")
+print("=== Validation : t2m JJA, Python vs ArcGIS, tous les pixels ===")
 e = xr.open_dataset(ERA5)["t2m"].transpose("time", "latitude", "longitude")
 pe, pp, _ = mann_kendall(e.values.astype("float32"),
                          e["time"].dt.year.values.astype("float64"))
-iy = int(np.abs(e["latitude"].values - 50.85).argmin())
-ix = int(np.abs(e["longitude"].values - 4.35).argmin())
-print("  pixel (%.2f N, %.2f E)" % (e["latitude"].values[iy], e["longitude"].values[ix]))
-print("  pente   : %.4f degC / decennie" % (pe[iy, ix] * 10))
-print("  p-value : %.2e" % pp[iy, ix])
-print("  -> a comparer avec trend_t2m_JJA_pente_dec.tif et _pvalue.tif au meme endroit")
+py = xr.Dataset({"pente": (("latitude", "longitude"), pe * 10),
+                 "pvalue": (("latitude", "longitude"), pp)},
+                coords={"latitude": e["latitude"], "longitude": e["longitude"]})
+
+lignes = []
+for nom, suffixe in [("pente", "pente_dec"), ("pvalue", "pvalue")]:
+    tif = os.path.join(SORTIE, "trend_t2m_JJA_%s.tif" % suffixe)
+    if not os.path.exists(tif):
+        print("  !! %s introuvable : lancer d'abord 13_tendances_arcgis.py" % os.path.basename(tif))
+        continue
+    arc = xr.open_dataarray(tif, engine="rasterio", masked=True).squeeze("band", drop=True)
+    arc = arc.rename({"x": "longitude", "y": "latitude"})
+    # Meme grille ERA5 a 0.1 deg : appariement au plus proche, tolerance 0.01 deg
+    arc = arc.reindex_like(py, method="nearest", tolerance=0.01)
+    ecart = np.abs(py[nom] - arc)
+    communs = int(ecart.notnull().sum())
+    lignes.append({"grandeur": nom, "pixels_compares": communs,
+                   "ecart_max": float(ecart.max()), "ecart_moyen": float(ecart.mean())})
+    print("  %-7s : %d pixels, ecart max %.2e, ecart moyen %.2e"
+          % (nom, communs, float(ecart.max()), float(ecart.mean())))
+
+if lignes:
+    os.makedirs(RESULTATS, exist_ok=True)
+    pd.DataFrame(lignes).to_csv(os.path.join(RESULTATS, "validation_tendance_python_arcgis.csv"),
+                                sep=";", decimal=",", index=False)
+    print("  -> 05_resultats/validation_tendance_python_arcgis.csv")
+print("  (pente en degC / decennie ; p-value sans unite)\n")
 
 # ===========================================================================
 # 2. Tendance du NDVI

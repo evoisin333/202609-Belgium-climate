@@ -1,0 +1,97 @@
+CLASSE;SAISON;CLIMAT;N;R;SIGNIFICATIF
+Artificialise;DJF;t2m;24;0,787;oui
+Artificialise;DJF;tp;24;0,293;non
+Artificialise;DJF;swvl1;24;0,553;oui
+Artificialise;JJA;t2m;24;-0,74;oui
+Artificialise;JJA;tp;24;0,604;oui
+Artificialise;JJA;swvl1;24;0,825;oui
+Artificialise;MAM;t2m;24;0,602;oui
+Artificialise;MAM;tp;24;-0,006;non
+Artificialise;MAM;swvl1;24;-0,072;non
+Artificialise;SON;t2m;24;0,226;non
+Artificialise;SON;tp;24;0,291;non
+Artificialise;SON;swvl1;24;0,691;oui
+Cultures;DJF;t2m;24;0,758;oui
+Cultures;DJF;tp;24;0,246;non
+Cultures;DJF;swvl1;24;0,417;oui
+Cultures;JJA;t2m;24;-0,723;oui
+Cultures;JJA;tp;24;0,557;oui
+Cultures;JJA;swvl1;24;0,661;oui
+Cultures;MAM;t2m;24;0,449;oui
+Cultures;MAM;tp;24;-0,023;non
+Cultures;MAM;swvl1;24;0,036;non
+Cultures;SON;t2m;24;0,237;non
+Cultures;SON;tp;24;0,288;non
+Cultures;SON;swvl1;24;0,634;oui
+Foret feuillus;DJF;t2m;24;0,841;oui
+Foret feuillus;DJF;tp;24;0,154;non
+Foret feuillus;DJF;swvl1;24;0,377;non
+Foret feuillus;JJA;t2m;24;-0,382;non
+Foret feuillus;JJA;tp;24;0,228;non
+Foret feuillus;JJA;swvl1;24;0,344;non
+Foret feuillus;MAM;t2m;24;0,821;oui
+Foret feuillus;MAM;tp;24;-0,179;non
+Foret feuillus;MAM;swvl1;24;-0,424;oui
+Foret feuillus;SON;t2m;24;0,319;non
+Foret feuillus;SON;tp;24;0,176;non
+Foret feuillus;SON;swvl1;24;0,427;oui
+Foret mixte;DJF;t2m;24;0,863;oui
+Foret mixte;DJF;tp;24;0,127;non
+Foret mixte;DJF;swvl1;24;0,327;non
+Foret mixte;JJA;t2m;24;-0,391;non
+Foret mixte;JJA;tp;24;0,228;non
+Foret mixte;JJA;swvl1;24;0,446;oui
+Foret mixte;MAM;t2m;24;0,788;oui
+Foret mixte;MAM;tp;24;-0,125;non
+Foret mixte;MAM;swvl1;24;-0,351;non
+Foret mixte;SON;t2m;24;0,323;non
+Foret mixte;SON;tp;24;0,189;non
+Foret mixte;SON;swvl1;24;0,466;oui
+Foret resineux;DJF;t2m;24;0,82;oui
+Foret resineux;DJF;tp;24;0,072;non
+Foret resineux;DJF;swvl1;24;0,261;non
+Foret resineux;JJA;t2m;24;-0,292;non
+Foret resineux;JJA;tp;24;0,151;non
+Foret resineux;JJA;swvl1;24;0,394;non
+Foret resineux;MAM;t2m;24;0,752;oui
+Foret resineux;MAM;tp;24;-0,063;non
+Foret resineux;MAM;swvl1;24;-0,306;non
+Foret resineux;SON;t2m;24;0,395;non
+Foret resineux;SON;tp;24;0,124;non
+Foret resineux;SON;swvl1;24;0,341;non
+Milieux semi-naturels;DJF;t2m;24;0,861;oui
+Milieux semi-naturels;DJF;tp;24;0,161;non
+Milieux semi-naturels;DJF;swvl1;24;0,454;oui
+Milieux semi-naturels;JJA;t2m;24;-0,308;non
+Milieux semi-naturels;JJA;tp;24;0,312;non
+Milieux semi-naturels;JJA;swvl1;24;0,638;oui
+Milieux semi-naturels;MAM;t2m;24;0,648;oui
+Milieux semi-naturels;MAM;tp;24;0,159;non
+Milieux semi-naturels;MAM;swvl1;24;-0,007;non
+Milieux semi-naturels;SON;t2m;24;0,472;oui
+Milieux semi-naturels;SON;tp;24;0,135;non
+Milieux semi-naturels;SON;swvl1;24;0,54;oui
+Prairies;DJF;t2m;24;0,834;oui
+Prairies;DJF;tp;24;0,335;non
+Prairies;DJF;swvl1;24;0,51;oui
+Prairies;JJA;t2m;24;-0,769;oui
+Prairies;JJA;tp;24;0,568;oui
+Prairies;JJA;swvl1;24;0,721;oui
+Prairies;MAM;t2m;24;0,475;oui
+Prairies;MAM;tp;24;-0,011;non
+Prairies;MAM;swvl1;24;-0,042;non
+Prairies;SON;t2m;24;0,168;non
+Prairies;SON;tp;24;0,249;non
+Prairies;SON;swvl1;24;0,708;oui
+Zones humides et eau;DJF;t2m;24;0,841;oui
+Zones humides et eau;DJF;tp;24;0,157;non
+Zones humides et eau;DJF;swvl1;24;0,433;oui
+Zones humides et eau;JJA;t2m;24;-0,493;oui
+Zones humides et eau;JJA;tp;24;0,436;oui
+Zones humides et eau;JJA;swvl1;24;0,726;oui
+Zones humides et eau;MAM;t2m;24;0,628;oui
+Zones humides et eau;MAM;tp;24;0,087;non
+Zones humides et eau;MAM;swvl1;24;0,003;non
+Zones humides et eau;SON;t2m;24;0,467;oui
+Zones humides et eau;SON;tp;24;0,134;non
+Zones humides et eau;SON;swvl1;24;0,468;oui

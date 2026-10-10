@@ -45,7 +45,7 @@ Change between the WMO climate normals **1961–1990 and 1991–2020**, national
 
 Indicator definitions (ETCCDI): **FD** frost days (Tmin < 0 °C), **SU** summer days (Tmax > 25 °C), **TR** tropical nights (Tmin > 20 °C), **TXx** hottest day of the season, **PRCPTOT** precipitation on wet days (≥ 1 mm). **su30** (days with Tmax ≥ 30 °C) is computed in this project from E-OBS daily Tmax.
 
-Raw and intermediate data are not stored here (several GB). They can be downloaded from the sources above.
+Raw and gridded intermediate data are not stored here (several GB); they can be downloaded from the sources below. The tabular outputs are included, so steps 16–17 (analysis and figures) can be rerun from the repository alone: `04_stats/` holds the zonal statistics produced by steps 14–15, `05_resultats/` the national series, normals, correlations and the trend validation produced by steps 16 and 18 (semicolon-separated, decimal comma).
 
 ### Data acquisition
 
@@ -80,7 +80,7 @@ These v31.0e links were online on 9 October 2026; newer E-OBS versions exist and
 
 **Seasons:** DJF, MAM, JJA, SON. December is assigned to the following year's winter.
 
-**Trends:** Sen's slope with a two-sided Mann-Kendall test, per pixel, expressed per decade (ArcGIS Pro *Generate Trend Raster* for climate indicators; an equivalent Python implementation for NDVI, validated against ArcGIS).
+**Trends:** Sen's slope with a two-sided Mann-Kendall test, per pixel, expressed per decade (ArcGIS Pro *Generate Trend Raster* for climate indicators; an equivalent Python implementation for NDVI, validated against ArcGIS on summer temperature over every ERA5-Land cell: see `05_resultats/validation_tendance_python_arcgis.csv`).
 
 **Regional figures:** zonal statistics by NUTS 2 region, and by region × land-cover class for NDVI. National values are area-weighted means.
 

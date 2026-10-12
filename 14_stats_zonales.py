@@ -18,6 +18,13 @@ import os
 import arcpy
 import arcpy.sa
 
+
+def arreter(message):
+    """Affiche le message puis arrete le script : la fenetre Python d'ArcGIS
+    Pro n'affiche pas toujours le texte d'un SystemExit."""
+    print("\n!! " + message)
+    raise SystemExit(message)
+
 arcpy.CheckOutExtension("Spatial")
 arcpy.env.overwriteOutput = True
 
@@ -32,7 +39,7 @@ GDB_DATA = os.path.join(PROJET_ARCGIS, "Belgium.gdb")   # geodatabase du projet
 ARCGIS = os.path.join(DEPOT, "03_arcgis")
 STATS = os.path.join(DEPOT, "04_stats")
 if not os.path.isdir(ARCGIS):
-    raise SystemExit("03_arcgis introuvable dans %s : corriger DEPOT" % DEPOT)
+    arreter("03_arcgis introuvable dans %s : corriger DEPOT" % DEPOT)
 print("depot     : %s" % DEPOT)
 print("projet    : %s" % PROJET_ARCGIS)
 GDB = arcpy.mp.ArcGISProject("CURRENT").defaultGeodatabase   # sorties
@@ -52,7 +59,7 @@ if not arcpy.Exists(PROVINCES) and arcpy.Exists(os.path.join(GDB, "provinces_BE_
 
 if not arcpy.Exists(PROVINCES):
     if not os.path.exists(NUTS_GEOJSON):
-        raise SystemExit("GeoJSON NUTS introuvable : %s" % NUTS_GEOJSON)
+        arreter("GeoJSON NUTS introuvable : %s" % NUTS_GEOJSON)
     print("creation de provinces_BE_wgs84 depuis %s" % os.path.basename(NUTS_GEOJSON))
     nuts_europe = os.path.join(GDB_DATA, "NUTS2_EUROPE")
     arcpy.conversion.JSONToFeatures(NUTS_GEOJSON, nuts_europe, "POLYGON")
@@ -63,7 +70,7 @@ if not arcpy.Exists(PROVINCES):
 n = int(arcpy.management.GetCount(PROVINCES)[0])
 epsg = arcpy.Describe(PROVINCES).spatialReference.factoryCode
 if n != 11 or epsg != 4326:
-    raise SystemExit("provinces_BE_wgs84 : %d entites (11 attendues), EPSG %s (4326 attendu)"
+    arreter("provinces_BE_wgs84 : %d entites (11 attendues), EPSG %s (4326 attendu)"
                      % (n, epsg))
 print("provinces : %s  (11 entites, EPSG:4326)" % PROVINCES)
 print("sorties   : %s" % GDB)

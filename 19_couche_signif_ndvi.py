@@ -15,6 +15,13 @@ import os
 import arcpy
 from arcpy.sa import Con, Raster
 
+
+def arreter(message):
+    """Affiche le message puis arrete le script : la fenetre Python d'ArcGIS
+    Pro n'affiche pas toujours le texte d'un SystemExit."""
+    print("\n!! " + message)
+    raise SystemExit(message)
+
 arcpy.CheckOutExtension("Spatial")
 arcpy.env.overwriteOutput = True
 
@@ -23,7 +30,7 @@ RACINE = os.path.dirname(arcpy.mp.ArcGISProject("CURRENT").filePath)
 TENDANCES = os.path.join(RACINE, "05_tendances")
 GDB = os.path.join(RACINE, "Belgium.gdb")
 if not os.path.isdir(TENDANCES):
-    raise SystemExit("Dossier '05_tendances' introuvable dans %s" % RACINE)
+    arreter("Dossier '05_tendances' introuvable dans %s" % RACINE)
 
 # Adapte ce nom si besoin : le script liste le dossier s'il ne trouve pas.
 PVALUE = os.path.join(TENDANCES, "trend_ndvi_JJA_pvalue_fdr.tif")
@@ -40,12 +47,18 @@ if not arcpy.Exists(PVALUE):
     for f in sorted(os.listdir(TENDANCES)):
         if f.lower().endswith(".tif"):
             print("   ", f)
-    raise SystemExit("Corrige la variable PVALUE puis relance.")
+    arreter("Corrige la variable PVALUE puis relance.")
 
 # ===========================================================================
 # 1. Polygones des cellules significatives
 # ===========================================================================
 print("=== Conversion ===")
+# Avec la correction FDR, il peut n'y avoir aucun pixel significatif : on
+# s'arrete proprement au lieu de produire une couche vide
+p = arcpy.RasterToNumPyArray(PVALUE, nodata_to_value=1.0)
+if not (p < SEUIL_FDR).any():
+    arreter("Aucun pixel significatif apres correction FDR (p ajustee min = %.3f) :"
+                     " pas de couche a tracer." % p.min())
 arcpy.conversion.RasterToPolygon(Con(Raster(PVALUE) < SEUIL_FDR, 1), SORTIE, "NO_SIMPLIFY")
 total = int(arcpy.management.GetCount(SORTIE)[0])
 print("  %d polygones" % total)
@@ -57,7 +70,7 @@ champ = "Shape_Area"
 surfaces = sorted(r[0] * KM2_PAR_DEGRE2
                   for r in arcpy.da.SearchCursor(SORTIE, [champ]))
 if not surfaces:
-    raise SystemExit("Aucun pixel significatif apres correction FDR : pas de couche a tracer.")
+    arreter("Aucun pixel significatif apres correction FDR : pas de couche a tracer.")
 
 
 def centile(p):
@@ -77,7 +90,7 @@ print("  total significatif : %.0f km2" % sum(surfaces))
 aprx = arcpy.mp.ArcGISProject("CURRENT")
 m = aprx.activeMap
 if m is None:
-    raise SystemExit("Ouvre l'onglet de la carte NDVI, puis relance.")
+    arreter("Ouvre l'onglet de la carte NDVI, puis relance.")
 
 for c in list(m.listLayers()):
     if c.name == NOM_COUCHE or "signif_ndvi" in c.name.lower():

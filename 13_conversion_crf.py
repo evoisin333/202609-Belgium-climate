@@ -4,13 +4,15 @@
 
 Copie chaque NetCDF de 03_arcgis (scripts 09 a 11) en CRF multidimensionnel
 (Copy Raster, toutes les tranches). Ces CRF servent aux statistiques zonales
-(14_stats_zonales.py et 15_ndvi_corine.py).
+du climat (14_stats_zonales.py) et aux cartes ; le NDVI par classe est
+calcule en Python (15_ndvi_corine.py).
 
 Les tendances ne sont plus calculees sous ArcGIS : voir 18_tendances.py
 (Mann-Kendall corrige de l'autocorrelation, que Generate Trend Raster ne
 propose pas).
 
-Les CRF deja presents sont conserves : supprimer un fichier pour le recreer.
+Les CRF deja presents sont conserves : supprimer un .crf pour le recreer
+(par exemple les modis_ndvi_BE_*.crf apres avoir relance 03 et 10).
 
 A LANCER DANS LA FENETRE PYTHON D'ARCGIS PRO (Analysis > Python > Python Window),
 projet Belgium ouvert.
@@ -21,12 +23,19 @@ import os
 
 import arcpy
 
+
+def arreter(message):
+    """Affiche le message puis arrete le script : la fenetre Python d'ArcGIS
+    Pro n'affiche pas toujours le texte d'un SystemExit."""
+    print("\n!! " + message)
+    raise SystemExit(message)
+
 # Seule ligne a adapter : dossier du depot (scripts, 03_arcgis)
 DEPOT = r"C:\chemin\vers\Project Belgium"
 
 ARCGIS = os.path.join(DEPOT, "03_arcgis")
 if not os.path.isdir(ARCGIS):
-    raise SystemExit("03_arcgis introuvable dans %s : corriger DEPOT" % DEPOT)
+    arreter("03_arcgis introuvable dans %s : corriger DEPOT" % DEPOT)
 print("depot : %s\n" % DEPOT)
 
 print("=== NetCDF -> CRF ===")

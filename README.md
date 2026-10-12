@@ -22,10 +22,10 @@ Change between the WMO climate normals **1961–1990 and 1991–2020**, national
 | Winter frost days | **−7 days** |
 | Spring soil moisture (top 7 cm) | **−0.016 m³/m³** |
 
-- **Summers are warming everywhere.** Mean summer temperature rises by 0.35 to 0.44 °C per decade, significant in every grid cell (Mann-Kendall, p < 0.05).
+- **Summers are warming everywhere.** Mean summer temperature rises by 0.35 to 0.44 °C per decade, significant in every grid cell (Mann-Kendall with prewhitening, 3PW, and false-discovery-rate correction).
 - **Extremes are rising faster than the mean.** TXx rises by 0.5 to 1.4 °C per decade, up to three times faster than mean summer temperature.
 - **Rain is shifting from spring to winter**, while annual totals barely change, and soils are drying in spring and summer.
-- **Summer vegetation is declining on farmland.** Over 2001–2024, the median summer NDVI trend is −0.012 per decade, with 29 % of pixels showing a significant trend (26 % declining, 3 % increasing). The decline concentrates on cropland and grassland (−0.019 and −0.021 per decade), while forests lose about five times less. Grassland and cropland NDVI is strongly linked to summer temperature (r = −0.70 and −0.64 after detrending) and to topsoil moisture (r = +0.75 and +0.67); forests show no significant link with summer temperature. These links hold after removing the 2001–2024 trends and with Spearman's rank correlation (8 of 96 class × season × variable cells change significance, all close to the 5 % threshold).
+- **Summer vegetation is declining on farmland.** Over 2001–2024, the median summer NDVI trend is −0.012 per decade. Tested one by one, 17 % of pixels show a significant trend (3PW, p < 0.05, against 5 % expected by chance), but none survives the false-discovery-rate correction over the ~970,000 pixels: the decline is widespread but too weak to be confirmed pixel by pixel over 24 years. The decline concentrates on cropland and grassland (−0.019 and −0.021 per decade), while forests lose about five times less. Grassland and cropland NDVI is strongly linked to summer temperature (r = −0.70 and −0.64 after detrending) and to topsoil moisture (r = +0.75 and +0.67); forests show no significant link with summer temperature. These links hold after removing the 2001–2024 trends and with Spearman's rank correlation (8 of 96 class × season × variable cells change significance, all close to the 5 % threshold).
 
 ![Mean seasonal temperature in Belgium, 1961–2024](fig1_seasonal_temperature.png)
 
@@ -80,7 +80,7 @@ These v31.0e links were online on 9 October 2026; newer E-OBS versions exist and
 
 **Seasons:** DJF, MAM, JJA, SON. December is assigned to the following year's winter.
 
-**Trends:** Sen's slope with a two-sided Mann-Kendall test, per pixel, expressed per decade (ArcGIS Pro *Generate Trend Raster* for climate indicators; an equivalent Python implementation for NDVI, validated against ArcGIS on summer temperature over all 1,260 ERA5-Land land cells: maximum difference 6 × 10⁻⁸ °C/decade for the slope and 5 × 10⁻¹⁰ for the p-value, see `05_resultats/validation_tendance_python_arcgis.csv`).
+**Trends:** per-pixel Sen's slope, expressed per decade, computed in Python for all indicators (`18_tendances.py`). Significance uses the 3PW approach of Collaud Coen et al. (2020): the Mann-Kendall test is run after prewhitening (PW, lag-1 autocorrelation removed) and after trend-free prewhitening (TFPW, Yue et al., 2002), and a trend is significant only if both tests are. Each map is then corrected for multiple testing with the Benjamini-Hochberg false discovery rate at 10 % (Wilks, 2016). Pixels need at least 75 % valid years. The same test is applied to the national summer NDVI series of each land-cover class (`16_analyse.py`), where averaging thousands of pixels reduces noise; zones keep a fixed weight (their mean pixel count) every year, so that year-to-year changes in the quality mask do not alter the spatial composition of the mean. The implementation matches the `pymannkendall` package (Hussain & Mahmud, 2019) on every complete ERA5-Land summer series (`05_resultats/validation_tendances_pymannkendall.csv`); the earlier plain Mann-Kendall implementation matched ArcGIS Pro *Generate Trend Raster* (`05_resultats/validation_tendance_python_arcgis.csv`).
 
 **Regional figures:** zonal statistics by NUTS 2 region, and by region × land-cover class for NDVI. National values are area-weighted means.
 
@@ -104,13 +104,14 @@ Scripts are numbered in execution order. Python scripts run in the conda environ
 | 08 | `08_masque_artefact_lux.py` | Python | Masks the residual artefact halo (summers 2003, 2004, 2006, 2007) |
 | 09–11 | `09_export_era5.py`, `10_export_ndvi_su30.py`, `11_export_eobs_indices.py` | Python | One CF-compliant NetCDF per season, readable by ArcGIS Pro |
 | 12 | `12_normales.py` | Python | Climate normals and change maps (GeoTIFF) |
-| 13 | `13_tendances_arcgis.py` | ArcGIS Pro | NetCDF → multidimensional CRF (*Copy Raster*), *Generate Trend Raster* (Mann-Kendall, Ignore NoData on) for 11 indicator × season combinations, then slope per decade, p-values, significance masking |
+| 13 | `13_conversion_crf.py` | ArcGIS Pro | NetCDF → multidimensional CRF (*Copy Raster*), used by the zonal statistics |
 | 14 | `14_stats_zonales.py` | ArcGIS Pro | Zonal statistics by region, ERA5 and E-OBS |
 | 15 | `15_ndvi_corine.py` | ArcGIS Pro | NDVI by region × land-cover class |
 | 16 | `16_analyse.py` | Python | Normals by region, national series, NDVI–climate correlations |
 | 17 | `17_figures.py`, `17_figures_en.py` | Python | Figures, in French and English |
-| 18 | `18_tendance_ndvi.py` | Python | Per-pixel NDVI trend (Sen + Mann-Kendall) |
-| 19 | `19_couche_signif_ndvi.py` | ArcGIS Pro | Significant NDVI trend areas larger than 20 km² |
+| 18 | `18_tendances.py` | Python | Per-pixel trends of the 11 climate combinations and summer NDVI: Sen's slope, Mann-Kendall 3PW, FDR-corrected p-values (GeoTIFF) |
+| 19 | `19_couche_signif_ndvi.py` | ArcGIS Pro | Polygon layer of significant NDVI trend areas (FDR 10 %) for the maps |
+| — | `outils_tendance.py` | Python | Trend-test functions (Sen's slope, Mann-Kendall, PW, TFPW, 3PW, Benjamini-Hochberg) shared by 16 and 18 |
 
 Code comments are in French.
 
@@ -127,8 +128,7 @@ Project Belgium/          ← project root (this repository)
 ├── 05_resultats/         national series, normals, correlations (CSV)
 └── 06_figures/, 06_figures_en/
 Belgium/                  ← ArcGIS Pro project, next to the root
-├── tendances/            Generate Trend Raster outputs
-├── 05_tendances/         trend GeoTIFFs
+├── 05_tendances/         trend GeoTIFFs (18_tendances.py)
 └── Belgium.gdb
 ```
 
@@ -145,7 +145,7 @@ python 01_decoupe.py
 
 Python scripts (00–12, 16–18) are run from the repository root; their paths are relative to it.
 
-The ArcGIS steps (13, 14, 15, 19) require ArcGIS Pro with the Spatial Analyst and Image Analyst extensions. Run them in the ArcGIS Pro Python window with the `Belgium` project open: they locate the project folder and `Belgium.gdb` from the open project. The only line to edit is `DEPOT` (path to this repository) at the top of `13_tendances_arcgis.py`, `14_stats_zonales.py` and `15_ndvi_corine.py`. Steps 12 and 16–18 rely only on open-source Python.
+The ArcGIS steps (13, 14, 15, 19) require ArcGIS Pro with the Spatial Analyst and Image Analyst extensions. Run them in the ArcGIS Pro Python window with the `Belgium` project open: they locate the project folder and `Belgium.gdb` from the open project. The only line to edit is `DEPOT` (path to this repository) at the top of `13_conversion_crf.py`, `14_stats_zonales.py` and `15_ndvi_corine.py`. Steps 12 and 16–18 rely only on open-source Python.
 
 ---
 
@@ -155,8 +155,8 @@ The ArcGIS steps (13, 14, 15, 19) require ArcGIS Pro with the Spatial Analyst an
 - **Different grids.** ERA5-Land and E-OBS cell centres are offset by about 0.05° (≈ 5.5 km). Data were not resampled; cross-source comparisons rely on regional zonal statistics.
 - **Precipitation sources differ.** ERA5-Land `tp` is total precipitation; E-OBS PRCPTOT counts wet days (≥ 1 mm) only.
 - **Rare events and Sen's slope.** Where days ≥ 30 °C are rare (coast, Ardennes), most summers score zero, so Sen's slope collapses towards zero even when Mann-Kendall detects an increase. The trend map shows *where* the increase is strongest, but underestimates its magnitude there.
-- **No pre-whitening and no multiple-testing correction.** The Mann-Kendall test does not correct for serial autocorrelation, and it is repeated over thousands of pixels. This mainly concerns precipitation, soil moisture and NDVI, where significance is closer to the threshold.
-- **Slopes in the figures.** Figures 1 and 3 show least-squares slopes on national means; the maps use per-pixel Sen's slopes. The two are not expected to be identical.
+- **Trend significance is conservative.** The 3PW approach keeps false detections near 5 % for autocorrelated series but loses power on short records: on the 24-year NDVI series, only clear trends are detected. Sen's slope is computed on the original series, not with the VCTFPW correction recommended by Collaud Coen et al. (2020).
+- **Slopes in the figures.** Figure 1 shows least-squares slopes on national means; the maps and Figure 3 use Sen's slopes. The two are not expected to be identical.
 - **Short NDVI record.** 24 years (2001–2024) allow trend and correlation analysis, but not a comparison of climate normals.
 - **NDVI–climate correlations: no multiple-testing correction.** 96 tests (8 classes × 4 seasons × 3 variables) are run at p < 0.05 each, so about five significant cells are expected by chance alone. The climate of each class is approximated by provincial values weighted by the class's pixel count, not computed pixel by pixel.
 
@@ -170,4 +170,8 @@ The ArcGIS steps (13, 14, 15, 19) require ArcGIS Pro with the Spatial Analyst an
 - CORINE Land Cover 2018, Copernicus Land Monitoring Service, European Environment Agency.
 - NUTS boundaries © EuroGeographics for the administrative boundaries, Eurostat GISCO.
 - de Winter, J. C. F., Gosling, S. D., Potter, J. (2016). Comparing the Pearson and Spearman correlation coefficients across distributions and sample sizes: a tutorial using simulations and empirical data. *Psychological Methods*, 21(3), 273–290. https://doi.org/10.1037/met0000079
+- Collaud Coen, M., Andrews, E., Bigi, A., Martucci, G., Romanens, G., Vogt, F. P. A., Vuilleumier, L. (2020). Effects of the prewhitening method, the time granularity, and the time segmentation on the Mann–Kendall trend detection and the associated Sen's slope. *Atmospheric Measurement Techniques*, 13, 6945–6964. https://doi.org/10.5194/amt-13-6945-2020
+- Yue, S., Pilon, P., Phinney, B., Cavadias, G. (2002). The influence of autocorrelation on the ability to detect trend in hydrological series. *Hydrological Processes*, 16, 1807–1829. https://doi.org/10.1002/hyp.1095
+- Wilks, D. S. (2016). "The stippling shows statistically significant grid points": how research results are routinely overstated and overinterpreted, and what to do about it. *Bulletin of the American Meteorological Society*, 97(12), 2263–2273. https://doi.org/10.1175/BAMS-D-15-00267.1
+- Hussain, Md., Mahmud, I. (2019). pyMannKendall: a python package for non parametric Mann Kendall family of trend tests. *Journal of Open Source Software*, 4(39), 1556. https://doi.org/10.21105/joss.01556
 - Bretherton, C. S., Widmann, M., Dymnikov, V. P., Wallace, J. M., Bladé, I. (1999). The effective number of spatial degrees of freedom of a time-varying field. *Journal of Climate*, 12(7), 1990–2009. https://doi.org/10.1175/1520-0442(1999)012<1990:TENOSD>2.0.CO;2

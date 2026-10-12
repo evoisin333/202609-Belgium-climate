@@ -11,7 +11,7 @@ provinces), a partir des CRF de 03_arcgis :
 Les tables sont exportees en CSV dans 04_stats.
 Le croisement NDVI x occupation du sol est traite par 15_ndvi_corine.py.
 
-Prealable : CRF de 03_arcgis crees par 13_tendances_arcgis.py (etape A).
+Prealable : CRF de 03_arcgis crees par 13_conversion_crf.py.
 """
 
 import os

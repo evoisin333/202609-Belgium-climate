@@ -204,6 +204,8 @@ enregistrer(fig, "fig2_ecarts_normales")
 # Figure 3 : NDVI estival par classe d'occupation du sol
 # ===========================================================================
 ndvi = lire("ndvi_par_classe")
+# pente de Sen et significativite (3PW, FDR) calculees par 16_analyse.py
+tend_cl = lire("tendance_ndvi_par_classe").set_index("CLASSE")
 ete = ndvi[ndvi["SAISON"] == "JJA"].sort_values(["CLASSE", "ANNEE"])
 classes = sorted(ete["CLASSE"].unique())
 
@@ -217,12 +219,16 @@ for ax, cl in zip(axes.ravel(), classes):
     d = ete[ete["CLASSE"] == cl]
     an, va = d["ANNEE"].values, d["VALEUR"].values
     ax.plot(an, va, color=BLEU, linewidth=1.9, zorder=3)
-    pente, droite = tendance(an, va)
-    ax.plot(an, droite, color=ENCRE_2, linewidth=1.4, linestyle="--", zorder=4)
+    # droite de Sen : pente du test, ordonnee = mediane des residus
+    pente = tend_cl.loc[cl, "PENTE_DEC"]
+    etoile = "*" if tend_cl.loc[cl, "SIGNIFICATIF"] == "oui" else ""
+    b = np.median(va - pente / 10 * an)
+    ax.plot(an, pente / 10 * an + b, color=ENCRE_2, linewidth=1.4, linestyle="--", zorder=4)
 
     ax.set_title(NOM_CLASSE.get(cl, cl), fontsize=9.5)
-    ax.annotate("%+.3f / décennie" % pente, xy=(0.04, 0.06),
-                xycoords="axes fraction", fontsize=8, color=ENCRE_2)
+    ax.annotate("%+.3f / décennie%s" % (pente, etoile), xy=(0.04, 0.06),
+                xycoords="axes fraction", fontsize=8,
+                fontweight="bold" if etoile else "normal", color=ENCRE_2)
     axes_propres(ax)
 
 for ax in axes[:, 0]:
@@ -230,7 +236,7 @@ for ax in axes[:, 0]:
 fig.suptitle("NDVI estival par classe d'occupation du sol, 2001-2024",
              fontsize=13, fontweight="bold")
 fig.text(0.5, 0.925,
-         "MODIS MOD13Q1, classes CORINE Land Cover 2018 — en gris, les autres classes",
+         "MODIS MOD13Q1, classes CORINE Land Cover 2018 — en gris, les autres classes   |   pente de Sen, * significative (Mann-Kendall 3PW, FDR 10 %)",
          ha="center", color=ENCRE_2, fontsize=9)
 fig.tight_layout(rect=[0, 0, 1, 0.91])
 enregistrer(fig, "fig3_ndvi_par_classe")

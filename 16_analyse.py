@@ -11,6 +11,7 @@ Produit dans 05_resultats\\ :
   - normales_par_province.csv  : 1961-1990 vs 1991-2020 vs 2015-2024, par province
   - series_nationales.csv      : moyenne belge annuelle, par indicateur et saison
   - ndvi_par_classe.csv        : NDVI national par classe d'occupation du sol
+  - tendance_ndvi_par_classe.csv : tendance du NDVI estival par classe (3PW, FDR)
   - correlation_ndvi_climat.csv: correlation NDVI / temperature, precipitations, humidite du sol,
                                  sur series detrendees (voir section 5)
 
@@ -26,6 +27,8 @@ import sys
 import numpy as np
 import pandas as pd
 from scipy import stats
+
+from outils_tendance import fdr, p_3pw, tendance_serie
 
 RACINE = os.getcwd()   # racine du projet
 STATS = os.path.join(RACINE, "04_stats")
@@ -86,6 +89,19 @@ def charger(nom):
         if c in d.columns and d[c].dtype == object:
             d[c] = d[c].astype(str).str.strip()
     return d
+
+
+def moyenne_poids_fixes(d, cles, zone):
+    """Comme moyenne_nationale, mais chaque zone garde le meme poids toutes les
+    annees (son nombre moyen de pixels) : la moyenne porte sur la meme
+    composition spatiale d'une annee a l'autre, meme si le masque qualite
+    retire des pixels differents chaque annee."""
+    d = d.dropna(subset=["MEAN"]).copy()
+    d["_poids"] = d.groupby(zone)["COUNT"].transform("mean")
+    d["_num"] = d["MEAN"] * d["_poids"]
+    g = d.groupby(cles).agg(_num=("_num", "sum"), _den=("_poids", "sum"))
+    g["VALEUR"] = g["_num"] / g["_den"]
+    return g["VALEUR"].reset_index()
 
 
 def moyenne_nationale(d, cles):
@@ -182,7 +198,8 @@ print("  controle t2m JJA : 1961 = %.2f   2003 = %.2f   2024 = %.2f degC" % (
 # ===========================================================================
 if ndvi is not None:
     print("\n=== NDVI par classe ===")
-    ndvi_nat = moyenne_nationale(ndvi, ["CLASSE", "SAISON", "ANNEE"])
+    ndvi_nat = moyenne_poids_fixes(ndvi, ["CLASSE", "SAISON", "ANNEE"],
+                                   ["NUTS_ID", "CLASSE", "SAISON"])
     ndvi_nat = ndvi_nat.sort_values(["CLASSE", "SAISON", "ANNEE"]).round(4)
     ndvi_nat.to_csv(os.path.join(SORTIE, "ndvi_par_classe.csv"),
                     index=False, sep=";", decimal=",")
@@ -286,5 +303,30 @@ if ndvi is not None:
         print("    %-22s %-6s r %+.3f  rho %+.3f  n_eff %4.1f   |  brut : r %+.3f  rho %+.3f"
               % (r["CLASSE"], r["CLIMAT"], r["R"], r["RHO"], r["N_EFF"],
                  r["R_BRUT"], r["RHO_BRUT"]))
+
+    # =======================================================================
+    # 6. Tendance du NDVI estival par classe (meme methode que les cartes)
+    # =======================================================================
+    # La moyenne de tous les pixels d'une classe est beaucoup moins bruitee
+    # qu'un pixel isole : une tendance faible mais generale peut y etre
+    # detectee alors qu'elle ne l'est pas pixel par pixel.
+    print("\n=== Tendance du NDVI estival par classe (3PW, FDR 10 %) ===")
+    lignes = []
+    for classe, g in ndvi_nat[ndvi_nat["SAISON"] == "JJA"].groupby("CLASSE"):
+        g = g.sort_values("ANNEE")
+        pente, p_cl, p_pw, p_tf = tendance_serie(g["ANNEE"].values.astype(float),
+                                                 g["VALEUR"].values.astype(float))
+        lignes.append({"CLASSE": classe, "N": len(g), "PENTE_DEC": pente * 10,
+                       "P_MK": p_cl, "P_3PW": float(p_3pw(p_pw, p_tf))})
+    tend = pd.DataFrame(lignes)
+    tend["P_FDR"] = fdr(tend["P_3PW"].values)
+    tend["SIGNIFICATIF"] = np.where(tend["P_FDR"] < 0.10, "oui", "non")
+    tend = tend.round({"PENTE_DEC": 4, "P_MK": 4, "P_3PW": 4, "P_FDR": 4})
+    tend.to_csv(os.path.join(SORTIE, "tendance_ndvi_par_classe.csv"),
+                index=False, sep=";", decimal=",")
+    for _, r in tend.sort_values("PENTE_DEC").iterrows():
+        print("    %-22s pente %+.4f / decennie   p 3PW %.4f   p FDR %.4f   %s"
+              % (r["CLASSE"], r["PENTE_DEC"], r["P_3PW"], r["P_FDR"], r["SIGNIFICATIF"]))
+    print("  -> tendance_ndvi_par_classe.csv")
 
 print("\nTermine. Resultats dans : %s" % SORTIE)

@@ -23,7 +23,7 @@ Deux pieges rencontres :
     emprise), sinon le croisement ne couvre qu'une partie du pays.
 
 Prealable : CRF modis_ndvi_BE_<saison>.crf dans 03_arcgis, crees par
-13_tendances_arcgis.py (etape A).
+13_conversion_crf.py.
 """
 
 import os

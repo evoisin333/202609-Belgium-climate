@@ -1,19 +1,19 @@
 CLASSE;SAISON;CLIMAT;N;R_BRUT;N_EFF_BRUT;P_BRUT;SIGNIFICATIF_BRUT;R;N_EFF;P;SIGNIFICATIF;RHO_BRUT;P_RHO_BRUT;SIGNIFICATIF_RHO_BRUT;RHO;P_RHO;SIGNIFICATIF_RHO
-Artificialise;DJF;t2m;24;0,787;19,5;0,0001;oui;0,743;23,8;0,0;oui;0,765;0,0001;oui;0,746;0,0;oui
-Artificialise;DJF;tp;24;0,29;21,3;0,199;non;0,476;23,6;0,02;oui;0,357;0,0931;non;0,54;0,0065;oui
-Artificialise;DJF;swvl1;24;0,536;24,0;0,007;oui;0,541;24,0;0,0063;oui;0,548;0,0056;oui;0,649;0,0006;oui
-Artificialise;JJA;t2m;24;-0,739;23,1;0,0001;oui;-0,678;24,0;0,0003;oui;-0,734;0,0;oui;-0,708;0,0001;oui
-Artificialise;JJA;tp;24;0,597;24,0;0,0021;oui;0,563;21,8;0,0066;oui;0,643;0,0007;oui;0,59;0,0039;oui
-Artificialise;JJA;swvl1;24;0,821;24,0;0,0;oui;0,83;22,3;0,0;oui;0,805;0,0;oui;0,835;0,0;oui
-Artificialise;MAM;t2m;24;0,607;22,8;0,0022;oui;0,599;20,3;0,0048;oui;0,561;0,0049;oui;0,511;0,0193;oui
-Artificialise;MAM;tp;24;0,01;23,6;0,9617;non;0,056;22,4;0,8037;non;-0,087;0,6896;non;-0,022;0,923;non
-Artificialise;MAM;swvl1;24;-0,061;23,7;0,7783;non;-0,015;22,8;0,9458;non;-0,018;0,9343;non;0,04;0,8555;non
+Artificialise;DJF;t2m;24;0,786;19,4;0,0001;oui;0,741;23,8;0,0;oui;0,765;0,0001;oui;0,74;0,0;oui
+Artificialise;DJF;tp;24;0,29;21,3;0,1984;non;0,476;23,6;0,0199;oui;0,357;0,0931;non;0,545;0,0059;oui
+Artificialise;DJF;swvl1;24;0,536;24,0;0,0069;oui;0,542;24,0;0,0063;oui;0,548;0,0056;oui;0,654;0,0005;oui
+Artificialise;JJA;t2m;24;-0,74;23,1;0,0001;oui;-0,679;24,0;0,0003;oui;-0,733;0,0;oui;-0,708;0,0001;oui
+Artificialise;JJA;tp;24;0,597;24,0;0,0021;oui;0,564;21,8;0,0065;oui;0,643;0,0007;oui;0,59;0,0039;oui
+Artificialise;JJA;swvl1;24;0,821;24,0;0,0;oui;0,83;22,3;0,0;oui;0,804;0,0;oui;0,835;0,0;oui
+Artificialise;MAM;t2m;24;0,607;22,8;0,0022;oui;0,599;20,3;0,0049;oui;0,561;0,005;oui;0,511;0,0193;oui
+Artificialise;MAM;tp;24;0,01;23,6;0,9635;non;0,055;22,4;0,8062;non;-0,087;0,6883;non;-0,022;0,923;non
+Artificialise;MAM;swvl1;24;-0,062;23,7;0,776;non;-0,016;22,8;0,9428;non;-0,016;0,9407;non;0,04;0,8555;non
 Artificialise;SON;t2m;24;0,233;23,9;0,2739;non;0,189;24,0;0,3775;non;0,213;0,3216;non;0,247;0,2447;non
 Artificialise;SON;tp;24;0,306;24,0;0,1461;non;0,31;24,0;0,141;non;0,322;0,1252;non;0,329;0,1168;non
 Artificialise;SON;swvl1;24;0,705;24,0;0,0001;oui;0,707;24,0;0,0001;oui;0,606;0,0018;oui;0,622;0,0012;oui
-Cultures;DJF;t2m;24;0,758;20,7;0,0001;oui;0,697;24,0;0,0002;oui;0,77;0,0001;oui;0,675;0,0003;oui
-Cultures;DJF;tp;24;0,243;22,0;0,2761;non;0,392;24,0;0,0584;non;0,393;0,0624;non;0,449;0,0279;oui
-Cultures;DJF;swvl1;24;0,387;24,0;0,0618;non;0,348;22,9;0,1046;non;0,462;0,0231;oui;0,377;0,0734;non
+Cultures;DJF;t2m;24;0,756;20,6;0,0001;oui;0,694;24,0;0,0002;oui;0,768;0,0001;oui;0,67;0,0003;oui
+Cultures;DJF;tp;24;0,244;21,9;0,2754;non;0,392;24,0;0,0579;non;0,398;0,0589;non;0,452;0,0265;oui
+Cultures;DJF;swvl1;24;0,388;24,0;0,0613;non;0,348;23,0;0,1036;non;0,469;0,0209;oui;0,373;0,0772;non
 Cultures;JJA;t2m;24;-0,722;21,5;0,0002;oui;-0,636;24,0;0,0008;oui;-0,724;0,0001;oui;-0,654;0,0005;oui
 Cultures;JJA;tp;24;0,557;24,0;0,0047;oui;0,515;21,4;0,016;oui;0,559;0,0045;oui;0,497;0,0216;oui
 Cultures;JJA;swvl1;24;0,661;24,0;0,0004;oui;0,666;21,8;0,0008;oui;0,59;0,0024;oui;0,674;0,0007;oui
@@ -23,9 +23,9 @@ Cultures;MAM;swvl1;24;0,044;23,7;0,8395;non;0,115;22,2;0,6081;non;0,03;0,8915;no
 Cultures;SON;t2m;24;0,244;23,8;0,2524;non;0,168;24,0;0,4339;non;0,141;0,5114;non;0,17;0,4283;non
 Cultures;SON;tp;24;0,293;24,0;0,164;non;0,301;24,0;0,1535;non;0,372;0,0742;non;0,32;0,1274;non
 Cultures;SON;swvl1;24;0,649;24,0;0,0006;oui;0,661;24,0;0,0004;oui;0,546;0,0058;oui;0,554;0,0051;oui
-Foret feuillus;DJF;t2m;24;0,833;19,6;0,0;oui;0,793;23,7;0,0;oui;0,829;0,0;oui;0,784;0,0;oui
-Foret feuillus;DJF;tp;24;0,176;21,9;0,4362;non;0,266;23,5;0,2143;non;0,274;0,203;non;0,318;0,1309;non
-Foret feuillus;DJF;swvl1;24;0,41;24,0;0,0469;oui;0,33;24,0;0,1154;non;0,521;0,0091;oui;0,488;0,0156;oui
+Foret feuillus;DJF;t2m;24;0,833;19,7;0,0;oui;0,793;23,7;0,0;oui;0,829;0,0;oui;0,784;0,0;oui
+Foret feuillus;DJF;tp;24;0,175;21,9;0,4381;non;0,264;23,5;0,2179;non;0,274;0,203;non;0,318;0,1309;non
+Foret feuillus;DJF;swvl1;24;0,406;24,0;0,0487;oui;0,326;24,0;0,1199;non;0,521;0,0091;oui;0,488;0,0156;oui
 Foret feuillus;JJA;t2m;24;-0,377;20,4;0,0968;non;-0,266;22,8;0,2214;non;-0,243;0,3009;non;-0,117;0,5973;non
 Foret feuillus;JJA;tp;24;0,237;24,0;0,265;non;0,176;24,0;0,4114;non;0,075;0,7284;non;0,046;0,8307;non
 Foret feuillus;JJA;swvl1;24;0,34;24,0;0,1042;non;0,291;24,0;0,1675;non;0,225;0,29;non;0,2;0,3488;non
@@ -35,9 +35,9 @@ Foret feuillus;MAM;swvl1;24;-0,44;22,2;0,0392;oui;-0,424;21,4;0,0527;non;-0,318;
 Foret feuillus;SON;t2m;24;0,31;23,5;0,1451;non;0,253;24,0;0,2329;non;0,213;0,3236;non;0,223;0,2938;non
 Foret feuillus;SON;tp;24;0,152;24,0;0,477;non;0,145;24,0;0,4996;non;0,217;0,3095;non;0,193;0,3661;non
 Foret feuillus;SON;swvl1;24;0,398;24,0;0,0542;non;0,399;24,0;0,0533;non;0,487;0,0167;oui;0,436;0,0339;oui
-Foret mixte;DJF;t2m;24;0,848;21,4;0,0;oui;0,809;24,0;0,0;oui;0,834;0,0;oui;0,841;0,0;oui
-Foret mixte;DJF;tp;24;0,144;22,9;0,5143;non;0,201;24,0;0,3458;non;0,204;0,3452;non;0,197;0,3568;non
-Foret mixte;DJF;swvl1;24;0,42;24,0;0,0411;oui;0,321;23,8;0,1276;non;0,518;0,0095;oui;0,439;0,0318;oui
+Foret mixte;DJF;t2m;24;0,842;21,5;0,0;oui;0,802;24,0;0,0;oui;0,834;0,0;oui;0,84;0,0;oui
+Foret mixte;DJF;tp;24;0,144;22,9;0,5125;non;0,2;24,0;0,3477;non;0,204;0,3452;non;0,207;0,3328;non
+Foret mixte;DJF;swvl1;24;0,416;24,0;0,0434;oui;0,317;23,7;0,1331;non;0,518;0,0095;oui;0,449;0,0279;oui
 Foret mixte;JJA;t2m;24;-0,393;21,1;0,0776;non;-0,274;23,4;0,2017;non;-0,236;0,3064;non;-0,232;0,2781;non
 Foret mixte;JJA;tp;24;0,247;24,0;0,2443;non;0,19;24,0;0,3732;non;0,095;0,6595;non;0,155;0,4702;non
 Foret mixte;JJA;swvl1;24;0,448;24,0;0,028;oui;0,409;24,0;0,047;oui;0,313;0,1363;non;0,376;0,0705;non
@@ -47,9 +47,9 @@ Foret mixte;MAM;swvl1;24;-0,393;22,2;0,0687;non;-0,374;21,2;0,0929;non;-0,32;0,1
 Foret mixte;SON;t2m;24;0,302;23,4;0,1577;non;0,266;24,0;0,2097;non;0,205;0,342;non;0,203;0,3403;non
 Foret mixte;SON;tp;24;0,168;24,0;0,4314;non;0,165;24,0;0,4422;non;0,204;0,3382;non;0,173;0,4187;non
 Foret mixte;SON;swvl1;24;0,433;24,0;0,0345;oui;0,437;24,0;0,0328;oui;0,417;0,0424;oui;0,41;0,0464;oui
-Foret resineux;DJF;t2m;24;0,81;22,4;0,0;oui;0,773;24,0;0,0;oui;0,801;0,0;oui;0,81;0,0;oui
-Foret resineux;DJF;tp;24;0,079;23,4;0,7193;non;0,119;24,0;0,58;non;0,146;0,4992;non;0,085;0,6948;non
-Foret resineux;DJF;swvl1;24;0,353;24,0;0,0908;non;0,261;23,9;0,2185;non;0,447;0,0285;oui;0,396;0,0557;non
+Foret resineux;DJF;t2m;24;0,765;23,0;0,0;oui;0,727;24,0;0,0001;oui;0,809;0,0;oui;0,816;0,0;oui
+Foret resineux;DJF;tp;24;0,07;23,6;0,7486;non;0,104;24,0;0,6298;non;0,152;0,4825;non;0,103;0,6335;non
+Foret resineux;DJF;swvl1;24;0,313;24,0;0,137;non;0,226;23,6;0,2925;non;0,45;0,0273;oui;0,403;0,0506;non
 Foret resineux;JJA;t2m;24;-0,298;21,8;0,1808;non;-0,191;23,5;0,3778;non;-0,183;0,4097;non;-0,15;0,4866;non
 Foret resineux;JJA;tp;24;0,194;24,0;0,3636;non;0,146;24,0;0,4971;non;0,038;0,8591;non;0,134;0,5327;non
 Foret resineux;JJA;swvl1;24;0,408;24,0;0,0481;oui;0,373;24,0;0,0723;non;0,316;0,133;non;0,361;0,0832;non
@@ -59,21 +59,21 @@ Foret resineux;MAM;swvl1;24;-0,348;22,9;0,1048;non;-0,328;22,1;0,1348;non;-0,316
 Foret resineux;SON;t2m;24;0,381;23,3;0,0703;non;0,303;24,0;0,1502;non;0,314;0,1441;non;0,283;0,1795;non
 Foret resineux;SON;tp;24;0,136;24,0;0,5256;non;0,137;24,0;0,5238;non;0,174;0,4151;non;0,125;0,5599;non
 Foret resineux;SON;swvl1;24;0,334;24,0;0,1112;non;0,344;24,0;0,0994;non;0,321;0,1257;non;0,31;0,141;non
-Milieux semi-naturels;DJF;t2m;24;0,858;19,2;0,0;oui;0,823;23,0;0,0;oui;0,843;0,0;oui;0,816;0,0;oui
-Milieux semi-naturels;DJF;tp;24;0,154;21,7;0,4973;non;0,234;22,5;0,2881;non;0,303;0,1625;non;0,332;0,1192;non
-Milieux semi-naturels;DJF;swvl1;24;0,507;24,0;0,0114;oui;0,441;24,0;0,0309;oui;0,617;0,0013;oui;0,618;0,0013;oui
-Milieux semi-naturels;JJA;t2m;24;-0,312;22,7;0,1501;non;-0,356;23,4;0,0923;non;-0,398;0,0596;non;-0,506;0,0128;oui
-Milieux semi-naturels;JJA;tp;24;0,351;24,0;0,0922;non;0,362;24,0;0,0817;non;0,475;0,019;oui;0,469;0,0209;oui
-Milieux semi-naturels;JJA;swvl1;24;0,644;24,0;0,0007;oui;0,66;24,0;0,0004;oui;0,705;0,0001;oui;0,703;0,0001;oui
+Milieux semi-naturels;DJF;t2m;24;0,846;19,0;0,0;oui;0,808;22,9;0,0;oui;0,813;0,0;oui;0,803;0,0;oui
+Milieux semi-naturels;DJF;tp;24;0,166;21,6;0,4659;non;0,249;22,4;0,2587;non;0,298;0,1708;non;0,365;0,0855;non
+Milieux semi-naturels;DJF;swvl1;24;0,52;24,0;0,0092;oui;0,456;24,0;0,025;oui;0,632;0,0009;oui;0,652;0,0006;oui
+Milieux semi-naturels;JJA;t2m;24;-0,312;22,7;0,1502;non;-0,355;23,4;0,0932;non;-0,392;0,0645;non;-0,514;0,0112;oui
+Milieux semi-naturels;JJA;tp;24;0,351;24,0;0,0924;non;0,362;24,0;0,0822;non;0,473;0,0196;oui;0,481;0,0174;oui
+Milieux semi-naturels;JJA;swvl1;24;0,643;24,0;0,0007;oui;0,66;24,0;0,0005;oui;0,702;0,0001;oui;0,712;0,0001;oui
 Milieux semi-naturels;MAM;t2m;24;0,649;24,0;0,0006;oui;0,638;22,9;0,0011;oui;0,556;0,0048;oui;0,548;0,0081;oui
-Milieux semi-naturels;MAM;tp;24;0,143;24,0;0,5058;non;0,186;23,5;0,3905;non;-0,024;0,9101;non;0,04;0,8561;non
-Milieux semi-naturels;MAM;swvl1;24;-0,032;24,0;0,8831;non;0,009;23,6;0,966;non;-0,003;0,9903;non;0,05;0,8173;non
-Milieux semi-naturels;SON;t2m;24;0,464;23,3;0,0249;oui;0,355;24,0;0,0889;non;0,453;0,0322;oui;0,363;0,0808;non
-Milieux semi-naturels;SON;tp;24;0,125;24,0;0,5613;non;0,136;24,0;0,5259;non;0,164;0,444;non;0,141;0,5115;non
-Milieux semi-naturels;SON;swvl1;24;0,534;24,0;0,0073;oui;0,579;24,0;0,003;oui;0,483;0,0168;oui;0,472;0,0198;oui
-Prairies;DJF;t2m;24;0,831;21,1;0,0;oui;0,788;24,0;0,0;oui;0,804;0,0;oui;0,79;0,0;oui
-Prairies;DJF;tp;24;0,335;22,5;0,1219;non;0,445;24,0;0,0294;oui;0,471;0,0219;oui;0,522;0,0089;oui
-Prairies;DJF;swvl1;24;0,537;24,0;0,0068;oui;0,491;23,7;0,0156;oui;0,545;0,0059;oui;0,578;0,0033;oui
+Milieux semi-naturels;MAM;tp;24;0,141;24,0;0,5103;non;0,184;23,5;0,3954;non;-0,024;0,9101;non;0,04;0,8561;non
+Milieux semi-naturels;MAM;swvl1;24;-0,034;24,0;0,8743;non;0,006;23,6;0,9763;non;-0,003;0,9903;non;0,05;0,8173;non
+Milieux semi-naturels;SON;t2m;24;0,464;23,3;0,0246;oui;0,356;24,0;0,0877;non;0,456;0,0312;oui;0,363;0,0808;non
+Milieux semi-naturels;SON;tp;24;0,123;24,0;0,5672;non;0,134;24,0;0,5325;non;0,155;0,4702;non;0,141;0,5115;non
+Milieux semi-naturels;SON;swvl1;24;0,532;24,0;0,0075;oui;0,577;24,0;0,0031;oui;0,482;0,0171;oui;0,472;0,0198;oui
+Prairies;DJF;t2m;24;0,828;21,1;0,0;oui;0,784;24,0;0,0;oui;0,796;0,0;oui;0,79;0,0;oui
+Prairies;DJF;tp;24;0,337;22,5;0,1202;non;0,447;24,0;0,0286;oui;0,48;0,0193;oui;0,522;0,0089;oui
+Prairies;DJF;swvl1;24;0,538;24,0;0,0067;oui;0,491;23,7;0,0154;oui;0,549;0,0055;oui;0,578;0,0033;oui
 Prairies;JJA;t2m;24;-0,769;21,8;0,0;oui;-0,7;24,0;0,0001;oui;-0,777;0,0;oui;-0,668;0,0004;oui
 Prairies;JJA;tp;24;0,568;24,0;0,0038;oui;0,545;21,2;0,0102;oui;0,511;0,0106;oui;0,53;0,0095;oui
 Prairies;JJA;swvl1;24;0,724;24,0;0,0001;oui;0,752;22,0;0,0001;oui;0,608;0,0016;oui;0,704;0,0002;oui
@@ -83,15 +83,15 @@ Prairies;MAM;swvl1;24;-0,048;23,3;0,8256;non;-0,007;22,3;0,9736;non;0,012;0,955;
 Prairies;SON;t2m;24;0,16;23,9;0,4562;non;0,2;24,0;0,3479;non;0,205;0,3436;non;0,18;0,4;non
 Prairies;SON;tp;24;0,24;24,0;0,2581;non;0,241;24,0;0,2558;non;0,258;0,223;non;0,272;0,1982;non
 Prairies;SON;swvl1;24;0,701;24,0;0,0001;oui;0,704;24,0;0,0001;oui;0,625;0,0011;oui;0,631;0,0009;oui
-Zones humides et eau;DJF;t2m;24;0,841;18,5;0,0;oui;0,849;23,5;0,0;oui;0,853;0,0;oui;0,879;0,0;oui
-Zones humides et eau;DJF;tp;24;0,139;20,9;0,5474;non;0,317;23,2;0,1382;non;0,246;0,2489;non;0,35;0,0964;non
-Zones humides et eau;DJF;swvl1;24;0,458;24,0;0,0245;oui;0,422;24,0;0,04;oui;0,559;0,0045;oui;0,58;0,003;oui
-Zones humides et eau;JJA;t2m;24;-0,493;22,3;0,0189;oui;-0,484;23,4;0,018;oui;-0,464;0,0315;oui;-0,528;0,0091;oui
-Zones humides et eau;JJA;tp;24;0,458;24,0;0,0243;oui;0,442;24,0;0,0305;oui;0,469;0,0208;oui;0,536;0,007;oui
-Zones humides et eau;JJA;swvl1;24;0,746;24,0;0,0;oui;0,739;24,0;0,0;oui;0,704;0,0001;oui;0,759;0,0;oui
-Zones humides et eau;MAM;t2m;24;0,634;23,7;0,001;oui;0,63;21,2;0,0021;oui;0,597;0,0021;oui;0,554;0,0078;oui
-Zones humides et eau;MAM;tp;24;0,113;23,9;0,5989;non;0,164;22,8;0,457;non;-0,034;0,875;non;0,158;0,4711;non
-Zones humides et eau;MAM;swvl1;24;0,009;23,9;0,9669;non;0,064;23,1;0,7716;non;0,026;0,9037;non;0,136;0,5338;non
-Zones humides et eau;SON;t2m;24;0,467;23,1;0,0244;oui;0,311;24,0;0,1391;non;0,441;0,0382;oui;0,29;0,1699;non
-Zones humides et eau;SON;tp;24;0,117;24,0;0,5868;non;0,161;24,0;0,4515;non;0,181;0,3976;non;0,174;0,4164;non
-Zones humides et eau;SON;swvl1;24;0,477;24,0;0,0184;oui;0,585;24,0;0,0027;oui;0,448;0,028;oui;0,464;0,0223;oui
+Zones humides et eau;DJF;t2m;24;0,822;17,9;0,0;oui;0,825;23,2;0,0;oui;0,83;0,0;oui;0,854;0,0;oui
+Zones humides et eau;DJF;tp;24;0,157;20,6;0,5004;non;0,352;22,6;0,1024;non;0,238;0,2649;non;0,408;0,0508;non
+Zones humides et eau;DJF;swvl1;24;0,485;24,0;0,0162;oui;0,467;24,0;0,0214;oui;0,58;0,003;oui;0,6;0,0019;oui
+Zones humides et eau;JJA;t2m;24;-0,483;22,5;0,0208;oui;-0,47;23,6;0,0217;oui;-0,47;0,0283;oui;-0,563;0,0047;oui
+Zones humides et eau;JJA;tp;24;0,447;24,0;0,0286;oui;0,429;24,0;0,0366;oui;0,465;0,022;oui;0,523;0,0087;oui
+Zones humides et eau;JJA;swvl1;24;0,735;24,0;0,0;oui;0,727;24,0;0,0001;oui;0,697;0,0002;oui;0,749;0,0;oui
+Zones humides et eau;MAM;t2m;24;0,649;22,9;0,0008;oui;0,645;20,5;0,0018;oui;0,62;0,0015;oui;0,609;0,0037;oui
+Zones humides et eau;MAM;tp;24;0,082;23,6;0,7052;non;0,129;22,5;0,5637;non;-0,034;0,8761;non;0,12;0,5904;non
+Zones humides et eau;MAM;swvl1;24;-0,023;23,7;0,9143;non;0,027;22,9;0,9024;non;-0,002;0,9936;non;0,081;0,7137;non
+Zones humides et eau;SON;t2m;24;0,473;23,1;0,0224;oui;0,319;24,0;0,1285;non;0,436;0,0404;oui;0,298;0,1569;non
+Zones humides et eau;SON;tp;24;0,11;24,0;0,6073;non;0,153;24,0;0,475;non;0,161;0,4527;non;0,178;0,4046;non
+Zones humides et eau;SON;swvl1;24;0,466;24,0;0,0218;oui;0,57;24,0;0,0036;oui;0,442;0,0307;oui;0,448;0,0282;oui

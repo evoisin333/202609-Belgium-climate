@@ -11,7 +11,8 @@ Produit dans 05_resultats\\ :
   - normales_par_province.csv  : 1961-1990 vs 1991-2020 vs 2015-2024, par province
   - series_nationales.csv      : moyenne belge annuelle, par indicateur et saison
   - ndvi_par_classe.csv        : NDVI national par classe d'occupation du sol
-  - correlation_ndvi_climat.csv: correlation NDVI / temperature, precipitations, humidite du sol
+  - correlation_ndvi_climat.csv: correlation NDVI / temperature, precipitations, humidite du sol,
+                                 sur series detrendees (voir section 5)
 
 Details de format geres ici :
   - CSV francais : separateur ';', virgule decimale
@@ -22,7 +23,9 @@ Details de format geres ici :
 import os
 import sys
 
+import numpy as np
 import pandas as pd
+from scipy import stats
 
 RACINE = os.getcwd()   # racine du projet
 STATS = os.path.join(RACINE, "04_stats")
@@ -188,34 +191,100 @@ if ndvi is not None:
     # =======================================================================
     # 5. Correlation NDVI / climat, 2001-2024
     # =======================================================================
-    print("\n=== Correlation NDVI / climat (2001-2024, n=24) ===")
-    print("  |r| > 0.404 = significatif a 5 %%\n")
+    # - climat de chaque classe : moyenne des provinces ponderee par le nombre
+    #   de pixels de la classe dans chaque province (pas le climat national) ;
+    # - les deux series sont detrendees (residus d'une droite sur les annees) :
+    #   une tendance commune ne doit pas creer de correlation ;
+    # - n effectif selon l'autocorrelation de lag 1 des deux series
+    #   (Bretherton et al. 1999, eq. 31), p-value de Student a n_eff - 2 ddl ;
+    # - deux versions : brute (series telles quelles) et detrendee ;
+    # - deux coefficients : Pearson (lien lineaire) et Spearman (lien monotone,
+    #   = Pearson sur les rangs, moins sensible aux annees extremes) ;
+    # - pas de correction des tests multiples (voir README, limites).
+    print("\n=== Correlation NDVI / climat (2001-2024, brute et detrendee) ===")
+    SEUIL = 0.05
 
-    clim_nat = moyenne_nationale(climat, ["INDICATEUR", "SAISON", "ANNEE"])
+    # poids de chaque province pour chaque classe : pixels moyens de la classe
+    poids = ndvi.groupby(["CLASSE", "NUTS_ID"])["COUNT"].mean().rename("POIDS").reset_index()
+
+    def climat_de_classe(classe, ind, saison):
+        c = climat[(climat["INDICATEUR"] == ind) & (climat["SAISON"] == saison)]
+        c = c.merge(poids[poids["CLASSE"] == classe], on="NUTS_ID")
+        c["_num"] = c["MEAN"] * c["POIDS"]
+        g = c.groupby("ANNEE").agg(_num=("_num", "sum"), _den=("POIDS", "sum"))
+        return g["_num"] / g["_den"]
+
+    def detrend(serie):
+        x = serie.index.values.astype(float)
+        a, b = np.polyfit(x, serie.values, 1)
+        return serie.values - (a * x + b)
+
+    def lag1(v):
+        return np.corrcoef(v[:-1], v[1:])[0, 1]
+
+    def test_correlation(x, y):
+        """r de Pearson, n effectif et p-value bilaterale."""
+        n = len(x)
+        r = float(np.corrcoef(x, y)[0, 1])
+        a1, a2 = lag1(x), lag1(y)
+        n_eff = float(np.clip(n * (1 - a1 * a2) / (1 + a1 * a2), 3, n))
+        t = r * np.sqrt((n_eff - 2) / (1 - r * r))
+        p = float(2 * stats.t.sf(abs(t), n_eff - 2))
+        return r, n_eff, p
+
     resultats = []
     for (classe, saison), g in ndvi_nat.groupby(["CLASSE", "SAISON"]):
         g = g.set_index("ANNEE")["VALEUR"]
         for ind in ("t2m", "tp", "swvl1"):
-            c = clim_nat[(clim_nat["INDICATEUR"] == ind) & (clim_nat["SAISON"] == saison)]
-            c = c.set_index("ANNEE")["VALEUR"]
-            commun = g.index.intersection(c.index)
-            if len(commun) < 10:
+            c = climat_de_classe(classe, ind, saison)
+            commun = g.index.intersection(c.index).sort_values()
+            n = len(commun)
+            if n < 10:
                 continue
-            r = g.loc[commun].corr(c.loc[commun])
-            resultats.append({"CLASSE": classe, "SAISON": saison, "CLIMAT": ind,
-                              "N": len(commun), "R": round(r, 3),
-                              "SIGNIFICATIF": "oui" if abs(r) > 0.404 else "non"})
+            x, y = g.loc[commun].values, c.loc[commun].values
+            xd, yd = detrend(g.loc[commun]), detrend(c.loc[commun])
+            rb, nb, pb = test_correlation(x, y)
+            rd, nd, pd_ = test_correlation(xd, yd)
+            # Spearman : meme test, applique aux rangs des valeurs
+            sb, _, psb = test_correlation(stats.rankdata(x), stats.rankdata(y))
+            sd, _, psd = test_correlation(stats.rankdata(xd), stats.rankdata(yd))
+            resultats.append({"CLASSE": classe, "SAISON": saison, "CLIMAT": ind, "N": n,
+                              "R_BRUT": round(rb, 3), "N_EFF_BRUT": round(nb, 1),
+                              "P_BRUT": round(pb, 4),
+                              "SIGNIFICATIF_BRUT": "oui" if pb < SEUIL else "non",
+                              "R": round(rd, 3), "N_EFF": round(nd, 1), "P": round(pd_, 4),
+                              "SIGNIFICATIF": "oui" if pd_ < SEUIL else "non",
+                              "RHO_BRUT": round(sb, 3), "P_RHO_BRUT": round(psb, 4),
+                              "SIGNIFICATIF_RHO_BRUT": "oui" if psb < SEUIL else "non",
+                              "RHO": round(sd, 3), "P_RHO": round(psd, 4),
+                              "SIGNIFICATIF_RHO": "oui" if psd < SEUIL else "non"})
 
     correl = pd.DataFrame(resultats)
+    n_sig = lambda col: int((correl[col] == "oui").sum())
+    print("  %d tests, cases a p < %.2f :" % (len(correl), SEUIL))
+    print("               brut   detrende")
+    print("    Pearson  : %4d   %4d" % (n_sig("SIGNIFICATIF_BRUT"), n_sig("SIGNIFICATIF")))
+    print("    Spearman : %4d   %4d" % (n_sig("SIGNIFICATIF_RHO_BRUT"), n_sig("SIGNIFICATIF_RHO")))
+
+    # Cases ou Pearson et Spearman (detrendes) ne concluent pas pareil :
+    # signe d'une annee extreme qui pilote la correlation de Pearson
+    diff = correl[correl["SIGNIFICATIF"] != correl["SIGNIFICATIF_RHO"]]
+    print("\n  Desaccords Pearson / Spearman (series detrendees) : %d" % len(diff))
+    for _, r in diff.iterrows():
+        print("    %-22s %-4s %-6s r %+.3f (p %.3f)   rho %+.3f (p %.3f)"
+              % (r["CLASSE"], r["SAISON"], r["CLIMAT"], r["R"], r["P"], r["RHO"], r["P_RHO"]))
+
     correl.to_csv(os.path.join(SORTIE, "correlation_ndvi_climat.csv"),
                   index=False, sep=";", decimal=",")
     print("  -> correlation_ndvi_climat.csv  (%d lignes)" % len(correl))
 
-    print("\n  Correlations significatives en ete (JJA) :")
+    print("\n  Correlations detrendees significatives (Pearson) en ete (JJA) :")
     ete = correl[(correl["SAISON"] == "JJA") & (correl["SIGNIFICATIF"] == "oui")]
     if len(ete) == 0:
         print("    aucune")
     for _, r in ete.sort_values("R").iterrows():
-        print("    %-22s %-6s r = %+.3f" % (r["CLASSE"], r["CLIMAT"], r["R"]))
+        print("    %-22s %-6s r %+.3f  rho %+.3f  n_eff %4.1f   |  brut : r %+.3f  rho %+.3f"
+              % (r["CLASSE"], r["CLIMAT"], r["R"], r["RHO"], r["N_EFF"],
+                 r["R_BRUT"], r["RHO_BRUT"]))
 
 print("\nTermine. Resultats dans : %s" % SORTIE)

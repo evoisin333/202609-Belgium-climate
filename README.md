@@ -25,7 +25,7 @@ Change between the WMO climate normals **1961–1990 and 1991–2020**, national
 - **Summers are warming everywhere.** Mean summer temperature rises by 0.35 to 0.44 °C per decade, significant in every grid cell (Mann-Kendall, p < 0.05).
 - **Extremes are rising faster than the mean.** TXx rises by 0.5 to 1.4 °C per decade, up to three times faster than mean summer temperature.
 - **Rain is shifting from spring to winter**, while annual totals barely change, and soils are drying in spring and summer.
-- **Summer vegetation is declining on farmland.** Over 2001–2024, the median summer NDVI trend is −0.012 per decade, with 29 % of pixels showing a significant trend (26 % declining, 3 % increasing). The decline concentrates on cropland and grassland (−0.019 and −0.021 per decade), while forests lose about five times less. Grassland and cropland NDVI is strongly linked to summer temperature (r ≈ −0.72 to −0.77) and soil moisture (r ≈ +0.66 to +0.72); forests show no significant link with summer temperature.
+- **Summer vegetation is declining on farmland.** Over 2001–2024, the median summer NDVI trend is −0.012 per decade, with 29 % of pixels showing a significant trend (26 % declining, 3 % increasing). The decline concentrates on cropland and grassland (−0.019 and −0.021 per decade), while forests lose about five times less. Grassland and cropland NDVI is strongly linked to summer temperature (r = −0.70 and −0.64 after detrending) and to topsoil moisture (r = +0.75 and +0.67); forests show no significant link with summer temperature. These links hold after removing the 2001–2024 trends and with Spearman's rank correlation (8 of 96 class × season × variable cells change significance, all close to the 5 % threshold).
 
 ![Mean seasonal temperature in Belgium, 1961–2024](fig1_seasonal_temperature.png)
 
@@ -80,9 +80,11 @@ These v31.0e links were online on 9 October 2026; newer E-OBS versions exist and
 
 **Seasons:** DJF, MAM, JJA, SON. December is assigned to the following year's winter.
 
-**Trends:** Sen's slope with a two-sided Mann-Kendall test, per pixel, expressed per decade (ArcGIS Pro *Generate Trend Raster* for climate indicators; an equivalent Python implementation for NDVI, validated against ArcGIS on summer temperature over every ERA5-Land cell: see `05_resultats/validation_tendance_python_arcgis.csv`).
+**Trends:** Sen's slope with a two-sided Mann-Kendall test, per pixel, expressed per decade (ArcGIS Pro *Generate Trend Raster* for climate indicators; an equivalent Python implementation for NDVI, validated against ArcGIS on summer temperature over all 1,260 ERA5-Land land cells: maximum difference 6 × 10⁻⁸ °C/decade for the slope and 5 × 10⁻¹⁰ for the p-value, see `05_resultats/validation_tendance_python_arcgis.csv`).
 
 **Regional figures:** zonal statistics by NUTS 2 region, and by region × land-cover class for NDVI. National values are area-weighted means.
+
+**NDVI–climate correlations:** Pearson r between national NDVI of each land-cover class and the climate of that class (provincial values weighted by the class's pixel count in each province), computed twice: on the raw series (Figure 4b) and on linearly detrended series (Figure 4), so that the year-to-year link is not inflated by shared trends. Significance (p < 0.05) uses an effective sample size from the lag-1 autocorrelation of both series (Bretherton et al., 1999, eq. 31). Both Pearson's r (linear link) and Spearman's rho (monotonic link, less sensitive to extreme years such as 2003 or 2018; de Winter et al., 2016) are reported (Figures 4c–4d for Spearman).
 
 ---
 
@@ -156,6 +158,7 @@ The ArcGIS steps (13, 14, 15, 19) require ArcGIS Pro with the Spatial Analyst an
 - **No pre-whitening and no multiple-testing correction.** The Mann-Kendall test does not correct for serial autocorrelation, and it is repeated over thousands of pixels. This mainly concerns precipitation, soil moisture and NDVI, where significance is closer to the threshold.
 - **Slopes in the figures.** Figures 1 and 3 show least-squares slopes on national means; the maps use per-pixel Sen's slopes. The two are not expected to be identical.
 - **Short NDVI record.** 24 years (2001–2024) allow trend and correlation analysis, but not a comparison of climate normals.
+- **NDVI–climate correlations: no multiple-testing correction.** 96 tests (8 classes × 4 seasons × 3 variables) are run at p < 0.05 each, so about five significant cells are expected by chance alone. The climate of each class is approximated by provincial values weighted by the class's pixel count, not computed pixel by pixel.
 
 ---
 
@@ -166,3 +169,5 @@ The ArcGIS steps (13, 14, 15, 19) require ArcGIS Pro with the Spatial Analyst an
 - Didan, K. (2021). MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V061. NASA EOSDIS Land Processes DAAC.
 - CORINE Land Cover 2018, Copernicus Land Monitoring Service, European Environment Agency.
 - NUTS boundaries © EuroGeographics for the administrative boundaries, Eurostat GISCO.
+- de Winter, J. C. F., Gosling, S. D., Potter, J. (2016). Comparing the Pearson and Spearman correlation coefficients across distributions and sample sizes: a tutorial using simulations and empirical data. *Psychological Methods*, 21(3), 273–290. https://doi.org/10.1037/met0000079
+- Bretherton, C. S., Widmann, M., Dymnikov, V. P., Wallace, J. M., Bladé, I. (1999). The effective number of spatial degrees of freedom of a time-varying field. *Journal of Climate*, 12(7), 1990–2009. https://doi.org/10.1175/1520-0442(1999)012<1990:TENOSD>2.0.CO;2

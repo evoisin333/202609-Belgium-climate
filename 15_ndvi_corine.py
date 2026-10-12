@@ -94,8 +94,12 @@ os.makedirs(STATS, exist_ok=True)
 
 def exporter_csv(table, nom):
     csv = os.path.join(STATS, nom + ".csv")
-    if os.path.exists(csv):
-        os.remove(csv)
+    # schema.ini : fichier ecrit par ArcGIS a cote des CSV, qui fixe le type de
+    # chaque colonne. S'il garde un ancien type (ex. NUTS_ID numerique), ArcGIS
+    # convertit le texte 'BE22' en 0 a l'export : on le supprime avant.
+    for f in (csv, csv + ".xml", os.path.join(STATS, "schema.ini")):
+        if os.path.exists(f):
+            os.remove(f)
     try:
         arcpy.conversion.ExportTable(table, csv)
     except AttributeError:

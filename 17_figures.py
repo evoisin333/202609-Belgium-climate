@@ -5,14 +5,16 @@ A lancer depuis la racine du projet, environnement geo :
     python 17_figures.py
 Necessite matplotlib :  conda install -c conda-forge matplotlib
 
-Produit dans 06_figures\\ quatre figures, en PNG 300 dpi (rapport Word,
+Produit dans 06_figures\\ sept figures, en PNG 300 dpi (rapport Word,
 StoryMap) et en PDF vectoriel (impression) :
 
   fig1_temperature_saisonniere : series 1961-2024 par saison, avec tendance
                                  et les deux normales OMM
   fig2_ecarts_normales         : ecart 1991-2020 moins 1961-1990, par unite
   fig3_ndvi_par_classe         : NDVI estival 2001-2024 par classe CORINE
-  fig4_correlations            : correlations NDVI / climat
+  fig4_correlations            : correlations NDVI / climat, series detrendees
+  fig4b_correlations_brutes    : idem, series brutes
+  fig4c / fig4d                : idem avec Spearman (detrende / brut)
 
 Choix graphiques : une seule echelle par panneau (jamais deux axes y),
 palette validee pour le daltonisme, valeurs ecrites en toutes lettres la ou
@@ -239,45 +241,60 @@ enregistrer(fig, "fig3_ndvi_par_classe")
 correl = lire("correlation_ndvi_climat")
 NOM_CLIM = {"t2m": "Température", "tp": "Précipitations", "swvl1": "Humidité du sol"}
 
-fig, axes = plt.subplots(1, 4, figsize=(15, 4.4), sharey=True)
-for ax, s in zip(axes, SAISONS):
-    d = correl[correl["SAISON"] == s]
-    tab = d.pivot(index="CLASSE", columns="CLIMAT", values="R")
-    tab = tab.reindex(columns=[c for c in ("t2m", "tp", "swvl1") if c in tab.columns])
-    sig = d.pivot(index="CLASSE", columns="CLIMAT", values="SIGNIFICATIF")
-    sig = sig.reindex(columns=tab.columns)
 
-    ax.imshow(tab.values, cmap=DIVERGENTE, vmin=-1, vmax=1, aspect="auto")
-    ax.set_xticks(range(len(tab.columns)))
-    ax.set_xticklabels([NOM_CLIM.get(c, c) for c in tab.columns],
-                       rotation=30, ha="right", fontsize=8.5)
-    ax.set_yticks(range(len(tab.index)))
-    ax.set_yticklabels([NOM_CLASSE.get(c, c) for c in tab.index], fontsize=8.5)
-    ax.set_title(NOM_SAISON[s])
-    ax.set_xticks(np.arange(-0.5, len(tab.columns), 1), minor=True)
-    ax.set_yticks(np.arange(-0.5, len(tab.index), 1), minor=True)
-    ax.grid(which="minor", color=SURFACE, linewidth=2)
-    ax.tick_params(which="minor", length=0)
-    ax.tick_params(axis="y", length=0)
+def figure_correlation(col_r, col_sig, sous_titre, suffixe_titre, nom):
+    """Une figure de 4 panneaux (saisons) : classes x variables climatiques."""
+    fig, axes = plt.subplots(1, 4, figsize=(15, 4.4), sharey=True)
+    for ax, s in zip(axes, SAISONS):
+        d = correl[correl["SAISON"] == s]
+        tab = d.pivot(index="CLASSE", columns="CLIMAT", values=col_r)
+        tab = tab.reindex(columns=[c for c in ("t2m", "tp", "swvl1") if c in tab.columns])
+        sig = d.pivot(index="CLASSE", columns="CLIMAT", values=col_sig)
+        sig = sig.reindex(columns=tab.columns)
 
-    # la valeur est ecrite dans chaque case : la couleur appuie, elle ne porte pas seule
-    for i in range(tab.shape[0]):
-        for j in range(tab.shape[1]):
-            r = tab.values[i, j]
-            if np.isnan(r):
-                continue
-            etoile = "*" if sig.values[i, j] == "oui" else ""
-            ax.text(j, i, "%+.2f%s" % (r, etoile), ha="center", va="center",
-                    fontsize=8, fontweight="bold" if etoile else "normal",
-                    color="#ffffff" if abs(r) > 0.55 else ENCRE)
+        ax.imshow(tab.values, cmap=DIVERGENTE, vmin=-1, vmax=1, aspect="auto")
+        ax.set_xticks(range(len(tab.columns)))
+        ax.set_xticklabels([NOM_CLIM.get(c, c) for c in tab.columns],
+                           rotation=30, ha="right", fontsize=8.5)
+        ax.set_yticks(range(len(tab.index)))
+        ax.set_yticklabels([NOM_CLASSE.get(c, c) for c in tab.index], fontsize=8.5)
+        ax.set_title(NOM_SAISON[s])
+        ax.set_xticks(np.arange(-0.5, len(tab.columns), 1), minor=True)
+        ax.set_yticks(np.arange(-0.5, len(tab.index), 1), minor=True)
+        ax.grid(which="minor", color=SURFACE, linewidth=2)
+        ax.tick_params(which="minor", length=0)
+        ax.tick_params(axis="y", length=0)
 
-fig.suptitle("Corrélation entre NDVI et climat par classe d'occupation du sol, 2001-2024",
-             fontsize=13, fontweight="bold")
-fig.text(0.5, 0.9,
-         "Coefficient de Pearson, n = 24 ans   |   * significatif à 5 % (|r| > 0,404)   |"
-         "   Rouge : positif, Bleu : négatif",
-         ha="center", color=ENCRE_2, fontsize=9)
-fig.tight_layout(rect=[0, 0, 1, 0.86])
-enregistrer(fig, "fig4_correlations")
+        # la valeur est ecrite dans chaque case : la couleur appuie, elle ne porte pas seule
+        for i in range(tab.shape[0]):
+            for j in range(tab.shape[1]):
+                r = tab.values[i, j]
+                if np.isnan(r):
+                    continue
+                etoile = "*" if sig.values[i, j] == "oui" else ""
+                ax.text(j, i, "%+.2f%s" % (r, etoile), ha="center", va="center",
+                        fontsize=8, fontweight="bold" if etoile else "normal",
+                        color="#ffffff" if abs(r) > 0.55 else ENCRE)
+
+    fig.suptitle("Corrélation entre NDVI et climat par classe d'occupation du sol, 2001-2024" + suffixe_titre, fontsize=13, fontweight="bold")
+    fig.text(0.5, 0.9, sous_titre, ha="center", color=ENCRE_2, fontsize=9)
+    fig.tight_layout(rect=[0, 0, 1, 0.86])
+    enregistrer(fig, nom)
+
+
+# fig4 : correlation detrendee (lien d'une annee a l'autre) ; fig4b : brute
+figure_correlation("R", "SIGNIFICATIF",
+                   "r de Pearson sur séries détrendées (tendance linéaire retirée), n = 24 ans   |   * p < 0,05 avec n effectif   |   Rouge : positif, Bleu : négatif",
+                   " (séries détrendées)", "fig4_correlations")
+figure_correlation("R_BRUT", "SIGNIFICATIF_BRUT",
+                   "r de Pearson sur séries brutes (tendances incluses), n = 24 ans   |   * p < 0,05 avec n effectif   |   Rouge : positif, Bleu : négatif",
+                   " (séries brutes)", "fig4b_correlations_brutes")
+
+figure_correlation("RHO", "SIGNIFICATIF_RHO",
+                   "rho de Spearman sur séries détrendées (tendance linéaire retirée), n = 24 ans   |   * p < 0,05 avec n effectif   |   Rouge : positif, Bleu : négatif",
+                   " (Spearman, séries détrendées)", "fig4c_correlations_spearman")
+figure_correlation("RHO_BRUT", "SIGNIFICATIF_RHO_BRUT",
+                   "rho de Spearman sur séries brutes (tendances incluses), n = 24 ans   |   * p < 0,05 avec n effectif   |   Rouge : positif, Bleu : négatif",
+                   " (Spearman, séries brutes)", "fig4d_correlations_spearman_brutes")
 
 print("\nTermine. Figures dans : %s" % SORTIE)

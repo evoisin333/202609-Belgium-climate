@@ -23,7 +23,7 @@ arcpy.env.overwriteOutput = True
 
 # --- Chemins ------------------------------------------------------------------
 # Seule ligne a adapter : dossier du depot (scripts, 03_arcgis, 04_stats)
-DEPOT = r"C:\vers\chemin\Project Belgium"
+DEPOT = r"C:\chemin\vers\Project Belgium"
 
 # Le reste se deduit du projet ArcGIS Pro ouvert
 PROJET_ARCGIS = os.path.dirname(arcpy.mp.ArcGISProject("CURRENT").filePath)
@@ -81,8 +81,12 @@ SAISONS = ["DJF", "MAM", "JJA", "SON"]
 def exporter_csv(table, nom):
     """Exporte une table de la geodatabase en CSV dans 04_stats."""
     csv = os.path.join(STATS, nom + ".csv")
-    if os.path.exists(csv):
-        os.remove(csv)
+    # schema.ini : fichier ecrit par ArcGIS a cote des CSV, qui fixe le type de
+    # chaque colonne. S'il garde un ancien type (ex. NUTS_ID numerique), ArcGIS
+    # convertit le texte 'BE22' en 0 a l'export : on le supprime avant.
+    for f in (csv, csv + ".xml", os.path.join(STATS, "schema.ini")):
+        if os.path.exists(f):
+            os.remove(f)
     try:
         arcpy.conversion.ExportTable(table, csv)
     except AttributeError:

@@ -25,7 +25,7 @@ Change between the WMO climate normals **1961–1990 and 1991–2020**, national
 - **Summers are warming everywhere.** Mean summer temperature rises by 0.35 to 0.44 °C per decade, significant in every grid cell (Mann-Kendall with prewhitening, 3PW, and false-discovery-rate correction).
 - **Extremes are rising faster than the mean.** TXx rises by 0.5 to 1.4 °C per decade, up to three times faster than mean summer temperature.
 - **Rain is shifting from spring to winter**, while annual totals barely change, and soils are drying in spring and summer.
-- **Summer NDVI is declining on farmland.** Over 2001–2024, the median summer NDVI trend is −0.012 per decade. Tested one by one, 17 % of pixels show a significant trend (3PW, p < 0.05, against 5 % expected by chance), but none survives the false-discovery-rate correction over the ~970,000 pixels: the decline is widespread but too weak to be confirmed pixel by pixel over 24 years. Averaged by land-cover class, where noise is much lower, the decline is significant on cropland (−0.020 per decade; Mann-Kendall 3PW, FDR 10 %) and borderline on grassland (−0.017 per decade; p = 0.03 for this test alone, 0.11 after correction for the 8 classes), while forest trends are about six times weaker and not significant. A month-by-month analysis (exploratory: individual tests, not corrected for multiple testing) shows that the decline on cropland and grassland is concentrated in June–July (p < 0.05), while the seasonal maximum shows no significant trend and spring NDVI on cropland increases. This points to an earlier seasonal cycle on cropland and to summer stress on grassland rather than to a general loss of vegetation vigour; 24 years of data cannot fully separate the two. March and November NDVI increase for all classes, including forests, which may reflect a longer growing season or residual cloud and snow effects. Grassland and cropland NDVI is strongly linked to summer temperature (r = −0.70 and −0.64 after detrending) and to topsoil moisture (r = +0.75 and +0.67); forests show no significant link with summer temperature. These links hold after removing the 2001–2024 trends and with Spearman's rank correlation (8 of 96 class × season × variable cells change significance, all close to the 5 % threshold).
+- **Summer NDVI is declining on farmland.** Over 2001–2024, the median summer NDVI trend is −0.012 per decade. Tested one by one, 17 % of pixels show a significant trend (3PW, p < 0.05, against 5 % expected by chance), but none survives the false-discovery-rate correction over the ~970,000 pixels: the decline is widespread but too weak to be confirmed pixel by pixel over 24 years. Averaged by land-cover class, where noise is much lower, the decline is significant on cropland and grassland (−0.021 and −0.017 per decade; Mann-Kendall 3PW, FDR 10 %), while forest trends are seven to nine times weaker and not significant. A month-by-month analysis (exploratory: individual tests, not corrected for multiple testing) shows that the decline on cropland and grassland is concentrated in June–July (p < 0.05). On cropland, spring NDVI increases while the seasonal maximum decreases slightly (p < 0.05), suggesting both an earlier seasonal cycle and some loss of peak greenness; on grassland, the maximum shows no significant trend, pointing rather to summer stress, consistent with its strong link to soil moisture. 24 years of data cannot fully separate these effects. March and November NDVI increase for all classes, including forests, which may reflect a longer growing season or residual cloud and snow effects. Grassland and cropland NDVI is strongly linked to summer temperature (r = −0.70 and −0.62 after detrending) and to topsoil moisture (r = +0.76 and +0.64); forests show no significant link with summer temperature. These links hold after removing the 2001–2024 trends and with Spearman's rank correlation (7 of 96 class × season × variable cells change significance, all close to the 5 % threshold).
 
 ![Mean seasonal temperature in Belgium, 1961–2024](fig1_seasonal_temperature.png)
 
@@ -40,7 +40,7 @@ Change between the WMO climate normals **1961–1990 and 1991–2020**, national
 | ERA5-Land monthly means (t2m, tp, swvl1, swvl2) | Mean temperature, precipitation, soil moisture | 0.1° | 1961–2024 | [Copernicus CDS](https://cds.climate.copernicus.eu/) |
 | E-OBS v31.0e — seasonal ETCCDI indices (FD, SU, TR, TXx, PRCPTOT) and daily Tmax | Thermal extremes, precipitation, days ≥ 30 °C | 0.1° | 1961–2024 | [ECA&D / Copernicus](https://surfobs.climate.copernicus.eu/) |
 | MODIS MOD13Q1 v061 (NDVI, pixel reliability) | Vegetation response | 250 m nominal (≈ 230 m), 16-day | 2001–2024 | [NASA AppEEARS](https://appeears.earthdatacloud.nasa.gov/) |
-| CORINE Land Cover 2018 | Land-cover classes (44 → 8) | 100 m | 2018 | [Copernicus Land](https://land.copernicus.eu/) |
+| CORINE Land Cover 2018 | Land-cover classes (44 → 8, open water excluded) | 100 m | 2018 | [Copernicus Land](https://land.copernicus.eu/) |
 | NUTS 2 regions (Brussels-Capital and the 10 provinces), file `NUTS_RG_01M_2024_4326_LEVL_2.geojson` in `01_raw/` | Zonal statistics | 1:1 million | NUTS 2024 | [Eurostat GISCO](https://gisco-services.ec.europa.eu/distribution/v2/nuts/geojson/NUTS_RG_01M_2024_4326_LEVL_2.geojson) |
 
 Indicator definitions (ETCCDI): **FD** frost days (Tmin < 0 °C), **SU** summer days (Tmax > 25 °C), **TR** tropical nights (Tmin > 20 °C), **TXx** hottest day of the season, **PRCPTOT** precipitation on wet days (≥ 1 mm). **su30** (days with Tmax ≥ 30 °C) is computed in this project from E-OBS daily Tmax.
@@ -84,13 +84,15 @@ These v31.0e links were online on 9 October 2026; newer E-OBS versions exist and
 
 **Regional figures:** zonal statistics by NUTS 2 region, and by region × land-cover class for NDVI. National values are area-weighted means.
 
+**Land-cover classes:** the 44 CORINE 2018 classes are grouped into 8 (artificial surfaces, cropland, grassland, broadleaf, coniferous and mixed forest, semi-natural areas, wetlands); open water is excluded. A MODIS pixel (~230 m, ~5 ha) is assigned to a class only if that class covers at least 80 % of it (computed from the 100 m CORINE raster), following Kulesza & Hościło (2024); mixed pixels — a town edge with gardens, a field with hedges — are left out. CORINE's 25 ha minimum mapping unit means that small features inside a class remain.
+
 **NDVI–climate correlations:** Pearson r between national NDVI of each land-cover class and the climate of that class (provincial values weighted by the class's pixel count in each province), computed twice: on the raw series (Figure 4b) and on linearly detrended series (Figure 4), so that the year-to-year link is not inflated by shared trends. Significance (p < 0.05) uses an effective sample size from the lag-1 autocorrelation of both series (Bretherton et al., 1999, eq. 31). Both Pearson's r (linear link) and Spearman's rho (monotonic link, less sensitive to extreme years such as 2003 or 2018; de Winter et al., 2016) are reported (Figures 4c–4d for Spearman).
 
 ---
 
 ## Processing chain
 
-Scripts are numbered in execution order. Python scripts run in the conda environment from `environment.yml`, from the project root folder. ArcGIS scripts are run in the ArcGIS Pro Python window; set `DEPOT` at the top of 13, 14 and 15 first.
+Scripts are numbered in execution order. Python scripts run in the conda environment from `environment.yml`, from the project root folder. ArcGIS scripts are run in the ArcGIS Pro Python window; set `DEPOT` at the top of 13 and 14 first.
 
 | # | Script | Environment | What it does |
 |---|---|---|---|
@@ -106,7 +108,7 @@ Scripts are numbered in execution order. Python scripts run in the conda environ
 | 12 | `12_normales.py` | Python | Climate normals and change maps (GeoTIFF) |
 | 13 | `13_conversion_crf.py` | ArcGIS Pro | NetCDF → multidimensional CRF (*Copy Raster*), used by the zonal statistics |
 | 14 | `14_stats_zonales.py` | ArcGIS Pro | Zonal statistics by region, ERA5 and E-OBS |
-| 15 | `15_ndvi_corine.py` | ArcGIS Pro | NDVI by region × land-cover class |
+| 15 | `15_ndvi_corine.py` | Python | CORINE classes on the MODIS grid, pure pixels only (≥ 80 % of one class), NDVI by region × land-cover class |
 | 16 | `16_analyse.py` | Python | Normals by region, national series, NDVI–climate correlations |
 | 17 | `17_figures.py`, `17_figures_en.py` | Python | Figures, in French and English |
 | 18 | `18_tendances.py` | Python | Per-pixel trends of the 11 climate combinations and summer NDVI: Sen's slope, Mann-Kendall 3PW, FDR-corrected p-values (GeoTIFF) |
@@ -144,9 +146,9 @@ python 01_decoupe.py
 
 `environment.yml` pins the exact versions used for the published results (Python 3.11.16, xarray 2026.7.0, numpy 2.4.6, pandas 3.0.5, rioxarray 0.19.0, conda-forge, Windows).
 
-Python scripts (00–12, 16–18) are run from the repository root; their paths are relative to it.
+Python scripts (00–12, 15–18, 20) are run from the repository root; their paths are relative to it.
 
-The ArcGIS steps (13, 14, 15, 19) require ArcGIS Pro with the Spatial Analyst and Image Analyst extensions. Run them in the ArcGIS Pro Python window with the `Belgium` project open: they locate the project folder and `Belgium.gdb` from the open project. The only line to edit is `DEPOT` (path to this repository) at the top of `13_conversion_crf.py`, `14_stats_zonales.py` and `15_ndvi_corine.py`. Steps 12 and 16–18 rely only on open-source Python.
+The ArcGIS steps (13, 14, 19) require ArcGIS Pro with the Spatial Analyst and Image Analyst extensions. Run them in the ArcGIS Pro Python window with the `Belgium` project open: they locate the project folder and `Belgium.gdb` from the open project. The only line to edit is `DEPOT` (path to this repository) at the top of `13_conversion_crf.py` and `14_stats_zonales.py`. Steps 12, 15–18 and 20 rely only on open-source Python.
 
 ---
 
@@ -158,6 +160,7 @@ The ArcGIS steps (13, 14, 15, 19) require ArcGIS Pro with the Spatial Analyst an
 - **Rare events and Sen's slope.** Where days ≥ 30 °C are rare (coast, Ardennes), most summers score zero, so Sen's slope collapses towards zero even when Mann-Kendall detects an increase. The trend map shows *where* the increase is strongest, but underestimates its magnitude there.
 - **Trend significance is conservative.** The 3PW approach keeps false detections near 5 % for autocorrelated series but loses power on short records: on the 24-year NDVI series, only clear trends are detected. Sen's slope is computed on the original series, not with the VCTFPW correction recommended by Collaud Coen et al. (2020).
 - **Slopes in the figures.** Figure 1 shows least-squares slopes on national means; the maps and Figure 3 use Sen's slopes. The two are not expected to be identical.
+- **One land-cover map for 24 years.** CORINE 2018 is applied to the whole 2001–2024 NDVI record; land-cover changes over the period (urban growth, grassland converted to cropland) are not accounted for. Using CORINE 2000–2018 and keeping only unchanged pixels would remove this effect.
 - **Short NDVI record.** 24 years (2001–2024) allow trend and correlation analysis, but not a comparison of climate normals.
 - **NDVI–climate correlations: no multiple-testing correction.** 96 tests (8 classes × 4 seasons × 3 variables) are run at p < 0.05 each, so about five significant cells are expected by chance alone. The climate of each class is approximated by provincial values weighted by the class's pixel count, not computed pixel by pixel.
 
@@ -173,6 +176,7 @@ The ArcGIS steps (13, 14, 15, 19) require ArcGIS Pro with the Spatial Analyst an
 - de Winter, J. C. F., Gosling, S. D., Potter, J. (2016). Comparing the Pearson and Spearman correlation coefficients across distributions and sample sizes: a tutorial using simulations and empirical data. *Psychological Methods*, 21(3), 273–290. https://doi.org/10.1037/met0000079
 - Eisfelder, C. et al. (2023). Seasonal vegetation trends for Europe over 30 years from a novel Normalised Difference Vegetation Index (NDVI) time-series—The TIMELINE NDVI product. *Remote Sensing*, 15(14), 3616. https://doi.org/10.3390/rs15143616
 - Garonna, I. et al. (2014). Strong contribution of autumn phenology to changes in satellite-derived growing season length estimates across Europe (1982–2011). *Global Change Biology*, 20(11), 3457–3470. https://doi.org/10.1111/gcb.12625
+- Kulesza, K., Hościło, A. (2024). Coherency and time lag analyses between MODIS vegetation indices and climate across forests and grasslands in the European temperate zone. *Biogeosciences*, 21, 2509–2527. https://doi.org/10.5194/bg-21-2509-2024
 - Collaud Coen, M., Andrews, E., Bigi, A., Martucci, G., Romanens, G., Vogt, F. P. A., Vuilleumier, L. (2020). Effects of the prewhitening method, the time granularity, and the time segmentation on the Mann–Kendall trend detection and the associated Sen's slope. *Atmospheric Measurement Techniques*, 13, 6945–6964. https://doi.org/10.5194/amt-13-6945-2020
 - Yue, S., Pilon, P., Phinney, B., Cavadias, G. (2002). The influence of autocorrelation on the ability to detect trend in hydrological series. *Hydrological Processes*, 16, 1807–1829. https://doi.org/10.1002/hyp.1095
 - Wilks, D. S. (2016). "The stippling shows statistically significant grid points": how research results are routinely overstated and overinterpreted, and what to do about it. *Bulletin of the American Meteorological Society*, 97(12), 2263–2273. https://doi.org/10.1175/BAMS-D-15-00267.1

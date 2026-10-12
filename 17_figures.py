@@ -64,6 +64,7 @@ NOM_CLASSE = {
     "Foret mixte": "Forêt mixte",
     "Milieux semi-naturels": "Milieux semi-naturels",
     "Zones humides et eau": "Zones humides et eau",
+    "Zones humides": "Zones humides",
 }
 
 plt.rcParams.update({

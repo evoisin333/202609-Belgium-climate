@@ -1,80 +1,64 @@
 # -*- coding: utf-8 -*-
 """
 15_ndvi_corine.py
-A LANCER DANS LA FENETRE PYTHON D'ARCGIS PRO. Necessite Spatial Analyst.
+A lancer depuis la racine du projet, environnement geo :
+    python 15_ndvi_corine.py
 
 NDVI par province ET par classe d'occupation du sol (CORINE Land Cover 2018,
-44 classes regroupees en 8), sur la grille du NDVI MODIS :
-  1. decoupe du raster CORINE europeen complet sur les provinces, projetees
-     d'abord dans le systeme de CORINE (ETRS89-LAEA)
-  2. reclassification en 8 classes
-  3. zones province x classe, identifiant = province x 10 + classe
-     (ex. 72 = province 7, classe 2) ; resultat obtenu : 86 zones, 11 provinces
-  4. statistiques zonales du NDVI pour les 4 saisons ; le code NUTS et le
-     libelle de classe sont ecrits dans les tables de sortie (la table
-     attributaire du raster de zones refuse d'etre modifiee)
-Sorties (04_stats) : zs_ndvi_<saison>.csv, corine_8classes_libelles.csv
-Sortie (01_raw) : corine_8classes_grille_modis.tif, pour 20_phenologie_ndvi.py
+44 classes regroupees en 8), sur la grille du NDVI MODIS (~230 m), en ne
+gardant que les pixels MODIS "purs" :
+  1. lecture de CORINE (100 m, ETRS89-LAEA) sur l'emprise de la Belgique ;
+  2. regroupement en 8 classes ; l'eau libre (codes 511-523) est une classe a
+     part, exclue de l'analyse NDVI ;
+  3. part de chaque classe dans chaque pixel MODIS (reprojection par moyenne
+     d'un masque 0/1) ;
+  4. un pixel MODIS n'est garde que si une classe couvre au moins 80 % de sa
+     surface (Kulesza et Hoscilo 2024) : un pixel de 5 ha a cheval sur une
+     ville et des jardins, ou sur un champ et une haie, n'est plus attribue a
+     une seule classe ;
+  5. provinces rasterisees depuis le GeoJSON NUTS ;
+  6. NDVI moyen par province x classe, par saison et par annee.
 
-Deux pieges rencontres :
-  - un premier decoupage de CORINE ne couvrait qu'environ 80 x 95 km autour
-    de Namur : la decoupe repart donc du raster europeen complet ;
-  - reprojection de CORINE, rasterisation des provinces et croisement doivent
-    partager le meme cadre de reference (snapRaster, taille de cellule,
-    emprise), sinon le croisement ne couvre qu'une partie du pays.
+Sorties :
+  04_stats/zs_ndvi_<saison>.csv          meme format qu'avant (lu par 16)
+  04_stats/corine_8classes_libelles.csv
+  01_raw/corine_8classes_grille_modis.tif   classes pures (lu par 20)
 
-Prealable : CRF modis_ndvi_BE_<saison>.crf dans 03_arcgis, crees par
-13_conversion_crf.py.
+Entrees :
+  raster CORINE europeen U2018_CLC2018*.tif (dans le dossier parent du projet
+  ou ses sous-dossiers), 01_raw/NUTS_RG_01M_2024_4326_LEVL_2.geojson,
+  02_working/modis_ndvi_BE_saisonnier.nc (03_modis_ndvi.py)
 """
 
-import os
 import glob
-import arcpy
-from arcpy.sa import Reclassify, RemapValue, Int
+import json
+import os
 
-arcpy.CheckOutExtension("Spatial")
-arcpy.env.overwriteOutput = True
+import numpy as np
+import pandas as pd
+import rasterio
+import xarray as xr
+from rasterio.features import rasterize
+from rasterio.transform import from_origin
+from rasterio.warp import Resampling, reproject, transform_bounds
+from rasterio.windows import from_bounds
 
-# --- Chemins ------------------------------------------------------------------
-# Seule ligne a adapter : dossier du depot (scripts, 01_raw, 03_arcgis, 04_stats)
-DEPOT = r"C:\chemin\vers\Project Belgium"
-# Raster CORINE europeen complet (U2018_CLC2018*.tif). Laisser None pour le
-# chercher dans les cartes du projet ouvert, puis dans les dossiers voisins.
-CLC_FULL = None
+RACINE = os.getcwd()   # racine du projet
+NDVI_NC = os.path.join(RACINE, "02_working", "modis_ndvi_BE_saisonnier.nc")
+NUTS = os.path.join(RACINE, "01_raw", "NUTS_RG_01M_2024_4326_LEVL_2.geojson")
+CLASSES_TIF = os.path.join(RACINE, "01_raw", "corine_8classes_grille_modis.tif")
+STATS = os.path.join(RACINE, "04_stats")
+os.makedirs(STATS, exist_ok=True)
 
-# Le reste se deduit du projet ArcGIS Pro ouvert
-PROJET_ARCGIS = os.path.dirname(arcpy.mp.ArcGISProject("CURRENT").filePath)
-GDB_DATA = os.path.join(PROJET_ARCGIS, "Belgium.gdb")   # geodatabase du projet
-
-ARCGIS = os.path.join(DEPOT, "03_arcgis")
-STATS = os.path.join(DEPOT, "04_stats")
-GDB = arcpy.mp.ArcGISProject("CURRENT").defaultGeodatabase
-if not os.path.isdir(ARCGIS):
-    raise SystemExit("03_arcgis introuvable dans %s : corriger DEPOT" % DEPOT)
-print("depot     : %s" % DEPOT)
-print("projet    : %s" % PROJET_ARCGIS)
-
-PROVINCES = os.path.join(GDB_DATA, "provinces_BE_wgs84")
-if not arcpy.Exists(PROVINCES):
-    raise SystemExit("provinces_BE_wgs84 introuvable dans %s" % GDB_DATA)
-CHAMP_ZONE = "NUTS_ID"
-NDVI_REF = os.path.join(ARCGIS, "modis_ndvi_BE_JJA.crf")
-
-CLC_DECOUPE = os.path.join(DEPOT, "01_raw", "CLC2018_BE2.tif")
-# Copie GeoTIFF des 8 classes sur la grille MODIS, lue par 20_phenologie_ndvi.py
-CLASSES_TIF = os.path.join(DEPOT, "01_raw", "corine_8classes_grille_modis.tif")
-CORINE_RECLASS = os.path.join(GDB, "corine_8classes")
-CORINE_GRILLE = os.path.join(GDB, "corine_grille_ndvi")
-PROV_GRILLE = os.path.join(GDB, "provinces_grille_ndvi")
-ZONES = os.path.join(GDB, "zones_prov_corine")
-
-SAISONS = ["DJF", "MAM", "JJA", "SON"]
+PURETE_MIN = 0.80        # part minimale de la classe dominante dans un pixel MODIS
+SAISONS = {"DJF": 1, "MAM": 4, "JJA": 7, "SON": 10}   # mois des dates (09-11)
 
 LIBELLES = {
     1: "Artificialise", 2: "Cultures", 3: "Prairies",
     4: "Foret feuillus", 5: "Foret resineux", 6: "Foret mixte",
-    7: "Milieux semi-naturels", 8: "Zones humides et eau",
+    7: "Milieux semi-naturels", 8: "Zones humides",
 }
+EAU = 9   # eau libre : calculee pour la purete des pixels, puis exclue
 
 # Codes CORINE a 3 chiffres -> groupe (l'ordre donne les codes de grille 1-44)
 CODES_3 = {}
@@ -88,179 +72,132 @@ CODES_3[312] = 5
 CODES_3[313] = 6
 for c in [321, 322, 323, 324, 331, 332, 333, 334, 335]:
     CODES_3[c] = 7
-for c in [411, 412, 421, 422, 423, 511, 512, 521, 522, 523]:
+for c in [411, 412, 421, 422, 423]:
     CODES_3[c] = 8
+for c in [511, 512, 521, 522, 523]:
+    CODES_3[c] = EAU
 CODES_GRILLE = dict((i + 1, CODES_3[c]) for i, c in enumerate(sorted(CODES_3)))
 
-os.makedirs(STATS, exist_ok=True)
+# ===========================================================================
+# 1. Grille MODIS (celle du NDVI saisonnier)
+# ===========================================================================
+ds = xr.open_dataset(NDVI_NC)
+ndvi = ds["ndvi"].transpose("saison", "annee", "y", "x")
+x, y = ds["x"].values, ds["y"].values
+res = float(abs(x[1] - x[0]))
+transform = from_origin(x.min() - res / 2, y.max() + res / 2, res, res)
+forme = (len(y), len(x))
+if y[0] < y[-1]:
+    raise SystemExit("Latitudes croissantes inattendues dans %s" % NDVI_NC)
+print("grille MODIS : %d x %d pixels, %.6f deg" % (forme[0], forme[1], res))
+
+# ===========================================================================
+# 2. CORINE sur l'emprise de la Belgique, regroupe en classes
+# ===========================================================================
+motif = os.path.join(os.path.dirname(RACINE), "**", "U2018_CLC2018*.tif")
+trouves = [f for f in glob.glob(motif, recursive=True) if f.lower().endswith(".tif")]
+if not trouves:
+    raise SystemExit("Raster CORINE europeen introuvable (%s)" % motif)
+clc_tif = trouves[0]
+print("CORINE : %s" % clc_tif)
+
+with rasterio.open(clc_tif) as src:
+    bornes = transform_bounds("EPSG:4326", src.crs, x.min() - res, y.min() - res,
+                              x.max() + res, y.max() + res)
+    fenetre = from_bounds(*bornes, transform=src.transform).round_offsets().round_lengths()
+    clc = src.read(1, window=fenetre)
+    clc_transform = src.window_transform(fenetre)
+    clc_crs = src.crs
+table = CODES_3 if np.isin(clc, list(CODES_3)).any() else CODES_GRILLE
+groupe = np.zeros(clc.shape, dtype="uint8")
+for code, g in table.items():
+    groupe[clc == code] = g
+print("  %d x %d cellules de 100 m, codes %s" % (
+    clc.shape[0], clc.shape[1], "a 3 chiffres" if table is CODES_3 else "de grille 1-44"))
+
+# ===========================================================================
+# 3. Part de chaque classe dans chaque pixel MODIS
+# ===========================================================================
+def part_sur_grille(masque):
+    """Moyenne d'un masque 0/1 de 100 m sur chaque pixel MODIS."""
+    dst = np.full(forme, np.nan, dtype="float32")
+    reproject(masque.astype("float32"), dst, src_transform=clc_transform, src_crs=clc_crs,
+              dst_transform=transform, dst_crs="EPSG:4326",
+              resampling=Resampling.average, src_nodata=np.nan, dst_nodata=np.nan)
+    return dst
 
 
-def exporter_csv(table, nom):
-    csv = os.path.join(STATS, nom + ".csv")
-    # schema.ini : fichier ecrit par ArcGIS a cote des CSV, qui fixe le type de
-    # chaque colonne. S'il garde un ancien type (ex. NUTS_ID numerique), ArcGIS
-    # convertit le texte 'BE22' en 0 a l'export : on le supprime avant.
-    for f in (csv, csv + ".xml", os.path.join(STATS, "schema.ini")):
-        if os.path.exists(f):
-            os.remove(f)
-    try:
-        arcpy.conversion.ExportTable(table, csv)
-    except AttributeError:
-        arcpy.conversion.TableToTable(table, STATS, nom + ".csv")
+parts = np.stack([part_sur_grille(np.where(groupe > 0, (groupe == k) * 1.0, np.nan))
+                  for k in range(1, EAU + 1)])        # (9, y, x)
+parts = np.nan_to_num(parts, nan=0.0)
+dominante = parts.argmax(axis=0) + 1
+purete = parts.max(axis=0)
+classes = np.where((purete >= PURETE_MIN) & (dominante != EAU), dominante, 0).astype("uint8")
 
+# ===========================================================================
+# 4. Provinces sur la grille MODIS ; tout ce qui est hors de Belgique est
+#    retire (le rectangle lu dans CORINE deborde sur les pays voisins)
+# ===========================================================================
+with open(NUTS, encoding="utf-8") as f:
+    nuts = [e for e in json.load(f)["features"] if e["properties"]["CNTR_CODE"] == "BE"]
+codes_nuts = sorted(e["properties"]["NUTS_ID"] for e in nuts)
+if len(codes_nuts) != 11:
+    raise SystemExit("%d regions NUTS 2 belges (11 attendues)" % len(codes_nuts))
+indice = {c: i + 1 for i, c in enumerate(codes_nuts)}
+provinces = rasterize([(e["geometry"], indice[e["properties"]["NUTS_ID"]]) for e in nuts],
+                      out_shape=forme, transform=transform, fill=0, dtype="uint8")
+belgique = provinces > 0
+classes[~belgique] = 0
 
-# --- 0. Retrouver le raster CORINE europeen complet --------------------------
-if CLC_FULL is None:
-    projet = arcpy.mp.ArcGISProject("CURRENT")
-    for m in projet.listMaps():
-        for l in m.listLayers():
-            if l.isRasterLayer and l.name.upper().startswith("U2018_CLC2018"):
-                CLC_FULL = l.dataSource
-                break
-if CLC_FULL is None:
-    motif = os.path.join(os.path.dirname(DEPOT), "**", "U2018_CLC2018*.tif")
-    trouves = glob.glob(motif, recursive=True)
-    CLC_FULL = trouves[0] if trouves else None
-if CLC_FULL is None:
-    raise SystemExit("Raster CORINE europeen introuvable : renseigner CLC_FULL a la main")
-print("CORINE complet : %s" % CLC_FULL)
+print("\n=== Purete des pixels (seuil %.0f %%) ===" % (PURETE_MIN * 100))
+print("  %-22s %10s %10s %7s" % ("classe", "dominante", "pure", "gardes"))
+for k in range(1, EAU + 1):
+    tous = int(np.sum(belgique & (dominante == k) & (parts.sum(axis=0) > 0)))
+    purs = int(np.sum(belgique & (dominante == k) & (purete >= PURETE_MIN)))
+    nom = LIBELLES.get(k, "Eau libre (exclue)")
+    print("  %-22s %10d %10d %6.0f %%" % (nom, tous, purs, 100.0 * purs / tous if tous else 0))
 
-# --- 1. Nettoyage des sorties precedentes ------------------------------------
-print("\n=== Suppression des sorties precedentes ===")
-for c in [ZONES, CORINE_GRILLE, PROV_GRILLE, CORINE_RECLASS] + \
-         [os.path.join(GDB, "zs_ndvi_%s" % s) for s in SAISONS]:
-    if arcpy.Exists(c):
-        arcpy.management.Delete(c)
-        print("  supprime : %s" % os.path.basename(c))
+with rasterio.open(CLASSES_TIF, "w", driver="GTiff", height=forme[0], width=forme[1],
+                   count=1, dtype="uint8", crs="EPSG:4326", transform=transform,
+                   nodata=0, compress="deflate") as dst:
+    dst.write(classes, 1)
+print("  -> %s" % os.path.relpath(CLASSES_TIF, RACINE))
 
-# --- 2. Decoupage sur la Belgique --------------------------------------------
-print("\n=== Decoupage de CORINE sur la Belgique ===")
-sr_clc = arcpy.Describe(CLC_FULL).spatialReference
-prov_laea = os.path.join(GDB, "prov_laea_tmp")
-if arcpy.Exists(prov_laea):
-    arcpy.management.Delete(prov_laea)
-arcpy.management.Project(PROVINCES, prov_laea, sr_clc)
-e = arcpy.Describe(prov_laea).extent
-print("  emprise des provinces en %s :" % sr_clc.name)
-print("    X %.0f -> %.0f  (%.0f km)" % (e.XMin, e.XMax, (e.XMax - e.XMin) / 1000))
-print("    Y %.0f -> %.0f  (%.0f km)" % (e.YMin, e.YMax, (e.YMax - e.YMin) / 1000))
-
-arcpy.management.Clip(CLC_FULL, "#", CLC_DECOUPE, prov_laea,
-                      "255", "ClippingGeometry", "NO_MAINTAIN_EXTENT")
-print("  ok : %s" % os.path.basename(CLC_DECOUPE))
-
-# --- 3. Reclassification ------------------------------------------------------
-print("\n=== Reclassification en 8 classes ===")
-r = arcpy.Raster(CLC_DECOUPE)
-if r.maximum is None:
-    arcpy.management.CalculateStatistics(CLC_DECOUPE)
-    r = arcpy.Raster(CLC_DECOUPE)
-print("  valeur maximale : %s" % r.maximum)
-# Le raster CORINE 100 m stocke souvent un code de grille 1-44 au lieu des
-# codes a 3 chiffres ; tout code absent de la table (48 = hors zone,
-# 255 = NoData) devient NoData
-table_codes = CODES_3 if r.maximum > 100 else CODES_GRILLE
-print("  -> %s" % ("codes a 3 chiffres" if r.maximum > 100 else "codes de grille 1-44"))
-
-remap = RemapValue([[v, table_codes[v]] for v in sorted(table_codes)])
-Reclassify(CLC_DECOUPE, "Value", remap, "NODATA").save(CORINE_RECLASS)
-print("  ok : corine_8classes")
-
-# --- 4. Zones province x classe sur la grille NDVI ---------------------------
-desc = arcpy.Describe(NDVI_REF)
-sr = desc.spatialReference
-taille = desc.meanCellWidth
-etendue = arcpy.Describe(PROVINCES).extent
-
-# Les trois operations partagent le meme cadre de reference
-with arcpy.EnvManager(snapRaster=NDVI_REF, cellSize=taille,
-                      extent=etendue, outputCoordinateSystem=sr):
-    print("\n=== Reprojection de CORINE sur la grille NDVI ===")
-    # NEAREST obligatoire : donnee categorielle
-    arcpy.management.ProjectRaster(CORINE_RECLASS, CORINE_GRILLE, sr,
-                                   "NEAREST", str(taille))
-    e2 = arcpy.Raster(CORINE_GRILLE).extent
-    print("  emprise : X %.3f-%.3f  Y %.3f-%.3f" % (e2.XMin, e2.XMax, e2.YMin, e2.YMax))
-    arcpy.management.CopyRaster(CORINE_GRILLE, CLASSES_TIF,
-                                pixel_type="8_BIT_UNSIGNED", nodata_value="0")
-    print("  ok : %s" % os.path.basename(CLASSES_TIF))
-
-    print("\n=== Rasterisation des provinces ===")
-    arcpy.conversion.PolygonToRaster(PROVINCES, CHAMP_ZONE, PROV_GRILLE,
-                                     "CELL_CENTER", cellsize=str(taille))
-
-    print("\n=== Croisement ===")
-    # Combine echoue a l'ecriture en geodatabase : identifiant de zone calcule
-    # directement, province x 10 + classe (provinces 1-11, classes 1-8)
-    zones_r = Int(arcpy.Raster(PROV_GRILLE) * 10 + arcpy.Raster(CORINE_GRILLE))
-    zones_r.save(ZONES)
-
-print("  zones creees : %s  (attendu 86)" % arcpy.management.GetCount(ZONES)[0])
-
-# --- 5. Correspondance code numerique -> code NUTS ---------------------------
-correspondance = dict((int(x[0]), x[1]) for x in
-                      arcpy.da.SearchCursor(PROV_GRILLE, ["Value", CHAMP_ZONE]))
-print("\n=== Provinces ===")
-for k in sorted(correspondance):
-    print("  %2d -> %s" % (k, correspondance[k]))
-
-zones_vues = sorted(int(x[0]) for x in arcpy.da.SearchCursor(ZONES, ["Value"]))
-provinces = sorted(set(correspondance.get(z // 10, "?") for z in zones_vues))
-print("\n=== Zones ===")
-print("  %d zones, %d provinces : %s" % (len(zones_vues), len(provinces), provinces))
-
-# --- 6. Statistiques zonales du NDVI -----------------------------------------
+# ===========================================================================
+# 5. NDVI moyen par province x classe, saison, annee
+# ===========================================================================
+zones = np.where((provinces > 0) & (classes > 0), provinces * 10 + classes, 0).ravel()
 print("\n=== NDVI par province et classe d'occupation du sol ===")
-for s in SAISONS:
-    nom = "zs_ndvi_%s" % s
-    table = os.path.join(GDB, nom)
-    if arcpy.Exists(table):
-        arcpy.management.Delete(table)
+annees = ndvi["annee"].values
+for saison, mois in SAISONS.items():
+    lignes = []
+    for a in annees:
+        v = ndvi.sel(saison=saison, annee=a).values.ravel()
+        ok = (zones > 0) & ~np.isnan(v)
+        somme = np.bincount(zones[ok], weights=v[ok], minlength=120)
+        nb = np.bincount(zones[ok], minlength=120)
+        for z in np.nonzero(nb)[0]:
+            p, c = divmod(int(z), 10)
+            lignes.append({"Value": int(z), "COUNT": int(nb[z]),
+                           "StdTime": "%d-%02d-15" % (a, mois),
+                           "MEAN": somme[z] / nb[z], "NUTS_ID": codes_nuts[p - 1],
+                           "CLC_CODE": c, "CLASSE": LIBELLES[c]})
+    t = pd.DataFrame(lignes)
+    t.to_csv(os.path.join(STATS, "zs_ndvi_%s.csv" % saison), index=False, sep=";", decimal=",")
+    print("  ok : zs_ndvi_%s  %5d lignes  (%d zones)" % (saison, len(t), t["Value"].nunique()))
 
-    md = arcpy.Raster(os.path.join(ARCGIS, "modis_ndvi_BE_%s.crf" % s), True)
-    arcpy.sa.ZonalStatisticsAsTable(
-        ZONES, "Value", md, table,
-        ignore_nodata="DATA", statistics_type="MEAN",
-        process_as_multidimensional="ALL_SLICES",
-    )
-
-    # Libelles ajoutes a la table de sortie, pas au raster
-    arcpy.management.AddField(table, CHAMP_ZONE, "TEXT", field_length=5)
-    arcpy.management.AddField(table, "CLC_CODE", "SHORT")
-    arcpy.management.AddField(table, "CLASSE", "TEXT", field_length=30)
-    with arcpy.da.UpdateCursor(table, ["Value", CHAMP_ZONE, "CLC_CODE", "CLASSE"]) as cur:
-        for row in cur:
-            p, c = divmod(int(row[0]), 10)
-            row[1] = correspondance.get(p, "?")
-            row[2] = c
-            row[3] = LIBELLES.get(c, "?")
-            cur.updateRow(row)
-
-    n = int(arcpy.management.GetCount(table)[0])
-    print("  ok : %-14s %5d lignes  (%d zones x 24 ans)" % (nom, n, n / 24))
-    exporter_csv(table, nom)
-
-# --- Table de correspondance des classes, pour le depot ----------------------
 with open(os.path.join(STATS, "corine_8classes_libelles.csv"), "w") as f:
     f.write("code,libelle\n")
     for k in sorted(LIBELLES):
         f.write("%d,%s\n" % (k, LIBELLES[k]))
 
-# --- Controle de plausibilite ------------------------------------------------
-print("\n=== Controle : NDVI ete 2003 par classe (moyenne des provinces) ===")
-table = os.path.join(GDB, "zs_ndvi_JJA")
-champs = [f.name for f in arcpy.ListFields(table)]
-champ_date = [c for c in champs if c.upper() in ("STDTIME", "DIMENSIONVALUE")]
-champ_date = champ_date[0] if champ_date else None
-
-cumul = {}
-with arcpy.da.SearchCursor(table, ["CLASSE", "MEAN"] + ([champ_date] if champ_date else [])) as cur:
-    for row in cur:
-        if champ_date and str(row[2])[:4] != "2003":
-            continue
-        cumul.setdefault(row[0], []).append(row[1])
-for k in sorted(cumul):
-    v = cumul[k]
-    print("  %-22s %.3f  (%d provinces)" % (k, sum(v) / len(v), len(v)))
-
-print("\nTermine. CSV dans : %s" % STATS)
+# ===========================================================================
+# 6. Controle : NDVI ete 2003 par classe
+# ===========================================================================
+print("\n=== Controle : NDVI ete 2003 par classe (moyenne ponderee des provinces) ===")
+t = pd.read_csv(os.path.join(STATS, "zs_ndvi_JJA.csv"), sep=";", decimal=",")
+t = t[t["StdTime"].str.startswith("2003")]
+for classe, g in t.groupby("CLASSE"):
+    print("  %-22s %.3f  (%d provinces, %d pixels)" % (
+        classe, np.average(g["MEAN"], weights=g["COUNT"]), len(g), g["COUNT"].sum()))
+print("\nTermine.")

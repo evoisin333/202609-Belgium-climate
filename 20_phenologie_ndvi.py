@@ -195,7 +195,10 @@ TEXTES = {
                sous="Sen's slope   |   * significant after correction (Mann-Kendall 3PW, FDR 10 %)   |   "
                     "○ p < 0.05 for this test alone (exploratory)   |   max: maximum NDVI from March to November"),
 }
-lim = np.nanmax(np.abs(tab.loc[[c for c in CLASSES_FIG if c in tab.index]].values)) * 1.25
+CLASSES_FIG = [c for c in CLASSES_FIG if c in tab.index]
+if not CLASSES_FIG:
+    raise SystemExit("Aucune des classes de la figure n'a de tendance calculee")
+lim = np.nanmax(np.abs(tab.loc[CLASSES_FIG].values)) * 1.25
 for langue, t in TEXTES.items():
     os.makedirs(os.path.join(RACINE, t["dossier"]), exist_ok=True)
     fig, axes = plt.subplots(1, len(CLASSES_FIG), figsize=(14, 4), sharey=True)

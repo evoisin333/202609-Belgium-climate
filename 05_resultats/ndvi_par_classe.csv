@@ -1,0 +1,769 @@
+CLASSE;SAISON;ANNEE;VALEUR
+Artificialise;DJF;2001;0,4775
+Artificialise;DJF;2002;0,4825
+Artificialise;DJF;2003;0,4394
+Artificialise;DJF;2004;0,4704
+Artificialise;DJF;2005;0,4584
+Artificialise;DJF;2006;0,4501
+Artificialise;DJF;2007;0,5072
+Artificialise;DJF;2008;0,4614
+Artificialise;DJF;2009;0,4416
+Artificialise;DJF;2010;0,4632
+Artificialise;DJF;2011;0,4455
+Artificialise;DJF;2012;0,4671
+Artificialise;DJF;2013;0,4843
+Artificialise;DJF;2014;0,5143
+Artificialise;DJF;2015;0,5122
+Artificialise;DJF;2016;0,5434
+Artificialise;DJF;2017;0,4813
+Artificialise;DJF;2018;0,5054
+Artificialise;DJF;2019;0,4879
+Artificialise;DJF;2020;0,5139
+Artificialise;DJF;2021;0,5036
+Artificialise;DJF;2022;0,514
+Artificialise;DJF;2023;0,5162
+Artificialise;DJF;2024;0,507
+Artificialise;JJA;2001;0,6036
+Artificialise;JJA;2002;0,6128
+Artificialise;JJA;2003;0,5909
+Artificialise;JJA;2004;0,6085
+Artificialise;JJA;2005;0,5983
+Artificialise;JJA;2006;0,5785
+Artificialise;JJA;2007;0,6165
+Artificialise;JJA;2008;0,6031
+Artificialise;JJA;2009;0,5999
+Artificialise;JJA;2010;0,5727
+Artificialise;JJA;2011;0,5907
+Artificialise;JJA;2012;0,6048
+Artificialise;JJA;2013;0,6017
+Artificialise;JJA;2014;0,6057
+Artificialise;JJA;2015;0,5834
+Artificialise;JJA;2016;0,6149
+Artificialise;JJA;2017;0,592
+Artificialise;JJA;2018;0,5436
+Artificialise;JJA;2019;0,5734
+Artificialise;JJA;2020;0,553
+Artificialise;JJA;2021;0,6082
+Artificialise;JJA;2022;0,5503
+Artificialise;JJA;2023;0,5914
+Artificialise;JJA;2024;0,606
+Artificialise;MAM;2001;0,5289
+Artificialise;MAM;2002;0,54
+Artificialise;MAM;2003;0,4971
+Artificialise;MAM;2004;0,5146
+Artificialise;MAM;2005;0,5473
+Artificialise;MAM;2006;0,4877
+Artificialise;MAM;2007;0,5503
+Artificialise;MAM;2008;0,5402
+Artificialise;MAM;2009;0,5173
+Artificialise;MAM;2010;0,4912
+Artificialise;MAM;2011;0,5222
+Artificialise;MAM;2012;0,5091
+Artificialise;MAM;2013;0,4927
+Artificialise;MAM;2014;0,5521
+Artificialise;MAM;2015;0,5164
+Artificialise;MAM;2016;0,5338
+Artificialise;MAM;2017;0,5397
+Artificialise;MAM;2018;0,5358
+Artificialise;MAM;2019;0,5408
+Artificialise;MAM;2020;0,5462
+Artificialise;MAM;2021;0,5103
+Artificialise;MAM;2022;0,531
+Artificialise;MAM;2023;0,5529
+Artificialise;MAM;2024;0,5544
+Artificialise;SON;2001;0,5757
+Artificialise;SON;2002;0,5692
+Artificialise;SON;2003;0,5267
+Artificialise;SON;2004;0,5639
+Artificialise;SON;2005;0,5812
+Artificialise;SON;2006;0,583
+Artificialise;SON;2007;0,5679
+Artificialise;SON;2008;0,5571
+Artificialise;SON;2009;0,5335
+Artificialise;SON;2010;0,578
+Artificialise;SON;2011;0,57
+Artificialise;SON;2012;0,5674
+Artificialise;SON;2013;0,5741
+Artificialise;SON;2014;0,5813
+Artificialise;SON;2015;0,5834
+Artificialise;SON;2016;0,5561
+Artificialise;SON;2017;0,5714
+Artificialise;SON;2018;0,538
+Artificialise;SON;2019;0,5602
+Artificialise;SON;2020;0,5516
+Artificialise;SON;2021;0,5779
+Artificialise;SON;2022;0,5495
+Artificialise;SON;2023;0,5971
+Artificialise;SON;2024;0,5977
+Cultures;DJF;2001;0,5275
+Cultures;DJF;2002;0,537
+Cultures;DJF;2003;0,4804
+Cultures;DJF;2004;0,5426
+Cultures;DJF;2005;0,5269
+Cultures;DJF;2006;0,5126
+Cultures;DJF;2007;0,6117
+Cultures;DJF;2008;0,5142
+Cultures;DJF;2009;0,4844
+Cultures;DJF;2010;0,5196
+Cultures;DJF;2011;0,4822
+Cultures;DJF;2012;0,5549
+Cultures;DJF;2013;0,5269
+Cultures;DJF;2014;0,5814
+Cultures;DJF;2015;0,5794
+Cultures;DJF;2016;0,6412
+Cultures;DJF;2017;0,5455
+Cultures;DJF;2018;0,5899
+Cultures;DJF;2019;0,5835
+Cultures;DJF;2020;0,5947
+Cultures;DJF;2021;0,5852
+Cultures;DJF;2022;0,5846
+Cultures;DJF;2023;0,6335
+Cultures;DJF;2024;0,5597
+Cultures;JJA;2001;0,6854
+Cultures;JJA;2002;0,7194
+Cultures;JJA;2003;0,6949
+Cultures;JJA;2004;0,7179
+Cultures;JJA;2005;0,6975
+Cultures;JJA;2006;0,6717
+Cultures;JJA;2007;0,708
+Cultures;JJA;2008;0,7047
+Cultures;JJA;2009;0,6999
+Cultures;JJA;2010;0,676
+Cultures;JJA;2011;0,6997
+Cultures;JJA;2012;0,6883
+Cultures;JJA;2013;0,7158
+Cultures;JJA;2014;0,7173
+Cultures;JJA;2015;0,6789
+Cultures;JJA;2016;0,6938
+Cultures;JJA;2017;0,6855
+Cultures;JJA;2018;0,6365
+Cultures;JJA;2019;0,6733
+Cultures;JJA;2020;0,6477
+Cultures;JJA;2021;0,7009
+Cultures;JJA;2022;0,6377
+Cultures;JJA;2023;0,6736
+Cultures;JJA;2024;0,6631
+Cultures;MAM;2001;0,582
+Cultures;MAM;2002;0,6066
+Cultures;MAM;2003;0,5541
+Cultures;MAM;2004;0,5909
+Cultures;MAM;2005;0,6344
+Cultures;MAM;2006;0,5579
+Cultures;MAM;2007;0,6386
+Cultures;MAM;2008;0,613
+Cultures;MAM;2009;0,5878
+Cultures;MAM;2010;0,5669
+Cultures;MAM;2011;0,5844
+Cultures;MAM;2012;0,6032
+Cultures;MAM;2013;0,5473
+Cultures;MAM;2014;0,6232
+Cultures;MAM;2015;0,5916
+Cultures;MAM;2016;0,6216
+Cultures;MAM;2017;0,6178
+Cultures;MAM;2018;0,6064
+Cultures;MAM;2019;0,6399
+Cultures;MAM;2020;0,6117
+Cultures;MAM;2021;0,6068
+Cultures;MAM;2022;0,5975
+Cultures;MAM;2023;0,666
+Cultures;MAM;2024;0,6282
+Cultures;SON;2001;0,6542
+Cultures;SON;2002;0,6356
+Cultures;SON;2003;0,5864
+Cultures;SON;2004;0,6332
+Cultures;SON;2005;0,6689
+Cultures;SON;2006;0,6605
+Cultures;SON;2007;0,6436
+Cultures;SON;2008;0,6311
+Cultures;SON;2009;0,601
+Cultures;SON;2010;0,6552
+Cultures;SON;2011;0,6504
+Cultures;SON;2012;0,6441
+Cultures;SON;2013;0,6563
+Cultures;SON;2014;0,6522
+Cultures;SON;2015;0,6732
+Cultures;SON;2016;0,6266
+Cultures;SON;2017;0,6648
+Cultures;SON;2018;0,6207
+Cultures;SON;2019;0,6366
+Cultures;SON;2020;0,6231
+Cultures;SON;2021;0,6536
+Cultures;SON;2022;0,6218
+Cultures;SON;2023;0,6848
+Cultures;SON;2024;0,6854
+Foret feuillus;DJF;2001;0,5804
+Foret feuillus;DJF;2002;0,5824
+Foret feuillus;DJF;2003;0,552
+Foret feuillus;DJF;2004;0,5697
+Foret feuillus;DJF;2005;0,578
+Foret feuillus;DJF;2006;0,5637
+Foret feuillus;DJF;2007;0,5973
+Foret feuillus;DJF;2008;0,5778
+Foret feuillus;DJF;2009;0,5413
+Foret feuillus;DJF;2010;0,5679
+Foret feuillus;DJF;2011;0,5447
+Foret feuillus;DJF;2012;0,5661
+Foret feuillus;DJF;2013;0,5498
+Foret feuillus;DJF;2014;0,6275
+Foret feuillus;DJF;2015;0,6052
+Foret feuillus;DJF;2016;0,6186
+Foret feuillus;DJF;2017;0,6005
+Foret feuillus;DJF;2018;0,5879
+Foret feuillus;DJF;2019;0,6061
+Foret feuillus;DJF;2020;0,6294
+Foret feuillus;DJF;2021;0,5788
+Foret feuillus;DJF;2022;0,6153
+Foret feuillus;DJF;2023;0,601
+Foret feuillus;DJF;2024;0,6087
+Foret feuillus;JJA;2001;0,862
+Foret feuillus;JJA;2002;0,8623
+Foret feuillus;JJA;2003;0,8559
+Foret feuillus;JJA;2004;0,8452
+Foret feuillus;JJA;2005;0,8543
+Foret feuillus;JJA;2006;0,8487
+Foret feuillus;JJA;2007;0,8537
+Foret feuillus;JJA;2008;0,8549
+Foret feuillus;JJA;2009;0,86
+Foret feuillus;JJA;2010;0,8533
+Foret feuillus;JJA;2011;0,8498
+Foret feuillus;JJA;2012;0,8483
+Foret feuillus;JJA;2013;0,8606
+Foret feuillus;JJA;2014;0,8505
+Foret feuillus;JJA;2015;0,8617
+Foret feuillus;JJA;2016;0,863
+Foret feuillus;JJA;2017;0,859
+Foret feuillus;JJA;2018;0,8363
+Foret feuillus;JJA;2019;0,8439
+Foret feuillus;JJA;2020;0,8498
+Foret feuillus;JJA;2021;0,858
+Foret feuillus;JJA;2022;0,8544
+Foret feuillus;JJA;2023;0,8524
+Foret feuillus;JJA;2024;0,847
+Foret feuillus;MAM;2001;0,6543
+Foret feuillus;MAM;2002;0,6614
+Foret feuillus;MAM;2003;0,6258
+Foret feuillus;MAM;2004;0,6172
+Foret feuillus;MAM;2005;0,6528
+Foret feuillus;MAM;2006;0,6037
+Foret feuillus;MAM;2007;0,7025
+Foret feuillus;MAM;2008;0,6797
+Foret feuillus;MAM;2009;0,6551
+Foret feuillus;MAM;2010;0,6105
+Foret feuillus;MAM;2011;0,6914
+Foret feuillus;MAM;2012;0,625
+Foret feuillus;MAM;2013;0,5952
+Foret feuillus;MAM;2014;0,6992
+Foret feuillus;MAM;2015;0,647
+Foret feuillus;MAM;2016;0,6559
+Foret feuillus;MAM;2017;0,6459
+Foret feuillus;MAM;2018;0,6992
+Foret feuillus;MAM;2019;0,6645
+Foret feuillus;MAM;2020;0,7162
+Foret feuillus;MAM;2021;0,5972
+Foret feuillus;MAM;2022;0,6652
+Foret feuillus;MAM;2023;0,6558
+Foret feuillus;MAM;2024;0,6727
+Foret feuillus;SON;2001;0,7688
+Foret feuillus;SON;2002;0,7524
+Foret feuillus;SON;2003;0,7438
+Foret feuillus;SON;2004;0,7377
+Foret feuillus;SON;2005;0,761
+Foret feuillus;SON;2006;0,7648
+Foret feuillus;SON;2007;0,7237
+Foret feuillus;SON;2008;0,7466
+Foret feuillus;SON;2009;0,746
+Foret feuillus;SON;2010;0,7811
+Foret feuillus;SON;2011;0,7499
+Foret feuillus;SON;2012;0,7479
+Foret feuillus;SON;2013;0,7707
+Foret feuillus;SON;2014;0,7473
+Foret feuillus;SON;2015;0,7606
+Foret feuillus;SON;2016;0,7571
+Foret feuillus;SON;2017;0,732
+Foret feuillus;SON;2018;0,7402
+Foret feuillus;SON;2019;0,7442
+Foret feuillus;SON;2020;0,7329
+Foret feuillus;SON;2021;0,7618
+Foret feuillus;SON;2022;0,7672
+Foret feuillus;SON;2023;0,7988
+Foret feuillus;SON;2024;0,7677
+Foret mixte;DJF;2001;0,6519
+Foret mixte;DJF;2002;0,6646
+Foret mixte;DJF;2003;0,6352
+Foret mixte;DJF;2004;0,6498
+Foret mixte;DJF;2005;0,6599
+Foret mixte;DJF;2006;0,6286
+Foret mixte;DJF;2007;0,6632
+Foret mixte;DJF;2008;0,6503
+Foret mixte;DJF;2009;0,6139
+Foret mixte;DJF;2010;0,635
+Foret mixte;DJF;2011;0,6151
+Foret mixte;DJF;2012;0,6357
+Foret mixte;DJF;2013;0,5942
+Foret mixte;DJF;2014;0,7009
+Foret mixte;DJF;2015;0,6519
+Foret mixte;DJF;2016;0,6883
+Foret mixte;DJF;2017;0,6714
+Foret mixte;DJF;2018;0,6586
+Foret mixte;DJF;2019;0,679
+Foret mixte;DJF;2020;0,7089
+Foret mixte;DJF;2021;0,6535
+Foret mixte;DJF;2022;0,6772
+Foret mixte;DJF;2023;0,6727
+Foret mixte;DJF;2024;0,6929
+Foret mixte;JJA;2001;0,8411
+Foret mixte;JJA;2002;0,8467
+Foret mixte;JJA;2003;0,8376
+Foret mixte;JJA;2004;0,8275
+Foret mixte;JJA;2005;0,8335
+Foret mixte;JJA;2006;0,8254
+Foret mixte;JJA;2007;0,8322
+Foret mixte;JJA;2008;0,8345
+Foret mixte;JJA;2009;0,8412
+Foret mixte;JJA;2010;0,8249
+Foret mixte;JJA;2011;0,8272
+Foret mixte;JJA;2012;0,8262
+Foret mixte;JJA;2013;0,8365
+Foret mixte;JJA;2014;0,8306
+Foret mixte;JJA;2015;0,8371
+Foret mixte;JJA;2016;0,8472
+Foret mixte;JJA;2017;0,8398
+Foret mixte;JJA;2018;0,8144
+Foret mixte;JJA;2019;0,8251
+Foret mixte;JJA;2020;0,8243
+Foret mixte;JJA;2021;0,8334
+Foret mixte;JJA;2022;0,8253
+Foret mixte;JJA;2023;0,8352
+Foret mixte;JJA;2024;0,8306
+Foret mixte;MAM;2001;0,6872
+Foret mixte;MAM;2002;0,6957
+Foret mixte;MAM;2003;0,6568
+Foret mixte;MAM;2004;0,6506
+Foret mixte;MAM;2005;0,6826
+Foret mixte;MAM;2006;0,6338
+Foret mixte;MAM;2007;0,7201
+Foret mixte;MAM;2008;0,6897
+Foret mixte;MAM;2009;0,6807
+Foret mixte;MAM;2010;0,645
+Foret mixte;MAM;2011;0,6972
+Foret mixte;MAM;2012;0,6557
+Foret mixte;MAM;2013;0,6387
+Foret mixte;MAM;2014;0,7105
+Foret mixte;MAM;2015;0,6669
+Foret mixte;MAM;2016;0,6815
+Foret mixte;MAM;2017;0,6756
+Foret mixte;MAM;2018;0,7105
+Foret mixte;MAM;2019;0,6887
+Foret mixte;MAM;2020;0,7237
+Foret mixte;MAM;2021;0,6459
+Foret mixte;MAM;2022;0,6889
+Foret mixte;MAM;2023;0,6856
+Foret mixte;MAM;2024;0,7011
+Foret mixte;SON;2001;0,7778
+Foret mixte;SON;2002;0,7771
+Foret mixte;SON;2003;0,7603
+Foret mixte;SON;2004;0,766
+Foret mixte;SON;2005;0,7791
+Foret mixte;SON;2006;0,7777
+Foret mixte;SON;2007;0,7496
+Foret mixte;SON;2008;0,756
+Foret mixte;SON;2009;0,7673
+Foret mixte;SON;2010;0,7893
+Foret mixte;SON;2011;0,759
+Foret mixte;SON;2012;0,7573
+Foret mixte;SON;2013;0,7905
+Foret mixte;SON;2014;0,7716
+Foret mixte;SON;2015;0,7823
+Foret mixte;SON;2016;0,7736
+Foret mixte;SON;2017;0,7495
+Foret mixte;SON;2018;0,7508
+Foret mixte;SON;2019;0,7595
+Foret mixte;SON;2020;0,7521
+Foret mixte;SON;2021;0,7849
+Foret mixte;SON;2022;0,7797
+Foret mixte;SON;2023;0,8101
+Foret mixte;SON;2024;0,7809
+Foret resineux;DJF;2001;0,6997
+Foret resineux;DJF;2002;0,7153
+Foret resineux;DJF;2003;0,6856
+Foret resineux;DJF;2004;0,698
+Foret resineux;DJF;2005;0,703
+Foret resineux;DJF;2006;0,6742
+Foret resineux;DJF;2007;0,6984
+Foret resineux;DJF;2008;0,6917
+Foret resineux;DJF;2009;0,668
+Foret resineux;DJF;2010;0,6753
+Foret resineux;DJF;2011;0,6676
+Foret resineux;DJF;2012;0,6723
+Foret resineux;DJF;2013;0,6033
+Foret resineux;DJF;2014;0,7407
+Foret resineux;DJF;2015;0,6804
+Foret resineux;DJF;2016;0,7239
+Foret resineux;DJF;2017;0,7111
+Foret resineux;DJF;2018;0,6994
+Foret resineux;DJF;2019;0,7169
+Foret resineux;DJF;2020;0,7532
+Foret resineux;DJF;2021;0,6919
+Foret resineux;DJF;2022;0,7059
+Foret resineux;DJF;2023;0,711
+Foret resineux;DJF;2024;0,7352
+Foret resineux;JJA;2001;0,8132
+Foret resineux;JJA;2002;0,8232
+Foret resineux;JJA;2003;0,8108
+Foret resineux;JJA;2004;0,7992
+Foret resineux;JJA;2005;0,8057
+Foret resineux;JJA;2006;0,7979
+Foret resineux;JJA;2007;0,8067
+Foret resineux;JJA;2008;0,8076
+Foret resineux;JJA;2009;0,8152
+Foret resineux;JJA;2010;0,7936
+Foret resineux;JJA;2011;0,8007
+Foret resineux;JJA;2012;0,7982
+Foret resineux;JJA;2013;0,8087
+Foret resineux;JJA;2014;0,8039
+Foret resineux;JJA;2015;0,8073
+Foret resineux;JJA;2016;0,8232
+Foret resineux;JJA;2017;0,8134
+Foret resineux;JJA;2018;0,7903
+Foret resineux;JJA;2019;0,8004
+Foret resineux;JJA;2020;0,7969
+Foret resineux;JJA;2021;0,8056
+Foret resineux;JJA;2022;0,796
+Foret resineux;JJA;2023;0,8092
+Foret resineux;JJA;2024;0,8048
+Foret resineux;MAM;2001;0,7005
+Foret resineux;MAM;2002;0,7069
+Foret resineux;MAM;2003;0,6758
+Foret resineux;MAM;2004;0,6579
+Foret resineux;MAM;2005;0,6913
+Foret resineux;MAM;2006;0,6522
+Foret resineux;MAM;2007;0,7173
+Foret resineux;MAM;2008;0,6897
+Foret resineux;MAM;2009;0,6881
+Foret resineux;MAM;2010;0,6589
+Foret resineux;MAM;2011;0,694
+Foret resineux;MAM;2012;0,6645
+Foret resineux;MAM;2013;0,6566
+Foret resineux;MAM;2014;0,705
+Foret resineux;MAM;2015;0,6756
+Foret resineux;MAM;2016;0,6875
+Foret resineux;MAM;2017;0,6879
+Foret resineux;MAM;2018;0,7076
+Foret resineux;MAM;2019;0,6945
+Foret resineux;MAM;2020;0,7183
+Foret resineux;MAM;2021;0,6702
+Foret resineux;MAM;2022;0,6951
+Foret resineux;MAM;2023;0,6909
+Foret resineux;MAM;2024;0,7033
+Foret resineux;SON;2001;0,7598
+Foret resineux;SON;2002;0,7804
+Foret resineux;SON;2003;0,7582
+Foret resineux;SON;2004;0,7706
+Foret resineux;SON;2005;0,7821
+Foret resineux;SON;2006;0,7732
+Foret resineux;SON;2007;0,7624
+Foret resineux;SON;2008;0,7472
+Foret resineux;SON;2009;0,7662
+Foret resineux;SON;2010;0,7761
+Foret resineux;SON;2011;0,762
+Foret resineux;SON;2012;0,762
+Foret resineux;SON;2013;0,7944
+Foret resineux;SON;2014;0,7756
+Foret resineux;SON;2015;0,7851
+Foret resineux;SON;2016;0,7774
+Foret resineux;SON;2017;0,7532
+Foret resineux;SON;2018;0,7546
+Foret resineux;SON;2019;0,7641
+Foret resineux;SON;2020;0,7629
+Foret resineux;SON;2021;0,7861
+Foret resineux;SON;2022;0,7761
+Foret resineux;SON;2023;0,8007
+Foret resineux;SON;2024;0,7795
+Milieux semi-naturels;DJF;2001;0,5294
+Milieux semi-naturels;DJF;2002;0,5392
+Milieux semi-naturels;DJF;2003;0,5017
+Milieux semi-naturels;DJF;2004;0,505
+Milieux semi-naturels;DJF;2005;0,5134
+Milieux semi-naturels;DJF;2006;0,4948
+Milieux semi-naturels;DJF;2007;0,5323
+Milieux semi-naturels;DJF;2008;0,5024
+Milieux semi-naturels;DJF;2009;0,474
+Milieux semi-naturels;DJF;2010;0,4793
+Milieux semi-naturels;DJF;2011;0,4752
+Milieux semi-naturels;DJF;2012;0,5004
+Milieux semi-naturels;DJF;2013;0,466
+Milieux semi-naturels;DJF;2014;0,5436
+Milieux semi-naturels;DJF;2015;0,5401
+Milieux semi-naturels;DJF;2016;0,5538
+Milieux semi-naturels;DJF;2017;0,5137
+Milieux semi-naturels;DJF;2018;0,5397
+Milieux semi-naturels;DJF;2019;0,5202
+Milieux semi-naturels;DJF;2020;0,5624
+Milieux semi-naturels;DJF;2021;0,5388
+Milieux semi-naturels;DJF;2022;0,5533
+Milieux semi-naturels;DJF;2023;0,5524
+Milieux semi-naturels;DJF;2024;0,5734
+Milieux semi-naturels;JJA;2001;0,7198
+Milieux semi-naturels;JJA;2002;0,7393
+Milieux semi-naturels;JJA;2003;0,717
+Milieux semi-naturels;JJA;2004;0,7082
+Milieux semi-naturels;JJA;2005;0,7052
+Milieux semi-naturels;JJA;2006;0,7042
+Milieux semi-naturels;JJA;2007;0,7313
+Milieux semi-naturels;JJA;2008;0,7232
+Milieux semi-naturels;JJA;2009;0,7158
+Milieux semi-naturels;JJA;2010;0,6807
+Milieux semi-naturels;JJA;2011;0,7012
+Milieux semi-naturels;JJA;2012;0,7248
+Milieux semi-naturels;JJA;2013;0,7209
+Milieux semi-naturels;JJA;2014;0,7232
+Milieux semi-naturels;JJA;2015;0,7136
+Milieux semi-naturels;JJA;2016;0,761
+Milieux semi-naturels;JJA;2017;0,7113
+Milieux semi-naturels;JJA;2018;0,6998
+Milieux semi-naturels;JJA;2019;0,7019
+Milieux semi-naturels;JJA;2020;0,6922
+Milieux semi-naturels;JJA;2021;0,7293
+Milieux semi-naturels;JJA;2022;0,7026
+Milieux semi-naturels;JJA;2023;0,7201
+Milieux semi-naturels;JJA;2024;0,7482
+Milieux semi-naturels;MAM;2001;0,5704
+Milieux semi-naturels;MAM;2002;0,5698
+Milieux semi-naturels;MAM;2003;0,517
+Milieux semi-naturels;MAM;2004;0,5193
+Milieux semi-naturels;MAM;2005;0,5616
+Milieux semi-naturels;MAM;2006;0,5053
+Milieux semi-naturels;MAM;2007;0,5694
+Milieux semi-naturels;MAM;2008;0,5503
+Milieux semi-naturels;MAM;2009;0,5336
+Milieux semi-naturels;MAM;2010;0,4888
+Milieux semi-naturels;MAM;2011;0,5378
+Milieux semi-naturels;MAM;2012;0,5206
+Milieux semi-naturels;MAM;2013;0,5
+Milieux semi-naturels;MAM;2014;0,5601
+Milieux semi-naturels;MAM;2015;0,5258
+Milieux semi-naturels;MAM;2016;0,5508
+Milieux semi-naturels;MAM;2017;0,5403
+Milieux semi-naturels;MAM;2018;0,5679
+Milieux semi-naturels;MAM;2019;0,5446
+Milieux semi-naturels;MAM;2020;0,57
+Milieux semi-naturels;MAM;2021;0,5247
+Milieux semi-naturels;MAM;2022;0,5539
+Milieux semi-naturels;MAM;2023;0,5732
+Milieux semi-naturels;MAM;2024;0,6057
+Milieux semi-naturels;SON;2001;0,6482
+Milieux semi-naturels;SON;2002;0,6608
+Milieux semi-naturels;SON;2003;0,6152
+Milieux semi-naturels;SON;2004;0,65
+Milieux semi-naturels;SON;2005;0,6588
+Milieux semi-naturels;SON;2006;0,661
+Milieux semi-naturels;SON;2007;0,6379
+Milieux semi-naturels;SON;2008;0,6333
+Milieux semi-naturels;SON;2009;0,6211
+Milieux semi-naturels;SON;2010;0,6513
+Milieux semi-naturels;SON;2011;0,6504
+Milieux semi-naturels;SON;2012;0,6344
+Milieux semi-naturels;SON;2013;0,6527
+Milieux semi-naturels;SON;2014;0,6662
+Milieux semi-naturels;SON;2015;0,668
+Milieux semi-naturels;SON;2016;0,6541
+Milieux semi-naturels;SON;2017;0,6526
+Milieux semi-naturels;SON;2018;0,6115
+Milieux semi-naturels;SON;2019;0,648
+Milieux semi-naturels;SON;2020;0,653
+Milieux semi-naturels;SON;2021;0,6765
+Milieux semi-naturels;SON;2022;0,6514
+Milieux semi-naturels;SON;2023;0,7122
+Milieux semi-naturels;SON;2024;0,6806
+Prairies;DJF;2001;0,642
+Prairies;DJF;2002;0,6477
+Prairies;DJF;2003;0,5939
+Prairies;DJF;2004;0,6446
+Prairies;DJF;2005;0,6249
+Prairies;DJF;2006;0,5846
+Prairies;DJF;2007;0,6931
+Prairies;DJF;2008;0,6168
+Prairies;DJF;2009;0,5669
+Prairies;DJF;2010;0,5977
+Prairies;DJF;2011;0,5743
+Prairies;DJF;2012;0,6277
+Prairies;DJF;2013;0,6193
+Prairies;DJF;2014;0,6804
+Prairies;DJF;2015;0,6613
+Prairies;DJF;2016;0,7212
+Prairies;DJF;2017;0,62
+Prairies;DJF;2018;0,6816
+Prairies;DJF;2019;0,6606
+Prairies;DJF;2020;0,6899
+Prairies;DJF;2021;0,6677
+Prairies;DJF;2022;0,6636
+Prairies;DJF;2023;0,6995
+Prairies;DJF;2024;0,6571
+Prairies;JJA;2001;0,767
+Prairies;JJA;2002;0,7814
+Prairies;JJA;2003;0,7563
+Prairies;JJA;2004;0,7793
+Prairies;JJA;2005;0,7675
+Prairies;JJA;2006;0,7314
+Prairies;JJA;2007;0,7761
+Prairies;JJA;2008;0,769
+Prairies;JJA;2009;0,7727
+Prairies;JJA;2010;0,7396
+Prairies;JJA;2011;0,766
+Prairies;JJA;2012;0,7635
+Prairies;JJA;2013;0,7684
+Prairies;JJA;2014;0,7721
+Prairies;JJA;2015;0,74
+Prairies;JJA;2016;0,762
+Prairies;JJA;2017;0,7583
+Prairies;JJA;2018;0,6909
+Prairies;JJA;2019;0,7322
+Prairies;JJA;2020;0,7059
+Prairies;JJA;2021;0,7617
+Prairies;JJA;2022;0,6894
+Prairies;JJA;2023;0,7434
+Prairies;JJA;2024;0,7441
+Prairies;MAM;2001;0,7228
+Prairies;MAM;2002;0,7241
+Prairies;MAM;2003;0,6737
+Prairies;MAM;2004;0,7025
+Prairies;MAM;2005;0,7252
+Prairies;MAM;2006;0,6389
+Prairies;MAM;2007;0,754
+Prairies;MAM;2008;0,727
+Prairies;MAM;2009;0,6955
+Prairies;MAM;2010;0,6707
+Prairies;MAM;2011;0,6934
+Prairies;MAM;2012;0,7002
+Prairies;MAM;2013;0,6729
+Prairies;MAM;2014;0,7263
+Prairies;MAM;2015;0,6904
+Prairies;MAM;2016;0,7252
+Prairies;MAM;2017;0,7211
+Prairies;MAM;2018;0,7114
+Prairies;MAM;2019;0,7366
+Prairies;MAM;2020;0,7324
+Prairies;MAM;2021;0,7056
+Prairies;MAM;2022;0,7028
+Prairies;MAM;2023;0,7543
+Prairies;MAM;2024;0,7282
+Prairies;SON;2001;0,748
+Prairies;SON;2002;0,7422
+Prairies;SON;2003;0,6909
+Prairies;SON;2004;0,7443
+Prairies;SON;2005;0,756
+Prairies;SON;2006;0,7619
+Prairies;SON;2007;0,7377
+Prairies;SON;2008;0,7234
+Prairies;SON;2009;0,7046
+Prairies;SON;2010;0,7579
+Prairies;SON;2011;0,7419
+Prairies;SON;2012;0,7259
+Prairies;SON;2013;0,7476
+Prairies;SON;2014;0,751
+Prairies;SON;2015;0,7556
+Prairies;SON;2016;0,709
+Prairies;SON;2017;0,7396
+Prairies;SON;2018;0,6935
+Prairies;SON;2019;0,7179
+Prairies;SON;2020;0,6986
+Prairies;SON;2021;0,7444
+Prairies;SON;2022;0,7132
+Prairies;SON;2023;0,7666
+Prairies;SON;2024;0,7564
+Zones humides;DJF;2001;0,4274
+Zones humides;DJF;2002;0,4411
+Zones humides;DJF;2003;0,4182
+Zones humides;DJF;2004;0,4176
+Zones humides;DJF;2005;0,4338
+Zones humides;DJF;2006;0,4158
+Zones humides;DJF;2007;0,4452
+Zones humides;DJF;2008;0,4285
+Zones humides;DJF;2009;0,3909
+Zones humides;DJF;2010;0,394
+Zones humides;DJF;2011;0,3921
+Zones humides;DJF;2012;0,4212
+Zones humides;DJF;2013;0,4276
+Zones humides;DJF;2014;0,4366
+Zones humides;DJF;2015;0,4814
+Zones humides;DJF;2016;0,4594
+Zones humides;DJF;2017;0,4266
+Zones humides;DJF;2018;0,447
+Zones humides;DJF;2019;0,427
+Zones humides;DJF;2020;0,4496
+Zones humides;DJF;2021;0,438
+Zones humides;DJF;2022;0,4493
+Zones humides;DJF;2023;0,4269
+Zones humides;DJF;2024;0,4573
+Zones humides;JJA;2001;0,7526
+Zones humides;JJA;2002;0,7858
+Zones humides;JJA;2003;0,7779
+Zones humides;JJA;2004;0,7389
+Zones humides;JJA;2005;0,7558
+Zones humides;JJA;2006;0,7766
+Zones humides;JJA;2007;0,7817
+Zones humides;JJA;2008;0,7808
+Zones humides;JJA;2009;0,7672
+Zones humides;JJA;2010;0,7259
+Zones humides;JJA;2011;0,7606
+Zones humides;JJA;2012;0,7555
+Zones humides;JJA;2013;0,7375
+Zones humides;JJA;2014;0,7638
+Zones humides;JJA;2015;0,7422
+Zones humides;JJA;2016;0,8032
+Zones humides;JJA;2017;0,7516
+Zones humides;JJA;2018;0,7739
+Zones humides;JJA;2019;0,7563
+Zones humides;JJA;2020;0,7448
+Zones humides;JJA;2021;0,7278
+Zones humides;JJA;2022;0,7574
+Zones humides;JJA;2023;0,7438
+Zones humides;JJA;2024;0,775
+Zones humides;MAM;2001;0,4755
+Zones humides;MAM;2002;0,459
+Zones humides;MAM;2003;0,4273
+Zones humides;MAM;2004;0,4282
+Zones humides;MAM;2005;0,4716
+Zones humides;MAM;2006;0,4259
+Zones humides;MAM;2007;0,4818
+Zones humides;MAM;2008;0,4441
+Zones humides;MAM;2009;0,4512
+Zones humides;MAM;2010;0,401
+Zones humides;MAM;2011;0,4555
+Zones humides;MAM;2012;0,4311
+Zones humides;MAM;2013;0,4078
+Zones humides;MAM;2014;0,4492
+Zones humides;MAM;2015;0,422
+Zones humides;MAM;2016;0,4399
+Zones humides;MAM;2017;0,4467
+Zones humides;MAM;2018;0,4668
+Zones humides;MAM;2019;0,4351
+Zones humides;MAM;2020;0,4488
+Zones humides;MAM;2021;0,4189
+Zones humides;MAM;2022;0,4409
+Zones humides;MAM;2023;0,4409
+Zones humides;MAM;2024;0,4981
+Zones humides;SON;2001;0,5958
+Zones humides;SON;2002;0,6393
+Zones humides;SON;2003;0,5928
+Zones humides;SON;2004;0,6212
+Zones humides;SON;2005;0,63
+Zones humides;SON;2006;0,6381
+Zones humides;SON;2007;0,6101
+Zones humides;SON;2008;0,6039
+Zones humides;SON;2009;0,6033
+Zones humides;SON;2010;0,6313
+Zones humides;SON;2011;0,633
+Zones humides;SON;2012;0,6118
+Zones humides;SON;2013;0,627
+Zones humides;SON;2014;0,6187
+Zones humides;SON;2015;0,6303
+Zones humides;SON;2016;0,6384
+Zones humides;SON;2017;0,6057
+Zones humides;SON;2018;0,5832
+Zones humides;SON;2019;0,6129
+Zones humides;SON;2020;0,6392
+Zones humides;SON;2021;0,6412
+Zones humides;SON;2022;0,6371
+Zones humides;SON;2023;0,7001
+Zones humides;SON;2024;0,6323

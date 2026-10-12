@@ -1,17 +1,30 @@
- 01_raw/
-   02_working/
-   03_arcgis/
-   *.nc
-   *.crf/
-   *.gdb/
-   *.aprx
-   *.atbx
-   *.lock
-   .backups/
-   ImportLog/
-   Index/
-   __pycache__/
-   *.pyc
-   .ipynb_checkpoints/
-   Thumbs.db
-   desktop.ini
+# Donnees lourdes ou regenerables (non versionnees)
+01_raw/
+02_working/
+03_arcgis/
+04_normales/
+*.nc
+*.crf/
+
+# ArcGIS Pro
+*.gdb/
+*.aprx
+*.atbx
+*.lock
+.backups/
+ImportLog/
+Index/
+schema.ini
+*.csv.xml
+
+# Telechargement local (contient des identifiants)
+telecharger_modis.py
+liste_*.txt
+.cdsapirc
+
+# Python et systeme
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+Thumbs.db
+desktop.ini

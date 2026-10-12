@@ -3,7 +3,6 @@
 17_figures_en.py
 A lancer depuis la racine du projet, environnement geo :
     python 17_figures_en.py
-Necessite matplotlib :  conda install -c conda-forge matplotlib
 
 Version anglaise de 17_figures.py. Produit dans 06_figures_en\\ sept
 figures, en PNG 300 dpi et en PDF vectoriel :
@@ -138,7 +137,7 @@ fig.legend(handles, labels, loc="lower center", ncol=4, frameon=False,
            bbox_to_anchor=(0.5, -0.03))
 fig.suptitle("Mean seasonal temperature in Belgium, 1961–2024",
              fontsize=13, fontweight="bold", y=0.98)
-fig.text(0.5, 0.925, "ERA5-Land, area-weighted national mean",
+fig.text(0.5, 0.925, "ERA5-Land, national mean weighted by grid-cell count",
          ha="center", color=ENCRE_2, fontsize=9)
 fig.tight_layout(rect=[0, 0.02, 1, 0.92])
 enregistrer(fig, "fig1_seasonal_temperature")

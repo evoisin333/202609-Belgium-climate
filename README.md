@@ -10,21 +10,21 @@ This repository holds the full processing chain behind the project: open dataset
 
 ## Key findings
 
-Change between the WMO climate normals **1961–1990 and 1991–2020**, national means weighted by area (values from figure 2 below):
+Change between the WMO climate normals **1961–1990 and 1991–2020**, national means weighted by the number of grid cells, i.e. approximately by area (values from figure 2 below):
 
 | Indicator | Change |
 |---|---|
 | Mean summer temperature | **+1.2 °C** |
 | Hottest summer day (TXx) | **+2.8 °C** |
 | Summer days reaching 30 °C | **+3.5 days** |
-| Spring precipitation | **−28 mm** |
-| Winter precipitation | **+30 mm** |
+| Spring precipitation on wet days (E-OBS PRCPTOT) | **−28 mm** |
+| Winter precipitation on wet days (E-OBS PRCPTOT) | **+30 mm** |
 | Winter frost days | **−7 days** |
-| Spring soil moisture (top 7 cm) | **−0.016 m³/m³** |
+| Spring soil moisture, top 7 cm (ERA5-Land, model-based) | **−0.016 m³/m³** |
 
 - **Summers are warming everywhere.** Mean summer temperature rises by 0.35 to 0.44 °C per decade, significant in every grid cell (Mann-Kendall with prewhitening, 3PW, and false-discovery-rate correction).
-- **Extremes are rising faster than the mean.** TXx rises by 0.5 to 1.4 °C per decade, up to three times faster than mean summer temperature.
-- **Rain is shifting from spring to winter**, while annual totals barely change, and soils are drying in spring and summer.
+- **The hottest day of summer is warming fast.** TXx (E-OBS) rises by 0.5 to 1.4 °C per decade, while mean summer temperature (ERA5-Land) rises by 0.35 to 0.44 °C. The two come from different datasets and grids, so the comparison is indicative only; a like-for-like ratio would use E-OBS mean temperature on the same cells.
+- **Rain is shifting from spring to winter.** Between the two normals, spring precipitation decreases by about 29 mm and winter precipitation increases by about 28 mm, with the same sign and size in ERA5-Land (total precipitation) and E-OBS (precipitation on wet days, ≥ 1 mm; simple mean of the provinces). ERA5-Land soil moisture decreases in spring and summer; it is a model output, not an observation (see *Known issues*).
 - **Farmland greenness follows hot, dry summers; a downward trend is suggested but not confirmed.** Summer NDVI of grassland and cropland is strongly linked to summer temperature (r = −0.73 and −0.64 after detrending) and to topsoil moisture (r = +0.74 and +0.63); forests show no significant link with summer temperature. These links hold on raw and detrended series and with Spearman's rank correlation (6 of 72 class × season × variable cells change significance, all close to the 5 % threshold). Over 2001–2024, summer NDVI decreases on grassland and cropland (−0.017 and −0.021 per decade, national class means), two to six times faster than on forests. The plain Mann-Kendall test finds both declines significant (p < 0.01 on the summer series built from the 16-day composites), but once year-to-year autocorrelation is accounted for (3PW) and the eight classes are corrected for multiple testing (FDR 10 %), only grassland remains significant (cropland: p = 0.04 before correction, 0.16 after). Pixel by pixel, the median trend is −0.013 per decade; 13 % of pixels have p < 0.05 (3PW), against 5 % expected by chance, but none survives the correction over ~960,000 pixels. A month-by-month analysis places the decline in June–July: on cropland, June and July NDVI decrease by 0.022 and 0.029 per decade, on grassland July NDVI by 0.026 (p < 0.05 for each test alone, not significant after correction over the 104 tests), and EVI, which saturates less over dense vegetation (Huete et al., 2002), shows the same pattern. March and November values increase for all classes with both indices, which may reflect a longer growing season. On forests the indices differ: summer NDVI is flat, whereas EVI rises on coniferous forest (+0.013 per decade in summer, +0.022 in autumn, p < 0.05 for each test alone), which could reflect NDVI saturation over dense canopies; it is not significant after correction. These trends sit at the edge of what 24 years can detect: with an earlier, less strict quality mask, the cropland decline and several EVI trends passed the correction, and with the current mask they do not.
 
 ![Mean seasonal temperature in Belgium, 1961–2024](fig1_seasonal_temperature.png)
@@ -84,7 +84,7 @@ These v31.0e links were online on 9 October 2026; newer E-OBS versions exist and
 
 **Trends:** per-pixel Sen's slope, expressed per decade, computed in Python for all indicators (`18_tendances.py`). Significance uses the 3PW approach of Collaud Coen et al. (2020): the Mann-Kendall test is run after prewhitening (PW, lag-1 autocorrelation removed) and after trend-free prewhitening (TFPW, Yue et al., 2002), and a trend is significant only if both tests are. Each map is then corrected for multiple testing with the Benjamini-Hochberg false discovery rate at 10 % (Wilks, 2016). Pixels need at least 75 % valid years. To tell lower vegetation vigour from an earlier seasonal cycle (e.g. earlier harvest), `20_phenologie_ndvi.py` repeats the class-level test month by month (March–November), by season and on the seasonal maximum, from the individual 16-day composites (Eisfelder et al., 2023, use seasonal means; Garonna et al., 2014, phenological dates). The same test is applied to the national summer NDVI series of each land-cover class (`16_analyse.py`), where averaging thousands of pixels reduces noise; zones keep a fixed weight (their mean pixel count) every year, so that year-to-year changes in the quality mask do not alter the spatial composition of the mean. The implementation matches the `pymannkendall` package (Hussain & Mahmud, 2019) on every complete ERA5-Land summer series (`05_resultats/validation_tendances_pymannkendall.csv`); the earlier plain Mann-Kendall implementation matched ArcGIS Pro *Generate Trend Raster* (`05_resultats/validation_tendance_python_arcgis.csv`).
 
-**Regional figures:** zonal statistics by NUTS 2 region, and by region × land-cover class for NDVI. National values are area-weighted means.
+**Regional figures:** zonal statistics by NUTS 2 region, and by region × land-cover class for NDVI. National values are means weighted by the number of grid cells in each region (cell area varies by about ±2 % across Belgium, so this is close to an area-weighted mean).
 
 **Land-cover classes:** the 44 CORINE 2018 classes are grouped into 8 (artificial surfaces, cropland, grassland, broadleaf, coniferous and mixed forest, semi-natural areas, wetlands); open water is excluded. A MODIS pixel (~230 m, ~5 ha) is assigned to a class only if that class covers at least 80 % of it (computed from the 100 m CORINE raster), following Kulesza & Hościło (2024); mixed pixels — a town edge with gardens, a field with hedges — are left out. CORINE's 25 ha minimum mapping unit means that small features inside a class remain.
 
@@ -158,6 +158,15 @@ The ArcGIS steps (13, 14, 19) require ArcGIS Pro with the Spatial Analyst and Im
 ## Known issues and limitations
 
 - **E-OBS station artefact.** A faulty station in the south of the Grand Duchy of Luxembourg produces impossible summer maxima (TXx up to 47 °C) that E-OBS interpolation spreads to neighbouring cells, including in the Belgian province of Luxembourg. A spatial-coherence test (TXx more than 4 °C above the median of its neighbours within ±0.5°) removed 40 cells, mostly around that station plus a faulty winter 2022 signal in Flanders, while keeping the genuine 2019 and 2022 heatwaves. A second test, cross-checked against ERA5-Land, masked a residual halo of 67 pixels for the summers of 2003, 2004, 2006 and 2007. Heat indices in the south of the province of Luxembourg should still be read with caution.
+- **ERA5-Land soil moisture is not observed.** ERA5-Land runs without data assimilation; observations only influence it through the ERA5 atmospheric forcing (NSF NCAR GDEX, ERA5-Land dataset description). Soil-moisture trends therefore reflect the land-surface model and its forcing, and were not compared with independent data such as ESA CCI Soil Moisture.
+- **Not yet addressed** (identified in an external review, left for a later version):
+  - no uncertainty is quantified: no confidence intervals on Sen's slopes or on the change between normals, and the E-OBS ensemble spread is not used;
+  - su30 is counted on the E-OBS ensemble mean of daily Tmax, which may smooth extremes, uses Tmax ≥ 30 °C (SU uses > 25 °C), and has no completeness criterion for missing days;
+  - the changing density of the E-OBS station network over 1961–2024 is not assessed;
+  - seasonal means of monthly ERA5-Land values are not weighted by the number of days in each month (bias of a few hundredths of a degree);
+  - the four masked summers (2003, 2004, 2006, 2007) were identified after inspecting the data; normals and trends were not recomputed without the mask;
+  - Sen's slope on count indices with many zero years (su30, TR) underestimates the change, see above;
+  - the E-OBS winter (DJF) convention is assumed from the file layout, not checked against the time bounds.
 - **Different grids.** ERA5-Land and E-OBS cell centres are offset by about 0.05° (≈ 5.5 km). Data were not resampled; cross-source comparisons rely on regional zonal statistics.
 - **Precipitation sources differ.** ERA5-Land `tp` is total precipitation; E-OBS PRCPTOT counts wet days (≥ 1 mm) only.
 - **Rare events and Sen's slope.** Where days ≥ 30 °C are rare (coast, Ardennes), most summers score zero, so Sen's slope collapses towards zero even when Mann-Kendall detects an increase. The trend map shows *where* the increase is strongest, but underestimates its magnitude there.
@@ -167,6 +176,12 @@ The ArcGIS steps (13, 14, 19) require ArcGIS Pro with the Spatial Analyst and Im
 - **No winter vegetation index.** Winter NDVI is excluded (see *MODIS quality*), so the analysis says nothing about winter greenness, e.g. of winter cereals or evergreen forest.
 - **Short NDVI record.** 24 years (2001–2024) allow trend and correlation analysis, but not a comparison of climate normals.
 - **NDVI–climate correlations: no multiple-testing correction.** 72 tests (8 classes × 3 seasons × 3 variables) are run at p < 0.05 each, so about four significant cells are expected by chance alone. The climate of each class is approximated by provincial values weighted by the class's pixel count, not computed pixel by pixel.
+
+---
+
+## License
+
+Code released under the MIT License (see `LICENSE`). The input data remain under their providers' licences (see *Credits*).
 
 ---
 
@@ -187,4 +202,5 @@ The ArcGIS steps (13, 14, 19) require ArcGIS Pro with the Spatial Analyst and Im
 - Hussain, Md., Mahmud, I. (2019). pyMannKendall: a python package for non parametric Mann Kendall family of trend tests. *Journal of Open Source Software*, 4(39), 1556. https://doi.org/10.21105/joss.01556
 - Huete, A., Didan, K., Miura, T., Rodriguez, E. P., Gao, X., Ferreira, L. G. (2002). Overview of the radiometric and biophysical performance of the MODIS vegetation indices. *Remote Sensing of Environment*, 83(1–2), 195–213. https://doi.org/10.1016/S0034-4257(02)00096-2
 - Didan, K., Barreto Munoz, A. (2019). *MODIS Vegetation Index User's Guide (MOD13 Series)*, version 3.10, Collection 6.1. NASA LP DAAC. https://lpdaac.usgs.gov/documents/621/MOD13_User_Guide_V61.pdf
+- NSF NCAR Geoscience Data Exchange. *ERA5-Land hourly data from 1950 to present* (dataset description, ds633.8). https://gdex.ucar.edu/datasets/d633008/
 - Bretherton, C. S., Widmann, M., Dymnikov, V. P., Wallace, J. M., Bladé, I. (1999). The effective number of spatial degrees of freedom of a time-varying field. *Journal of Climate*, 12(7), 1990–2009. https://doi.org/10.1175/1520-0442(1999)012<1990:TENOSD>2.0.CO;2

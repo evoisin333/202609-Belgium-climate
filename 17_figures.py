@@ -3,7 +3,6 @@
 17_figures.py
 A lancer depuis la racine du projet, environnement geo :
     python 17_figures.py
-Necessite matplotlib :  conda install -c conda-forge matplotlib
 
 Produit dans 06_figures\\ sept figures, en PNG 300 dpi (rapport Word,
 StoryMap) et en PDF vectoriel (impression) :
@@ -138,7 +137,7 @@ fig.legend(handles, labels, loc="lower center", ncol=4, frameon=False,
            bbox_to_anchor=(0.5, -0.03))
 fig.suptitle("Température moyenne saisonnière en Belgique, 1961-2024",
              fontsize=13, fontweight="bold", y=0.98)
-fig.text(0.5, 0.925, "ERA5-Land, moyenne nationale pondérée par la surface",
+fig.text(0.5, 0.925, "ERA5-Land, moyenne nationale pondérée par le nombre de mailles",
          ha="center", color=ENCRE_2, fontsize=9)
 fig.tight_layout(rect=[0, 0.02, 1, 0.92])
 enregistrer(fig, "fig1_temperature_saisonniere")

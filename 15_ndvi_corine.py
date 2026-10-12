@@ -14,6 +14,7 @@ NDVI par province ET par classe d'occupation du sol (CORINE Land Cover 2018,
      libelle de classe sont ecrits dans les tables de sortie (la table
      attributaire du raster de zones refuse d'etre modifiee)
 Sorties (04_stats) : zs_ndvi_<saison>.csv, corine_8classes_libelles.csv
+Sortie (01_raw) : corine_8classes_grille_modis.tif, pour 20_phenologie_ndvi.py
 
 Deux pieges rencontres :
   - un premier decoupage de CORINE ne couvrait qu'environ 80 x 95 km autour
@@ -60,6 +61,8 @@ CHAMP_ZONE = "NUTS_ID"
 NDVI_REF = os.path.join(ARCGIS, "modis_ndvi_BE_JJA.crf")
 
 CLC_DECOUPE = os.path.join(DEPOT, "01_raw", "CLC2018_BE2.tif")
+# Copie GeoTIFF des 8 classes sur la grille MODIS, lue par 20_phenologie_ndvi.py
+CLASSES_TIF = os.path.join(DEPOT, "01_raw", "corine_8classes_grille_modis.tif")
 CORINE_RECLASS = os.path.join(GDB, "corine_8classes")
 CORINE_GRILLE = os.path.join(GDB, "corine_grille_ndvi")
 PROV_GRILLE = os.path.join(GDB, "provinces_grille_ndvi")
@@ -178,6 +181,9 @@ with arcpy.EnvManager(snapRaster=NDVI_REF, cellSize=taille,
                                    "NEAREST", str(taille))
     e2 = arcpy.Raster(CORINE_GRILLE).extent
     print("  emprise : X %.3f-%.3f  Y %.3f-%.3f" % (e2.XMin, e2.XMax, e2.YMin, e2.YMax))
+    arcpy.management.CopyRaster(CORINE_GRILLE, CLASSES_TIF,
+                                pixel_type="8_BIT_UNSIGNED", nodata_value="0")
+    print("  ok : %s" % os.path.basename(CLASSES_TIF))
 
     print("\n=== Rasterisation des provinces ===")
     arcpy.conversion.PolygonToRaster(PROVINCES, CHAMP_ZONE, PROV_GRILLE,

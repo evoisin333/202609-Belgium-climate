@@ -1,0 +1,105 @@
+CLASSE;INDICATEUR;N;PENTE_DEC;P_MK;P_3PW;P_FDR;SIGNIFICATIF
+Artificialise;JJA;24;-0,009;0,1725;0,1391;0,3911;non
+Artificialise;M03;24;0,0248;0,0185;0,0201;0,1661;non
+Artificialise;M04;24;0,0065;0,2643;0,1391;0,3911;non
+Artificialise;M05;24;-0,0032;0,5352;0,4596;0,6732;non
+Artificialise;M06;24;-0,0085;0,2437;0,1015;0,33;non
+Artificialise;M07;24;-0,016;0,0185;0,0303;0,1661;non
+Artificialise;M08;24;-0,0018;0,6733;0,9159;0,9621;non
+Artificialise;M09;24;-0,0083;0,3092;0,398;0,6732;non
+Artificialise;M10;24;0,0104;0,0782;0,2908;0,6048;non
+Artificialise;M11;24;0,0198;0,008;0,1131;0,3359;non
+Artificialise;MAM;24;0,0111;0,0965;0,0645;0,2396;non
+Artificialise;MAX;24;-0,0062;0,2862;0,2908;0,6048;non
+Artificialise;SON;24;0,0059;0,4419;0,3156;0,6435;non
+Cultures;JJA;24;-0,0197;0,0027;0,0151;0,1661;non
+Cultures;M03;24;0,0352;0,0092;0,0151;0,1661;non
+Cultures;M04;24;0,0152;0,05;0,0507;0,2026;non
+Cultures;M05;24;0,0011;0,8622;0,7116;0,8506;non
+Cultures;M06;24;-0,0157;0,1725;0,0394;0,1707;non
+Cultures;M07;24;-0,0304;0,0012;0,0112;0,1661;non
+Cultures;M08;24;-0,0057;0,5352;0,7917;0,8853;non
+Cultures;M09;24;-0,0111;0,3092;0,3692;0,6732;non
+Cultures;M10;24;0,0078;0,2862;0,2049;0,4956;non
+Cultures;M11;23;0,0318;0,0003;0,0235;0,1661;non
+Cultures;MAM;24;0,0172;0,0273;0,0394;0,1707;non
+Cultures;MAX;24;-0,0142;0,0027;0,091;0,3052;non
+Cultures;SON;24;0,0073;0,413;0,398;0,6732;non
+Foret feuillus;JJA;24;-0,0033;0,1433;0,4596;0,6732;non
+Foret feuillus;M03;24;0,0197;0,0185;0,0265;0,1661;non
+Foret feuillus;M04;23;0,0171;0,3417;0,4986;0,7103;non
+Foret feuillus;M05;24;0,0038;0,9013;0,7116;0,8506;non
+Foret feuillus;M06;24;-0,0026;0,413;0,398;0,6732;non
+Foret feuillus;M07;24;-0,0047;0,2059;0,4596;0,6732;non
+Foret feuillus;M08;24;-0,0021;0,785;0,9159;0,9621;non
+Foret feuillus;M09;24;-0,0043;0,2862;0,5974;0,7864;non
+Foret feuillus;M10;24;0,0076;0,413;0,2049;0,4956;non
+Foret feuillus;M11;23;0,0254;0,0011;0,0072;0,1661;non
+Foret feuillus;MAM;24;0,0141;0,1069;0,1867;0,4735;non
+Foret feuillus;MAX;24;-0,002;0,503;0,4596;0,6732;non
+Foret feuillus;SON;24;0,0029;0,6024;0,4282;0,6732;non
+Foret mixte;JJA;24;-0,0041;0,0782;0,4282;0,6732;non
+Foret mixte;M03;24;0,0191;0,0273;0,0303;0,1661;non
+Foret mixte;M04;23;0,0102;0,398;0,1759;0,4691;non
+Foret mixte;M05;24;-0,0045;0,6374;0,6726;0,8328;non
+Foret mixte;M06;24;-0,0033;0,2643;0,4596;0,6732;non
+Foret mixte;M07;24;-0,0044;0,1433;0,2908;0,6048;non
+Foret mixte;M08;24;-0,0022;0,8622;0,7513;0,8586;non
+Foret mixte;M09;24;-0,0047;0,413;0,5612;0,7483;non
+Foret mixte;M10;24;0,0066;0,2862;0,3417;0,6705;non
+Foret mixte;M11;22;0,0199;0,0423;0,0252;0,1661;non
+Foret mixte;MAM;24;0,0108;0,2059;0,2452;0,5667;non
+Foret mixte;MAX;24;-0,0018;0,3853;1,0;1,0;non
+Foret mixte;SON;24;-0,0004;1,0;0,6345;0,795;non
+Foret resineux;JJA;24;-0,0034;0,1303;0,6345;0,795;non
+Foret resineux;M03;24;0,0167;0,0309;0,0265;0,1661;non
+Foret resineux;M04;23;0,0038;0,7513;0,6118;0,795;non
+Foret resineux;M05;24;-0,0025;0,785;1,0;1,0;non
+Foret resineux;M06;24;-0,0008;0,9407;0,5262;0,72;non
+Foret resineux;M07;24;-0,0042;0,1433;0,398;0,6732;non
+Foret resineux;M08;24;-0,0004;0,9013;0,7116;0,8506;non
+Foret resineux;M09;24;-0,0031;0,6733;0,7513;0,8586;non
+Foret resineux;M10;24;0,0102;0,1181;0,5262;0,72;non
+Foret resineux;M11;22;0,0194;0,0627;0,0301;0,1661;non
+Foret resineux;MAM;24;0,0061;0,1574;0,1131;0,3359;non
+Foret resineux;MAX;24;-0,0015;0,6733;0,7513;0,8586;non
+Foret resineux;SON;24;0,0007;0,8622;0,7513;0,8586;non
+Milieux semi-naturels;JJA;24;-0,0016;0,8233;0,9579;0,9863;non
+Milieux semi-naturels;M03;23;0,0264;0,0201;0,0235;0,1661;non
+Milieux semi-naturels;M04;23;0,0101;0,398;0,3377;0,6705;non
+Milieux semi-naturels;M05;24;-0,0017;0,9407;0,8741;0,9569;non
+Milieux semi-naturels;M06;24;0,0021;0,6374;0,9159;0,9621;non
+Milieux semi-naturels;M07;24;-0,0017;0,8622;1,0;1,0;non
+Milieux semi-naturels;M08;24;0,0041;0,6374;0,398;0,6732;non
+Milieux semi-naturels;M09;24;0,001;0,7471;0,6345;0,795;non
+Milieux semi-naturels;M10;24;0,0159;0,0309;0,4923;0,7103;non
+Milieux semi-naturels;M11;23;0,0202;0,0051;0,032;0,1666;non
+Milieux semi-naturels;MAM;24;0,014;0,1181;0,0813;0,2819;non
+Milieux semi-naturels;MAX;24;0,004;0,3853;0,2908;0,6048;non
+Milieux semi-naturels;SON;24;0,0105;0,2242;0,2452;0,5667;non
+Prairies;JJA;24;-0,0172;0,0014;0,0151;0,1661;non
+Prairies;M03;24;0,0321;0,035;0,0265;0,1661;non
+Prairies;M04;24;0,0058;0,413;0,1867;0,4735;non
+Prairies;M05;24;-0,007;0,2643;0,4596;0,6732;non
+Prairies;M06;24;-0,017;0,024;0,0507;0,2026;non
+Prairies;M07;24;-0,0256;0,001;0,0071;0,1661;non
+Prairies;M08;24;-0,006;0,4419;0,4596;0,6732;non
+Prairies;M09;24;-0,0121;0,087;0,0394;0,1707;non
+Prairies;M10;24;0,0024;0,7471;0,8741;0,9569;non
+Prairies;M11;23;0,0173;0,0447;0,0372;0,1707;non
+Prairies;MAM;24;0,0102;0,1574;0,1131;0,3359;non
+Prairies;MAX;24;-0,0064;0,087;0,2908;0,6048;non
+Prairies;SON;24;-0,0001;1,0;0,9579;0,9863;non
+Zones humides et eau;JJA;24;0,0028;0,6733;0,7917;0,8853;non
+Zones humides et eau;M03;23;0,0237;0,0096;0,0122;0,1661;non
+Zones humides et eau;M04;22;0,014;0,0711;0,1443;0,3949;non
+Zones humides et eau;M05;24;-0,001;0,9802;0,5262;0,72;non
+Zones humides et eau;M06;24;0,0091;0,2643;0,4596;0,6732;non
+Zones humides et eau;M07;24;0,0046;0,6733;0,9159;0,9621;non
+Zones humides et eau;M08;23;0,0039;0,6726;0,4149;0,6732;non
+Zones humides et eau;M09;24;0,0166;0,0309;0,0645;0,2396;non
+Zones humides et eau;M10;23;0,0283;0,0007;0,4149;0,6732;non
+Zones humides et eau;M11;23;0,0244;0,0096;0,006;0,1661;non
+Zones humides et eau;MAM;24;0,0177;0,05;0,0813;0,2819;non
+Zones humides et eau;MAX;24;0,0095;0,2643;0,5612;0,7483;non
+Zones humides et eau;SON;24;0,0194;0,0008;0,0201;0,1661;non

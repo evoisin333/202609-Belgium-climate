@@ -51,7 +51,7 @@ STATS = os.path.join(RACINE, "04_stats")
 os.makedirs(STATS, exist_ok=True)
 
 PURETE_MIN = 0.80        # part minimale de la classe dominante dans un pixel MODIS
-SAISONS = {"DJF": 1, "MAM": 4, "JJA": 7, "SON": 10}   # mois des dates (09-11)
+SAISONS = {"MAM": 4, "JJA": 7, "SON": 10}   # mois des dates (09-11) ; pas d'hiver (03)
 
 LIBELLES = {
     1: "Artificialise", 2: "Cultures", 3: "Prairies",

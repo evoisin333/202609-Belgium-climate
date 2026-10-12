@@ -13,14 +13,21 @@ precoces) ? On regarde la tendance mois par mois :
   - si tous les mois et le maximum baissent : plutot une perte de vigueur.
 
 Pour chaque composite MODIS de 16 jours (2001-2024) :
-  - meme masque qualite que 03_modis_ndvi.py (pixel_reliability 0 ou 1,
-    valeur -3000 retiree, facteur 0,0001), meme date (debut + 8 jours) ;
-  - NDVI moyen de chaque classe CORINE (8 classes, grille MODIS) ;
+  - meme masque qualite que 03_modis_ndvi.py (outils_modis.py : fiabilite 0,
+    ou 1 si VI_Quality ne signale ni nuage, ni ombre, ni neige ; valeur
+    -3000 retiree, facteur 0,0001) ; NDVI et EVI partagent ces couches ;
+  - chaque pixel est date par son jour d'acquisition reel
+    (composite_day_of_the_year) : un composite a cheval sur deux mois
+    alimente les deux ;
   - composite ignore pour une classe si moins de 50 % de ses pixels sont valides.
 Indicateurs par classe et par annee :
-  - NDVI moyen de chaque mois, mars a novembre (9 indicateurs) ;
-  - NDVI moyen de chaque saison : MAM, JJA, SON (3 indicateurs) ;
-  - NDVI maximum de mars a novembre (1 indicateur).
+  - NDVI moyen de chaque mois, mars a novembre (9 indicateurs), moyenne de
+    tous les pixels valides de la classe acquis ce mois-la ;
+  - NDVI moyen de chaque saison : MAM, JJA, SON (3 indicateurs), seulement
+    si au moins 3 composites valides y contribuent (comme 03) ;
+  - NDVI maximum de mars a novembre (1 indicateur) : plus forte moyenne de
+    composite, chaque composite etant rattache au mois de la plupart de ses
+    pixels valides.
 Tendance de chaque serie : pente de Sen, Mann-Kendall 3PW, puis correction
 FDR 10 % sur l'ensemble des tests (outils_tendance.py). Au moins 18 annees.
 
@@ -32,7 +39,8 @@ L'EVI sert de controle pour les forets : le NDVI sature quand le couvert est
 dense (Huete et al. 2002), l'EVI beaucoup moins.
 
 Entrees :
-  01_raw/MODIS/NDVI/*.tif (ou EVI/), 01_raw/MODIS/pixel_reliability/*.tif
+  01_raw/MODIS/NDVI/*.tif (ou EVI/), et les couches qualite
+  01_raw/MODIS/pixel_reliability, VI_Quality, composite_day_of_the_year
   01_raw/corine_8classes_grille_modis.tif   (15_ndvi_corine.py)
   04_stats/corine_8classes_libelles.csv
 Sorties :
@@ -42,9 +50,7 @@ Sorties :
   en PNG et PDF, et la version anglaise dans 06_figures_en
 """
 
-import glob
 import os
-import re
 import sys
 
 import matplotlib
@@ -54,17 +60,17 @@ import numpy as np
 import pandas as pd
 import rioxarray as rxr
 
+from outils_modis import ECHELLE, date_des_pixels, fichiers_apparies, lire, masque_qualite
 from outils_tendance import fdr, p_3pw, tendance_serie
 
 RACINE = os.getcwd()   # racine du projet
 INDICE = sys.argv[1].upper() if len(sys.argv) > 1 else "NDVI"
 if INDICE not in ("NDVI", "EVI"):
     raise SystemExit("Indice inconnu : %s (NDVI ou EVI)" % INDICE)
-RAW_NDVI = os.path.join(RACINE, "01_raw", "MODIS", INDICE)
+MODIS = os.path.join(RACINE, "01_raw", "MODIS")
 SUFFIXE = INDICE.lower()
 NOM_FIG = "fig5_tendance_ndvi_mensuelle" if INDICE == "NDVI" else "fig5b_tendance_evi_mensuelle"
 print("indice : %s" % INDICE)
-RAW_REL = os.path.join(RACINE, "01_raw", "MODIS", "pixel_reliability")
 CLASSES_TIF = os.path.join(RACINE, "01_raw", "corine_8classes_grille_modis.tif")
 LIBELLES_CSV = os.path.join(RACINE, "04_stats", "corine_8classes_libelles.csv")
 RESULTATS = os.path.join(RACINE, "05_resultats")
@@ -75,14 +81,8 @@ MOIS = [3, 4, 5, 6, 7, 8, 9, 10, 11]
 SAISONS = {"MAM": [3, 4, 5], "JJA": [6, 7, 8], "SON": [9, 10, 11]}
 PART_VALIDE_MIN = 0.5   # part minimale de pixels valides d'une classe par composite
 ANNEES_MIN = 18         # annees minimum pour une tendance
+COMPOSITES_MIN = 3      # composites valides minimum pour une moyenne de saison
 SEUIL_FDR = 0.10
-
-
-def date_du_fichier(chemin):
-    """Date mediane du composite de 16 jours (comme 03_modis_ndvi.py)."""
-    m = re.search(r"doy(\d{4})(\d{3})", os.path.basename(chemin))
-    an, jour = int(m.group(1)), int(m.group(2))
-    return pd.Timestamp(f"{an}-01-01") + pd.Timedelta(days=jour - 1 + 8)
 
 
 # ===========================================================================
@@ -92,13 +92,13 @@ if not os.path.exists(CLASSES_TIF):
     raise SystemExit("Introuvable : %s\n-> lancer d'abord 15_ndvi_corine.py" % CLASSES_TIF)
 libelles = pd.read_csv(LIBELLES_CSV).set_index("code")["libelle"].to_dict()
 
-ndvi_f = {date_du_fichier(f): f for f in glob.glob(os.path.join(RAW_NDVI, "*.tif"))}
-rel_f = {date_du_fichier(f): f for f in glob.glob(os.path.join(RAW_REL, "*.tif"))}
-dates = sorted(d for d in set(ndvi_f) & set(rel_f) if ANNEES[0] <= d.year <= ANNEES[1])
-print("%d composites apparies, %s -> %s" % (len(dates), dates[0].date(), dates[-1].date()))
+composites = fichiers_apparies(MODIS, INDICE, ANNEES)
+print("%d composites apparies (%s + 3 couches qualite)" % (len(composites), INDICE))
 
-gabarit = rxr.open_rasterio(ndvi_f[dates[0]]).squeeze(drop=True)
-cl = rxr.open_rasterio(CLASSES_TIF).squeeze(drop=True)
+with rxr.open_rasterio(composites[0][2][INDICE]) as g:
+    gabarit = g.squeeze(drop=True).load()
+with rxr.open_rasterio(CLASSES_TIF) as g:
+    cl = g.squeeze(drop=True).load()
 # meme grille : appariement des centres de pixels, a un demi-pixel pres
 demi = abs(float(gabarit.x[1] - gabarit.x[0])) / 2
 try:
@@ -114,34 +114,56 @@ print("pixels par classe :", {libelles[k]: int(n_classe[k]) for k in range(1, 9)
 # 2. NDVI moyen de chaque classe, composite par composite
 # ===========================================================================
 print("\n=== Lecture des composites ===")
-lignes = []
-for i, d in enumerate(dates):
-    n = rxr.open_rasterio(ndvi_f[d], masked=False).squeeze(drop=True).values
-    r = rxr.open_rasterio(rel_f[d], masked=False).squeeze(drop=True).values
-    valide = ((r == 0) | (r == 1)) & (n != -3000) & (classes > 0)
-    c = classes[valide]
-    somme = np.bincount(c, weights=n[valide] * 0.0001, minlength=9)
-    nb = np.bincount(c, minlength=9)
-    for k in range(1, 9):
-        if n_classe[k] > 0 and nb[k] >= PART_VALIDE_MIN * n_classe[k]:
-            lignes.append({"DATE": d, "CLASSE": libelles[k], "NDVI": somme[k] / nb[k]})
+lignes = []   # une ligne par composite, classe et mois d'acquisition
+for i, (an, jour, f) in enumerate(composites):
+    n = lire(f[INDICE])
+    ok = masque_qualite(n, lire(f["pixel_reliability"]), lire(f["VI_Quality"]))
+    annee, mois = date_des_pixels(an, jour, lire(f["composite_day_of_the_year"]))
+    ok &= (mois > 0) & (classes > 0)
+    nb_tot = np.bincount(classes[ok], minlength=9)
+    garder = (n_classe > 0) & (nb_tot >= PART_VALIDE_MIN * n_classe)
+    cle = annee * 100 + mois          # annee et mois d'acquisition, ex. 200307
+    for am in np.unique(cle[ok]):
+        a, m = divmod(int(am), 100)
+        sel = ok & (cle == am)
+        c = classes[sel]
+        somme = np.bincount(c, weights=n[sel] * ECHELLE, minlength=9)
+        nb = np.bincount(c, minlength=9)
+        for k in range(1, 9):
+            if garder[k] and nb[k] > 0:
+                lignes.append({"COMPOSITE": i, "CLASSE": libelles[k], "ANNEE": a,
+                               "MOIS": m, "SOMME": somme[k], "NB": nb[k]})
     if (i + 1) % 100 == 0:
-        print("  %d/%d" % (i + 1, len(dates)))
+        print("  %d/%d" % (i + 1, len(composites)))
 comp = pd.DataFrame(lignes)
-comp["ANNEE"] = comp["DATE"].dt.year
-comp["MOIS"] = comp["DATE"].dt.month
 
 # ===========================================================================
 # 3. Indicateurs annuels
 # ===========================================================================
+def moyennes(d):
+    """Moyenne de tous les pixels valides par classe et annee, et nombre de
+    composites qui y contribuent."""
+    g = d.groupby(["CLASSE", "ANNEE"]).agg(SOMME=("SOMME", "sum"), NB=("NB", "sum"),
+                                           N_COMP=("COMPOSITE", "nunique"))
+    g["VALEUR"] = g["SOMME"] / g["NB"]
+    return g
+
+
 series = []
 for m in MOIS:
-    g = comp[comp["MOIS"] == m].groupby(["CLASSE", "ANNEE"])["NDVI"].mean()
-    series.append(g.rename("VALEUR").reset_index().assign(INDICATEUR="M%02d" % m))
-for s, mois in SAISONS.items():
-    g = comp[comp["MOIS"].isin(mois)].groupby(["CLASSE", "ANNEE"])["NDVI"].mean()
-    series.append(g.rename("VALEUR").reset_index().assign(INDICATEUR=s))
-g = comp[comp["MOIS"].between(3, 11)].groupby(["CLASSE", "ANNEE"])["NDVI"].max()
+    g = moyennes(comp[comp["MOIS"] == m])
+    series.append(g["VALEUR"].reset_index().assign(INDICATEUR="M%02d" % m))
+for s, mois_s in SAISONS.items():
+    g = moyennes(comp[comp["MOIS"].isin(mois_s)])
+    g = g[g["N_COMP"] >= COMPOSITES_MIN]
+    series.append(g["VALEUR"].reset_index().assign(INDICATEUR=s))
+# maximum : moyenne de chaque composite, rattachee au mois de la plupart de ses pixels
+par_comp = comp.groupby(["COMPOSITE", "CLASSE"]).agg(SOMME=("SOMME", "sum"), NB=("NB", "sum"))
+par_comp["VALEUR"] = par_comp["SOMME"] / par_comp["NB"]
+principal = comp.loc[comp.groupby(["COMPOSITE", "CLASSE"])["NB"].idxmax(),
+                     ["COMPOSITE", "CLASSE", "ANNEE", "MOIS"]].set_index(["COMPOSITE", "CLASSE"])
+par_comp = par_comp.join(principal)
+g = par_comp[par_comp["MOIS"].between(3, 11)].groupby(["CLASSE", "ANNEE"])["VALEUR"].max()
 series.append(g.rename("VALEUR").reset_index().assign(INDICATEUR="MAX"))
 series = pd.concat(series, ignore_index=True)
 series.round(4).to_csv(os.path.join(RESULTATS, "%s_indicateurs_par_classe.csv" % SUFFIXE),

@@ -250,9 +250,10 @@ NOM_CLIM = {"t2m": "Température", "tp": "Précipitations", "swvl1": "Humidité 
 
 
 def figure_correlation(col_r, col_sig, sous_titre, suffixe_titre, nom):
-    """Une figure de 4 panneaux (saisons) : classes x variables climatiques."""
-    fig, axes = plt.subplots(1, 4, figsize=(15, 4.4), sharey=True)
-    for ax, s in zip(axes, SAISONS):
+    """Un panneau par saison (printemps, ete, automne) : classes x variables climatiques."""
+    saisons = [s for s in SAISONS if s in set(correl["SAISON"])]   # pas d'hiver pour le NDVI
+    fig, axes = plt.subplots(1, len(saisons), figsize=(3.75 * len(saisons), 4.4), sharey=True)
+    for ax, s in zip(axes, saisons):
         d = correl[correl["SAISON"] == s]
         tab = d.pivot(index="CLASSE", columns="CLIMAT", values=col_r)
         tab = tab.reindex(columns=[c for c in ("t2m", "tp", "swvl1") if c in tab.columns])

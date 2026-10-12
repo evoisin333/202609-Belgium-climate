@@ -135,7 +135,8 @@ if not climat:
 climat = pd.concat(climat, ignore_index=True)
 
 ndvi = []
-for s in ["DJF", "MAM", "JJA", "SON"]:
+# pas de NDVI d'hiver (03_modis_ndvi.py) : un ancien zs_ndvi_DJF.csv est ignore
+for s in ["MAM", "JJA", "SON"]:
     d = charger("zs_ndvi_%s" % s)
     if d is None:
         continue

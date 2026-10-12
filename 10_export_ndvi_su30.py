@@ -1,7 +1,8 @@
 """
 10_export_ndvi_su30.py
 Meme logique que 09_export_era5.py, appliquee a :
-  - modis_ndvi_BE_saisonnier.nc    (03_modis_ndvi.py ; dimensions saison, y, x, annee)
+  - modis_ndvi_BE_saisonnier.nc    (03_modis_ndvi.py ; dimensions saison, y, x, annee ;
+                                    MAM, JJA, SON seulement)
   - eobs_su30_BE_saisonnier_qc.nc  (02_agregation.py, puis masques de
                                     07_controle_spatial_qc.py et
                                     08_masque_artefact_lux.py)
@@ -47,6 +48,8 @@ def exporter(fichier_entree, prefixe, variables, source, historique):
     ds = ds.reset_coords(drop=True)
 
     for saison, mois in MOIS_MILIEU.items():
+        if saison not in ds["saison"].values:   # NDVI : pas d'hiver (03_modis_ndvi.py)
+            continue
         sub = ds.sel(saison=saison, drop=True)
 
         dates = pd.to_datetime(pd.DataFrame({"year": sub["annee"].values, "month": mois, "day": 15}))

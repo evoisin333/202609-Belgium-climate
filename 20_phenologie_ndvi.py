@@ -2,7 +2,8 @@
 """
 20_phenologie_ndvi.py
 A lancer depuis la racine du projet, environnement geo :
-    python 20_phenologie_ndvi.py
+    python 20_phenologie_ndvi.py          (NDVI)
+    python 20_phenologie_ndvi.py EVI      (EVI, meme analyse)
 
 La baisse du NDVI moyen d'ete sur les cultures vient-elle d'une vegetation
 moins vigoureuse, ou d'un calendrier qui avance (senescence et recolte plus
@@ -27,19 +28,24 @@ Le JJA calcule ici (moyenne spatiale de chaque composite, puis moyenne de la
 saison) peut differer legerement de celui de 16_analyse.py (moyenne de la
 saison par pixel, puis moyenne spatiale) : l'ordre des moyennes change.
 
+L'EVI sert de controle pour les forets : le NDVI sature quand le couvert est
+dense (Huete et al. 2002), l'EVI beaucoup moins.
+
 Entrees :
-  01_raw/MODIS/NDVI/*.tif, 01_raw/MODIS/pixel_reliability/*.tif
+  01_raw/MODIS/NDVI/*.tif (ou EVI/), 01_raw/MODIS/pixel_reliability/*.tif
   01_raw/corine_8classes_grille_modis.tif   (15_ndvi_corine.py)
   04_stats/corine_8classes_libelles.csv
 Sorties :
-  05_resultats/ndvi_indicateurs_par_classe.csv   series annuelles
-  05_resultats/phenologie_ndvi_par_classe.csv    tendances
-  06_figures/fig5_tendance_ndvi_mensuelle.png/.pdf (et 06_figures_en)
+  05_resultats/<indice>_indicateurs_par_classe.csv   series annuelles
+  05_resultats/phenologie_<indice>_par_classe.csv    tendances
+  06_figures/fig5_tendance_ndvi_mensuelle (fig5b_tendance_evi_mensuelle pour l'EVI)
+  en PNG et PDF, et la version anglaise dans 06_figures_en
 """
 
 import glob
 import os
 import re
+import sys
 
 import matplotlib
 matplotlib.use("Agg")
@@ -51,7 +57,13 @@ import rioxarray as rxr
 from outils_tendance import fdr, p_3pw, tendance_serie
 
 RACINE = os.getcwd()   # racine du projet
-RAW_NDVI = os.path.join(RACINE, "01_raw", "MODIS", "NDVI")
+INDICE = sys.argv[1].upper() if len(sys.argv) > 1 else "NDVI"
+if INDICE not in ("NDVI", "EVI"):
+    raise SystemExit("Indice inconnu : %s (NDVI ou EVI)" % INDICE)
+RAW_NDVI = os.path.join(RACINE, "01_raw", "MODIS", INDICE)
+SUFFIXE = INDICE.lower()
+NOM_FIG = "fig5_tendance_ndvi_mensuelle" if INDICE == "NDVI" else "fig5b_tendance_evi_mensuelle"
+print("indice : %s" % INDICE)
 RAW_REL = os.path.join(RACINE, "01_raw", "MODIS", "pixel_reliability")
 CLASSES_TIF = os.path.join(RACINE, "01_raw", "corine_8classes_grille_modis.tif")
 LIBELLES_CSV = os.path.join(RACINE, "04_stats", "corine_8classes_libelles.csv")
@@ -77,8 +89,7 @@ def date_du_fichier(chemin):
 # 1. Classes CORINE sur la grille MODIS
 # ===========================================================================
 if not os.path.exists(CLASSES_TIF):
-    raise SystemExit("Introuvable : %s\n-> exporter corine_grille_ndvi depuis ArcGIS "
-                     "(voir 15_ndvi_corine.py)" % CLASSES_TIF)
+    raise SystemExit("Introuvable : %s\n-> lancer d'abord 15_ndvi_corine.py" % CLASSES_TIF)
 libelles = pd.read_csv(LIBELLES_CSV).set_index("code")["libelle"].to_dict()
 
 ndvi_f = {date_du_fichier(f): f for f in glob.glob(os.path.join(RAW_NDVI, "*.tif"))}
@@ -133,13 +144,13 @@ for s, mois in SAISONS.items():
 g = comp[comp["MOIS"].between(3, 11)].groupby(["CLASSE", "ANNEE"])["NDVI"].max()
 series.append(g.rename("VALEUR").reset_index().assign(INDICATEUR="MAX"))
 series = pd.concat(series, ignore_index=True)
-series.round(4).to_csv(os.path.join(RESULTATS, "ndvi_indicateurs_par_classe.csv"),
+series.round(4).to_csv(os.path.join(RESULTATS, "%s_indicateurs_par_classe.csv" % SUFFIXE),
                        index=False, sep=";", decimal=",")
 
 # ===========================================================================
 # 4. Tendances
 # ===========================================================================
-print("\n=== Tendances (pente NDVI / decennie, 3PW, FDR %.0f %%) ===" % (SEUIL_FDR * 100))
+print("\n=== Tendances (pente %s / decennie, 3PW, FDR %.0f %%) ===" % (INDICE, SEUIL_FDR * 100))
 res = []
 for (classe, ind), g in series.groupby(["CLASSE", "INDICATEUR"]):
     g = g.sort_values("ANNEE")
@@ -153,7 +164,7 @@ res = pd.DataFrame(res)
 res["P_FDR"] = fdr(res["P_3PW"].values)
 res["SIGNIFICATIF"] = np.where(res["P_FDR"] < SEUIL_FDR, "oui", "non")
 res = res.round({"PENTE_DEC": 4, "P_MK": 4, "P_3PW": 4, "P_FDR": 4})
-res.to_csv(os.path.join(RESULTATS, "phenologie_ndvi_par_classe.csv"),
+res.to_csv(os.path.join(RESULTATS, "phenologie_%s_par_classe.csv" % SUFFIXE),
            index=False, sep=";", decimal=",")
 
 ORDRE = ["M%02d" % m for m in MOIS] + list(SAISONS) + ["MAX"]
@@ -183,17 +194,17 @@ TEXTES = {
     "fr": dict(dossier="06_figures", noms={"Cultures": "Cultures", "Prairies": "Prairies",
                                            "Foret feuillus": "Forêt de feuillus"},
                mois=["mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov."],
-               fin=["MAM", "JJA", "SON", "max"], y="Pente du NDVI (/ décennie)",
-               titre="Tendance du NDVI par mois et par saison, 2001-2024",
-               sous="Pente de Sen   |   * significative après correction (Mann-Kendall 3PW, FDR 10 %)   |   "
-                    "○ p < 0,05 pour ce test seul (exploratoire)   |   max : NDVI maximum de mars à novembre"),
+               fin=["MAM", "JJA", "SON", "max"], y="Pente du %s (/ décennie)" % INDICE,
+               titre="Tendance du %s par mois et par saison, 2001-2024" % INDICE,
+               sous="Pente de Sen   |   * significative après correction (Mann-Kendall 3PW, FDR 10 %%)   |   "
+                    "○ p < 0,05 pour ce test seul (exploratoire)   |   max : %s maximum de mars à novembre" % INDICE),
     "en": dict(dossier="06_figures_en", noms={"Cultures": "Cropland", "Prairies": "Grassland",
                                               "Foret feuillus": "Broadleaf forest"},
                mois=["Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov"],
-               fin=["MAM", "JJA", "SON", "max"], y="NDVI slope (/ decade)",
-               titre="NDVI trend by month and season, 2001–2024",
-               sous="Sen's slope   |   * significant after correction (Mann-Kendall 3PW, FDR 10 %)   |   "
-                    "○ p < 0.05 for this test alone (exploratory)   |   max: maximum NDVI from March to November"),
+               fin=["MAM", "JJA", "SON", "max"], y="%s slope (/ decade)" % INDICE,
+               titre="%s trend by month and season, 2001–2024" % INDICE,
+               sous="Sen's slope   |   * significant after correction (Mann-Kendall 3PW, FDR 10 %%)   |   "
+                    "○ p < 0.05 for this test alone (exploratory)   |   max: maximum %s from March to November" % INDICE),
 }
 CLASSES_FIG = [c for c in CLASSES_FIG if c in tab.index]
 if not CLASSES_FIG:
@@ -235,10 +246,10 @@ for langue, t in TEXTES.items():
     fig.text(0.5, 0.9, t["sous"], ha="center", color=ENCRE_2, fontsize=9)
     fig.tight_layout(rect=[0, 0, 1, 0.88])
     for ext in ("png", "pdf"):
-        fig.savefig(os.path.join(RACINE, t["dossier"], "fig5_tendance_ndvi_mensuelle.%s" % ext),
+        fig.savefig(os.path.join(RACINE, t["dossier"], "%s.%s" % (NOM_FIG, ext)),
                     dpi=300, bbox_inches="tight")
     plt.close(fig)
 
-print("\n-> 05_resultats/ndvi_indicateurs_par_classe.csv")
-print("-> 05_resultats/phenologie_ndvi_par_classe.csv")
-print("-> 06_figures/ et 06_figures_en/fig5_tendance_ndvi_mensuelle.png / .pdf")
+print("\n-> 05_resultats/%s_indicateurs_par_classe.csv" % SUFFIXE)
+print("-> 05_resultats/phenologie_%s_par_classe.csv" % SUFFIXE)
+print("-> 06_figures/ et 06_figures_en/%s.png / .pdf" % NOM_FIG)

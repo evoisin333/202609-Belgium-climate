@@ -74,6 +74,10 @@ TENDANCES = [
 def ecrire_tif(tableau, gabarit, chemin):
     da = xr.DataArray(tableau.astype("float32"), dims=("latitude", "longitude"),
                       coords={"latitude": gabarit["latitude"], "longitude": gabarit["longitude"]})
+    # Nord en haut : E-OBS range ses latitudes du sud au nord ; ecrites telles
+    # quelles, elles donnent un GeoTIFF "a l'envers" qu'ArcGIS lit mal
+    # (decalage, trous sur la cote). Meme correction que 12_normales.py.
+    da = da.sortby("latitude", ascending=False)
     da = da.rio.set_spatial_dims(x_dim="longitude", y_dim="latitude")
     da = da.rio.write_crs("EPSG:4326").rio.write_nodata(np.nan)
     da.rio.to_raster(chemin)
